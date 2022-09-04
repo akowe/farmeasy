@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 04, 2022 at 11:50 PM
+-- Generation Time: Sep 05, 2022 at 12:14 AM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -76,7 +76,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2022_08_31_091949_create_users_table', 10),
 (14, '2022_08_31_123357_create_location_table', 11),
 (19, '2022_08_31_123524_create_orders_table', 12),
-(20, '2022_08_31_133444_create_product_service_table', 13);
+(20, '2022_08_31_133444_create_product_service_table', 13),
+(21, '2022_09_04_200239_create_request_table', 14);
 
 -- --------------------------------------------------------
 
@@ -136,6 +137,29 @@ CREATE TABLE `profile` (
   `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `account_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `account_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `request`
+--
+
+CREATE TABLE `request` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `agent_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sp_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `land_hectare` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `service_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `farm_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -237,6 +261,12 @@ ALTER TABLE `profile`
   ADD UNIQUE KEY `profile_user_id_unique` (`user_id`);
 
 --
+-- Indexes for table `request`
+--
+ALTER TABLE `request`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `role`
 --
 ALTER TABLE `role`
@@ -274,7 +304,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `orders`
 --
@@ -289,6 +319,11 @@ ALTER TABLE `product_service`
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `request`
+--
+ALTER TABLE `request`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `role`
