@@ -15,13 +15,7 @@ class CreateServiceTypeTable extends Migration
     {
         Schema::create('service_type', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('tractor');
-            $table->string('plower');
-            $table->string('planter');
-            $table->string('pesticide');
-            $table->string('fertilizer');
-            $table->string('processor');
-            $table->string('ext_agent');
+            $table->string('service');
             $table->timestamps();
         });
     }

@@ -15,11 +15,8 @@ class CreateFarmTypeTable extends Migration
     {
         Schema::create('farm_type', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('rice');
-            $table->string('maize');
-            $table->string('wheat');
-            $table->string('others');
-            $table->string('status'); // status can be approved or regected. if approve it become visible on frontend
+            $table->string('farm');
+            $table->string('status')->nullable(); // status can be approved or regected. if approve it become visible on frontend
             $table->timestamps();
         });
     }

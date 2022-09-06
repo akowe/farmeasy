@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 05, 2022 at 12:14 AM
+-- Generation Time: Sep 06, 2022 at 01:44 PM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -28,14 +28,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `farm_type` (
   `id` int(10) UNSIGNED NOT NULL,
-  `rice` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `maize` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `wheat` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `others` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `farm` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `farm_type`
+--
+
+INSERT INTO `farm_type` (`id`, `farm`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Rice', 'approve', '2022-09-06 11:27:53', '2022-09-06 11:27:53'),
+(2, 'Wheat', 'approve', '2022-09-06 11:27:53', '2022-09-06 11:27:53'),
+(3, 'Maize', 'approve', '2022-09-06 11:27:53', '2022-09-06 11:27:53'),
+(4, 'Others', NULL, '2022-09-06 11:27:53', '2022-09-06 11:27:53');
 
 -- --------------------------------------------------------
 
@@ -45,12 +52,20 @@ CREATE TABLE `farm_type` (
 
 CREATE TABLE `location` (
   `id` int(10) UNSIGNED NOT NULL,
-  `lagos` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `niger` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `kaduna` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `location`
+--
+
+INSERT INTO `location` (`id`, `location`, `created_at`, `updated_at`) VALUES
+(1, 'Kaduna', '2022-09-06 11:40:58', '2022-09-06 11:40:58'),
+(2, 'Lagos', '2022-09-06 11:40:58', '2022-09-06 11:40:58'),
+(3, 'Niger', '2022-09-06 11:40:58', '2022-09-06 11:40:58'),
+(4, 'Taraba', '2022-09-06 11:40:58', '2022-09-06 11:40:58');
 
 -- --------------------------------------------------------
 
@@ -70,14 +85,14 @@ CREATE TABLE `migrations` (
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2022_08_31_104418_create_role_table', 3),
-(5, '2022_08_31_092307_create_farm_type_table', 4),
-(6, '2022_08_31_110836_create_service_type_table', 5),
-(12, '2022_08_31_112848_create_profile_table', 9),
 (13, '2022_08_31_091949_create_users_table', 10),
-(14, '2022_08_31_123357_create_location_table', 11),
 (19, '2022_08_31_123524_create_orders_table', 12),
 (20, '2022_08_31_133444_create_product_service_table', 13),
-(21, '2022_09_04_200239_create_request_table', 14);
+(21, '2022_09_04_200239_create_request_table', 14),
+(22, '2022_08_31_112848_create_profile_table', 15),
+(23, '2022_08_31_110836_create_service_type_table', 16),
+(24, '2022_08_31_092307_create_farm_type_table', 17),
+(25, '2022_08_31_123357_create_location_table', 18);
 
 -- --------------------------------------------------------
 
@@ -130,6 +145,7 @@ CREATE TABLE `product_service` (
 CREATE TABLE `profile` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `business_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -178,6 +194,17 @@ CREATE TABLE `role` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `role`
+--
+
+INSERT INTO `role` (`id`, `role`, `user_type`, `created_at`, `updated_at`) VALUES
+(1, '1', 'superadmin', '2022-09-06 11:35:23', '2022-09-06 11:35:23'),
+(2, '2', 'admin', '2022-09-06 11:35:23', '2022-09-06 11:35:23'),
+(3, '3', 'agent', '2022-09-06 11:35:23', '2022-09-06 11:35:23'),
+(4, '4', 'farmer', '2022-09-06 11:35:23', '2022-09-06 11:35:23'),
+(5, '5', 'service', '2022-09-06 11:35:23', '2022-09-06 11:35:23');
+
 -- --------------------------------------------------------
 
 --
@@ -186,16 +213,23 @@ CREATE TABLE `role` (
 
 CREATE TABLE `service_type` (
   `id` int(10) UNSIGNED NOT NULL,
-  `tractor` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `plower` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `planter` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pesticide` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fertilizer` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `processor` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ext_agent` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `service` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `service_type`
+--
+
+INSERT INTO `service_type` (`id`, `service`, `created_at`, `updated_at`) VALUES
+(1, 'Tractor', '2022-09-06 11:29:06', '2022-09-06 11:29:06'),
+(2, 'Plower', '2022-09-06 11:29:06', '2022-09-06 11:29:06'),
+(3, 'Planter', '2022-09-06 11:29:06', '2022-09-06 11:29:06'),
+(4, 'Seed', '2022-09-06 11:29:06', '2022-09-06 11:29:06'),
+(5, 'Pesticide', '2022-09-06 11:29:06', '2022-09-06 11:29:06'),
+(6, 'Fertilizer', '2022-09-06 11:29:06', '2022-09-06 11:29:06'),
+(7, 'Processor', '2022-09-06 11:29:06', '2022-09-06 11:29:06');
 
 -- --------------------------------------------------------
 
@@ -258,7 +292,8 @@ ALTER TABLE `product_service`
 --
 ALTER TABLE `profile`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `profile_user_id_unique` (`user_id`);
+  ADD UNIQUE KEY `profile_user_id_unique` (`user_id`),
+  ADD UNIQUE KEY `profile_email_unique` (`email`);
 
 --
 -- Indexes for table `request`
@@ -294,17 +329,17 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `farm_type`
 --
 ALTER TABLE `farm_type`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `orders`
 --
@@ -329,12 +364,12 @@ ALTER TABLE `request`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `service_type`
 --
 ALTER TABLE `service_type`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `users`
 --

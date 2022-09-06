@@ -36,9 +36,9 @@ class UserController extends Controller
         $user = new User();
         $user->ip          = $request['ip']; //hidden input field. auto get the user ip
         $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
-        $user->user_type   = $request['user_type']; 
-        $user->farm_type   = $request['farm_type']; //select fron db
-        $user->farm_type   = $request['service_type']; //select fron db
+        $user->user_type   = $request['user_type']; // can select from role table
+        $user->farm_type   = $request['farm_type']; //select fron db 'farmer'
+        $user->farm_type   = $request['service_type']; //select fron db 'service'
         $user->phone       = $request['phone']; 
         $user->reg_code    = $reg_code; 
         $user->password    = Hash::make($request->input('password'));
