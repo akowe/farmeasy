@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2022 at 01:44 PM
+-- Generation Time: Sep 06, 2022 at 02:38 PM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -89,10 +89,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (19, '2022_08_31_123524_create_orders_table', 12),
 (20, '2022_08_31_133444_create_product_service_table', 13),
 (21, '2022_09_04_200239_create_request_table', 14),
-(22, '2022_08_31_112848_create_profile_table', 15),
 (23, '2022_08_31_110836_create_service_type_table', 16),
 (24, '2022_08_31_092307_create_farm_type_table', 17),
-(25, '2022_08_31_123357_create_location_table', 18);
+(25, '2022_08_31_123357_create_location_table', 18),
+(26, '2022_08_31_112848_create_profile_table', 19);
 
 -- --------------------------------------------------------
 
@@ -145,7 +145,7 @@ CREATE TABLE `product_service` (
 CREATE TABLE `profile` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `business_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -339,7 +339,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `orders`
 --
