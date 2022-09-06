@@ -87,7 +87,7 @@ class UserController extends Controller
   }
 
   //update user with  otp
-  public function updateUser(Request $request, $id){
+  public function verifyUser(Request $request){
       
       //Input::get('code')
       $getCode = $request->input('code');
