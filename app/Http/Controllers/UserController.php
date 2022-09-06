@@ -19,6 +19,8 @@ class UserController extends Controller
             'ip'        => ['string', 'max:255'],
             'country'   => ['string', 'max:255'],
             'user_type' => ['string', 'max:255'],
+            'farm_type' => ['string', 'max:255'],
+            'service_type' => ['string', 'max:255'],
             'phone'     => ['required', 'string', 'max:255', 'unique:users'],
             'password'  => ['required', 'string', 'min:6', 'confirmed'],
         ]);
@@ -35,6 +37,8 @@ class UserController extends Controller
         $user->ip          = $request['ip']; //hidden input field. auto get the user ip
         $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
         $user->user_type   = $request['user_type']; 
+        $user->farm_type   = $request['farm_type']; //select fron db
+        $user->farm_type   = $request['service_type']; //select fron db
         $user->phone       = $request['phone']; 
         $user->reg_code    = $reg_code; 
         $user->password    = Hash::make($request->input('password'));
