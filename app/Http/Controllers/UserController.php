@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\Profile;
 use App\Otp;
+use App\Country;
 use Carbon\Carbon;
+
 class UserController extends Controller
 {
     //
@@ -45,27 +47,54 @@ class UserController extends Controller
  
         //generate random code insert to otp table send otp to user phone
           $reg_code   = str_random(6);//generate unique 6 string
-          $otp            = new Otp();
-          $otp->code      = $reg_code;
-
-          $otp->save();
-
+         
           //send otp as sms to user phone here 
 
+          //get user ip
+          $ipaddress = '';
+          if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+              $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+          } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+              $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+          } else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
+              $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+          } else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+              $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+          } else if (isset($_SERVER['HTTP_FORWARDED'])) {
+              $ipaddress = $_SERVER['HTTP_FORWARDED'];
+          } else if (isset($_SERVER['REMOTE_ADDR'])) {
+              $ipaddress = $_SERVER['REMOTE_ADDR'];
+          } else {
+              $ipaddress = 'UNKNOWN';
+          }
+          
+          //get lcountry of any network
+          $getloc = json_decode(file_get_contents("http://ipinfo.io/"));
+          $country= $getloc->country;
+          $city = explode(",", $getloc->region); // -> '32,-72' becomes'32','-72'
+        
+        if (Country::where('country', $country)->exists()) {
+   
         $user = new User();
-        $user->ip          = $request['ip']; //hidden input field. auto get the user ip
-        $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
+        $user->ip          = $ipaddress; //hidden input field. auto get the user ip
+        $user->country     = $country;  // hidden field. auto get the user country from his ip
         $user->user_type   = $request['user_type']; // can select from role table
         $user->name        = $request['name']; // required 
         $user->farm_type   = $request['farm_type']; //select fron db 'farmer'
         $user->service_type = $request['service_type']; //select fron db 'service'
-        $user->country_code = $request['country_code']; // select from db
+        $user->country_code = $request['country_code']; // select from country table
         $user->phone       = $request['phone']; 
         $user->reg_code    = $reg_code;
         $user->password    = Hash::make($request['password']);
         $user->status      = 'pending';
         
         $user->save();
+
+          }
+
+          else{
+            return response('FME app not available in your country');
+          }
 
         // upon successful registration create profile for user so user can edit their profile later
         if($user){
@@ -95,7 +124,7 @@ class UserController extends Controller
       $getCode = $request->input('code');
 
       //check if exist
-      $otp =  Otp::where('code', $getCode)->exists();
+      $otp =  User::where('code', $getCode)->exists();
 
       $user  = User::where('reg_code', $otp)
               ->update([

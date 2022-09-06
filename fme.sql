@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2022 at 11:42 PM
+-- Generation Time: Sep 07, 2022 at 01:48 AM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -39,8 +39,8 @@ CREATE TABLE `country` (
 --
 
 INSERT INTO `country` (`id`, `country_code`, `country`, `created_at`, `updated_at`) VALUES
-(1, '+234', 'Nigeria', '2022-09-06 21:39:06', '2022-09-06 21:39:06'),
-(2, '+255', 'Tanzania', '2022-09-06 21:39:06', '2022-09-06 21:39:06');
+(1, '+234', 'NG', '2022-09-06 21:39:06', '2022-09-06 21:39:06'),
+(2, '+255', 'TZ', '2022-09-06 21:39:06', '2022-09-06 21:39:06');
 
 -- --------------------------------------------------------
 
