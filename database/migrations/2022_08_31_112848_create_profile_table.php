@@ -17,7 +17,6 @@ class CreateProfileTable extends Migration
             $table->increments('id');
             $table->string('user_id')->unique();
             $table->string('email')->unique()->nullable();
-            $table->string('name')->nullable();
             $table->string('business_name')->nullable();
             $table->string('address')->nullable();
             $table->string('location')->nullable();

@@ -18,11 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('ip');
             $table->string('country');
             $table->string('user_type');
+            $table->string('name');
             $table->string('farm_type')->nullable();
             $table->string('service_type')->nullable();
             $table->string('phone')->unique();
             $table->string('password');
-            $table->string('reg_code')->unique();//user verification code
+            $table->string('reg_code')->unique()->nullable();//user verification code
             $table->string('status')->nullable();
             $table->rememberToken();
             $table->timestamps();

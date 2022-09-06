@@ -18,6 +18,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
 
+    $router->post('verify', ['uses' => 'UserController@getOtp']);
     $router->post('user', ['uses' => 'UserController@createUser']);
 
     $router->put('user/{id}', ['uses' => 'UserController@updateUser']);

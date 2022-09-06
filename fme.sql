@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2022 at 02:38 PM
+-- Generation Time: Sep 06, 2022 at 06:04 PM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -85,14 +85,15 @@ CREATE TABLE `migrations` (
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2022_08_31_104418_create_role_table', 3),
-(13, '2022_08_31_091949_create_users_table', 10),
 (19, '2022_08_31_123524_create_orders_table', 12),
 (20, '2022_08_31_133444_create_product_service_table', 13),
 (21, '2022_09_04_200239_create_request_table', 14),
 (23, '2022_08_31_110836_create_service_type_table', 16),
 (24, '2022_08_31_092307_create_farm_type_table', 17),
 (25, '2022_08_31_123357_create_location_table', 18),
-(26, '2022_08_31_112848_create_profile_table', 19);
+(27, '2022_08_31_091949_create_users_table', 20),
+(28, '2022_08_31_112848_create_profile_table', 21),
+(29, '2022_09_06_144303_create_otp_table', 22);
 
 -- --------------------------------------------------------
 
@@ -113,6 +114,19 @@ CREATE TABLE `orders` (
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amount` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `otp`
+--
+
+CREATE TABLE `otp` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -146,7 +160,6 @@ CREATE TABLE `profile` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `business_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -242,11 +255,12 @@ CREATE TABLE `users` (
   `ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `farm_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `service_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reg_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reg_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -279,6 +293,12 @@ ALTER TABLE `migrations`
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `otp`
+--
+ALTER TABLE `otp`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -339,11 +359,16 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `otp`
+--
+ALTER TABLE `otp`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `product_service`
