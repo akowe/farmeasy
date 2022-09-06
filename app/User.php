@@ -18,7 +18,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        'ip', 'country', 'user_type', 'farm_type',
+        'service_type', 'phone', 'password',
+        'reg_code', 'status'
     ];
 
     /**
@@ -28,5 +30,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+   
+    
 }
