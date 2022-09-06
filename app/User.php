@@ -19,7 +19,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'ip', 'country', 'user_type', 'farm_type',
-        'service_type', 'phone', 'password',
+        'service_type', 'country_code', 'phone', 'password',
         'reg_code', 'status'
     ];
 
