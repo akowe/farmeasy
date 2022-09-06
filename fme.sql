@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2022 at 06:04 PM
+-- Generation Time: Sep 06, 2022 at 11:13 PM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -91,9 +91,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (23, '2022_08_31_110836_create_service_type_table', 16),
 (24, '2022_08_31_092307_create_farm_type_table', 17),
 (25, '2022_08_31_123357_create_location_table', 18),
-(27, '2022_08_31_091949_create_users_table', 20),
 (28, '2022_08_31_112848_create_profile_table', 21),
-(29, '2022_09_06_144303_create_otp_table', 22);
+(29, '2022_09_06_144303_create_otp_table', 22),
+(30, '2022_08_31_091949_create_users_table', 23);
 
 -- --------------------------------------------------------
 
@@ -258,6 +258,7 @@ CREATE TABLE `users` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `farm_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `service_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reg_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -359,7 +360,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `orders`
 --

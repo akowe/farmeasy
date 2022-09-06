@@ -35,6 +35,7 @@ class UserController extends Controller
             'name'      => ['required','string', 'max:255'],
             'farm_type' => ['string', 'max:255'],
             'service_type' => ['string', 'max:255'],
+            'country_code' => ['string', 'max:255'],
             'phone'     => ['required', 'string', 'max:255', 'unique:users'],
             'password'  => ['required', 'string', 'min:6', 'confirmed'],
         ]);
@@ -58,6 +59,7 @@ class UserController extends Controller
         $user->name        = $request['name']; // required 
         $user->farm_type   = $request['farm_type']; //select fron db 'farmer'
         $user->service_type = $request['service_type']; //select fron db 'service'
+        $user->country_code = $request['country_code']; // select from db
         $user->phone       = $request['phone']; 
         $user->reg_code    = $reg_code;
         $user->password    = Hash::make($request['password']);
