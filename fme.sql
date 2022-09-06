@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2022 at 11:13 PM
+-- Generation Time: Sep 06, 2022 at 11:42 PM
 -- Server version: 5.7.23
 -- PHP Version: 7.3.8
 
@@ -19,6 +19,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `fme`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `country`
+--
+
+CREATE TABLE `country` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `country_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `country`
+--
+
+INSERT INTO `country` (`id`, `country_code`, `country`, `created_at`, `updated_at`) VALUES
+(1, '+234', 'Nigeria', '2022-09-06 21:39:06', '2022-09-06 21:39:06'),
+(2, '+255', 'Tanzania', '2022-09-06 21:39:06', '2022-09-06 21:39:06');
 
 -- --------------------------------------------------------
 
@@ -93,7 +115,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (25, '2022_08_31_123357_create_location_table', 18),
 (28, '2022_08_31_112848_create_profile_table', 21),
 (29, '2022_09_06_144303_create_otp_table', 22),
-(30, '2022_08_31_091949_create_users_table', 23);
+(30, '2022_08_31_091949_create_users_table', 23),
+(31, '2022_09_06_212712_create_country_table', 24);
 
 -- --------------------------------------------------------
 
@@ -273,6 +296,12 @@ CREATE TABLE `users` (
 --
 
 --
+-- Indexes for table `country`
+--
+ALTER TABLE `country`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `farm_type`
 --
 ALTER TABLE `farm_type`
@@ -347,6 +376,11 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `country`
+--
+ALTER TABLE `country`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `farm_type`
 --
 ALTER TABLE `farm_type`
@@ -360,7 +394,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT for table `orders`
 --

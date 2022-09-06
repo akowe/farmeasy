@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('farm_type')->nullable();
             $table->string('service_type')->nullable();
+            $table->string('country_code');
             $table->string('phone')->unique();
             $table->string('password');
             $table->string('reg_code')->unique()->nullable();//user verification code
