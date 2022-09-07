@@ -18,10 +18,10 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
 
-    $router->post('otp', ['uses' => 'UserController@getOtp']);
+    //$router->post('otp', ['uses' => 'UserController@getOtp']);
     $router->post('user', ['uses' => 'UserController@createUser']);
 
-    $router->put('verify', ['uses' => 'UserController@verifyUser']);
+    $router->put('user/{id}', ['uses' => 'UserController@updateUser']);
 
     $router->delete('user/{id}', ['uses' => 'UserController@deleteUser']);
 

@@ -117,22 +117,28 @@ class UserController extends Controller
  
   }
 
-  //update user with  otp
-  public function verifyUser(Request $request){
-      
-      //Input::get('code')
-      $getCode = $request->input('code');
 
-      //check if exist
-      $otp =  User::where('code', $getCode)->exists();
+public function updateUser(Request $request, $id){
 
-      $user  = User::where('reg_code', $otp)
-              ->update([
-                'status' =>'verify'
-              ]);
+    $getCode = $request->input('reg_code');
+
+    //check if exist
+    //   $otp =  User::where('reg_code', $getCode)->exists();
+
+    // if($otp)
+      //{
+      $user  = User::find($id);
+      $user->status = 'verify';
      
+      $user->save();
+    // }
+    // else{
+    //         return response('Invalid code');
+    //       }
+ 
       return response()->json($user);
-  } 
+  }  
+
 
 
   public function deleteUser($id){
