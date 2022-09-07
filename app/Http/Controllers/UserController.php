@@ -7,10 +7,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+use Auth;
 use App\User;
-use App\Profile;
+use App\UserProfile;
 use App\Otp;
+use App\Role;
+use App\Country;
+use App\FarmType;
+use App\ServiceType;
 use Carbon\Carbon;
+use Carbon\Profile;
 class UserController extends Controller
 {
     //
@@ -25,7 +31,7 @@ class UserController extends Controller
 
     }
 
-     protected function validator(array $request)
+   /*  protected function validator(array $request)
     {
           return Validator::make($request, [
             'ip'        => ['string', 'max:255'],
@@ -39,11 +45,21 @@ class UserController extends Controller
             'phone'     => ['required', 'string', 'max:255', 'unique:users'],
             'password'  => ['required', 'string', 'min:6', 'confirmed'],
         ]);
-    }
+    }*/
 
     public function createUser(Request $request){
- 
-        //generate random code insert to otp table send otp to user phone
+  
+
+        if($request->account_type =="farmer"){
+            // validation
+            $this->validate($request, [
+              'name' => 'required',
+              'phone' => 'required|min:11|numeric|unique:users,phone',
+              'farm_type' => 'required',
+              'password' => 'required|confirmed'
+
+          ]);
+          //generate random code insert to otp table send otp to user phone
           $reg_code   = str_random(6);//generate unique 6 string
           $otp            = new Otp();
           $otp->code      = $reg_code;
@@ -51,35 +67,68 @@ class UserController extends Controller
           $otp->save();
 
           //send otp as sms to user phone here 
-
-        $user = new User();
-        $user->ip          = $request['ip']; //hidden input field. auto get the user ip
-        $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
-        $user->user_type   = $request['user_type']; // can select from role table
-        $user->name        = $request['name']; // required 
-        $user->farm_type   = $request['farm_type']; //select fron db 'farmer'
-        $user->service_type = $request['service_type']; //select fron db 'service'
-        $user->country_code = $request['country_code']; // select from db
-        $user->phone       = $request['phone']; 
-        $user->reg_code    = $reg_code;
-        $user->password    = Hash::make($request['password']);
-        $user->status      = 'pending';
         
-        $user->save();
+          $user = new User();
+          $role = new Role();
+          $country = new Country();
+          $user->ip          = $request['ip']; //hidden input field. auto get the user ip
+          $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
+          $user->name        = $request['name']; // required 
+          $user->country_code = $country->get_country_code($request['country']); // select from db
+          $user->phone       = $request['phone']; 
+          $user->reg_code    = $reg_code;
+
+          $user_type = 'farmer';
+          $user->user_type   =  $role->get_role($user_type); // can select from role table
+          $user->farm_type   = $request['farm_type']; //select fron db 'farmer'
+          $user->password    = Hash::make($request['password']);
+          $user->status      = 'pending';
+          $user->save();         
+
+        }else if($request->account_type =="service provider"){
+
+            // validation
+            $this->validate($request, [
+              'name' => 'required',
+              'phone' => 'required|min:11|numeric|unique:users,phone',
+              'service_type' => 'required',
+              'password' => 'required|confirmed'
+
+          ]);      
+
+          //generate random code insert to otp table send otp to user phone
+          $reg_code   = str_random(6);//generate unique 6 string
+          $otp            = new Otp();
+          $otp->code      = $reg_code;
+
+          $otp->save();
+
+          //send otp as sms to user phone here 
+        
+          $user = new User();
+          $role = new Role();
+          $country = new Country();
+          $user->ip          = $request['ip']; //hidden input field. auto get the user ip
+          $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
+          $user->name        = $request['name']; // required 
+          $user->country_code = $country->get_country_code($request['country']); // select from db
+          $user->phone       = $request['phone']; 
+          $user->reg_code    = $reg_code;
+
+          $user_type = 'service';
+          $user->user_type   =  $role->get_role($user_type); // can select from role table
+          $user->service_type = $request['service_type']; //select fron db 'service' 
+          $user->password    = Hash::make($request['password']);
+          $user->status      = 'pending';
+          $user->save();            
+        }
+
 
         // upon successful registration create profile for user so user can edit their profile later
         if($user){
         // users profile page
-          $profile = new Profile();
-          $profile->user_id         = $user->id; //get inserted user id
-          $profile->email           = $request->input('email'); //optional 
-          $profile->business_name   = $request->input('business_name'); // optional
-          $profile->address         = $request->input('address'); // required 
-          $profile->location        = $request->input('location'); // required. fetch from lacation table
-          $profile->bank_name       = $request->input('bank_name'); // optional
-          $profile->account_name    = $request->input('account_name'); // optional
-          $profile->account_number  = $request->input('account_number'); // optional 
-          
+          $profile = new UserProfile();
+          $profile->user_id  = $user->id; //get inserted user id
           $profile->save(); 
 
         }
@@ -99,7 +148,7 @@ class UserController extends Controller
 
       $user  = User::where('reg_code', $otp)
               ->update([
-                'status' =>'verify'
+                'status' =>'verified'
               ]);
      
       return response()->json($user);
@@ -112,7 +161,31 @@ class UserController extends Controller
  
       return response()->json('Removed successfully.');
   }
+  
+  // update profile details
+  public function updateProfile(Request $request){
+    $user_id = $request->user_id;
+    $profile = array(
+      'email' => $request->input('email'), 
+      'business_name'   => $request->input('business_name'),
+      'address' => $request->input('address'),
+      'location' => $request->input('location'),
+      'bank_name' => $request->input('bank_name'),
+      'account_name' => $request->input('account_name'), 
+      'account_number'  => $request->input('account_number')
+    );
 
+    $profile  = UserProfile::where('user_id', $user_id)
+    ->update($profile);
+
+      return response()->json($profile);  
+  }
+
+    // get profile details
+    public function getProfile($id){
+      $profile = UserProfile::where('user_id', $id)->first();
+        return response()->json($profile);  
+    } 
 
   public function index(){
  
@@ -121,4 +194,99 @@ class UserController extends Controller
       return response()->json($users);
  
   }
-}//class
+  
+  // fetch all farm types
+  public function allFarmTypes(){
+ 
+    $all_farm_types  = FarmType::all();
+
+    return response()->json($all_farm_types);
+
+  } 
+  
+  //fetch all service types
+  public function allServiceTypes(){
+ 
+    $all_service_types  = ServiceType::all();
+
+    return response()->json($all_service_types);
+
+  } 
+
+
+  function random_code($length)
+  {
+    return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $length);
+  }
+  
+  
+
+   //forgot passowrd
+  public  function userForgotPassword(Request $request){
+
+    //validattion
+    $this->validate($request, [
+      'phone' => 'required|min:11|numeric',
+      ]);
+        //check if exist
+      $user =  User::where('phone', $request->phone)->exists();
+      if($user){
+
+        // bulk sms will be replaced here
+        $password_reset_code  = $this->random_code(6);
+        $user  = User::where('phone', $request->phone)
+        ->update([
+          'reset_code' =>$password_reset_code
+        ]);
+        // just for testing, will remove it when bulk sms is implemented
+        return response()->json(['reset_code'=>$password_reset_code]);
+      }
+
+
+   }
+
+   //reset new passowrd
+   public  function userResetPassword(Request $request){
+
+    //validattion
+    $this->validate($request, [
+      'phone' => 'required|min:11|numeric',
+      'new_password' => 'required',
+      'reset_code' => 'required'
+      ]);
+        //check if exist
+      $user =  User::where('reset_code', $request->reset_code)->exists();
+      if($user){
+
+        $user  = User::where('phone', $request->phone)
+        ->update([
+          'password' => Hash::make($request['new_password'])
+        ]);
+
+        return response()->json(['message'=>'Password successfully change'], 200);
+      }else{
+        return response()->json(['message'=>'Reset code is wrong'],401);
+      }
+
+
+   }
+
+  // authenticate user for login
+  public function authenticateUser(Request $request){
+      // validation
+      $this->validate($request, [
+        'phone' => 'required|min:11|numeric',
+        'password' => 'required'
+
+    ]);
+    $condition= array('phone'=>$request->phone);
+    $user = User::where($condition)->first();
+
+      if ( Hash::check($request->input('password'), $user->password) && $user->status =='verified') {
+         return response()->json(['status' => 'verified', 'user'=>$user],200);
+      }else{
+        return response()->json(['status' => 'fail', 'message'=>'Phone number or password is wrong'],401);
+      }
+   }
+
+}
