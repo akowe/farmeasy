@@ -23,7 +23,7 @@ class FarmerController extends Controller
             $this->validate($request, [
               'name' => 'required',
               'phone' => 'required|min:11|numeric|unique:users,phone',
-              'service_type' => 'required',
+              'farm_type' => 'required',
               'password' => 'required|confirmed'
 
           ]);      
@@ -47,9 +47,9 @@ class FarmerController extends Controller
           $user->phone       = $request['phone']; 
           $user->reg_code    = $reg_code;
 
-          $user_type = 'service';
+          $user_type = 'farmer';
           $user->user_type   =  $role->get_role($user_type); // can select from role table
-          $user->service_type = $request['service_type']; //select fron db 'service' 
+          $user->farm_type = $request['farm_type']; //select fron db 'service' 
           $user->password    = Hash::make($request['password']);
           $user->status      = 'pending';
           $user->save();            
