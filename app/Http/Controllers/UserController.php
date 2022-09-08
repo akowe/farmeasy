@@ -11,15 +11,13 @@ use Auth;
 use App\User;
 use App\UserProfile;
 use App\Otp;
-
 use App\Role;
 use App\Country;
 use App\FarmType;
 use App\ServiceType;
 use Carbon\Carbon;
 use Carbon\Profile;
-
-class UserController extends Controller
+class FarmerController extends Controller
 {
     //
    public function getOtp(Request $request){
@@ -33,117 +31,23 @@ class UserController extends Controller
 
     }
 
-    public function createUser(Request $request){
-  
 
-        if($request->account_type =="farmer"){
-            // validation
-            $this->validate($request, [
-              'name' => 'required',
-              'phone' => 'required|min:11|numeric|unique:users,phone',
-              'farm_type' => 'required',
-              'password' => 'required|confirmed'
+  //update user with  otp
+  public function verifyUser(Request $request){
+      
+      //Input::get('code')
+      $getCode = $request->input('code');
 
-          ]);
-          //generate random code insert to otp table send otp to user phone
-          $reg_code   = str_random(6);//generate unique 6 string
-         
-          //send otp as sms to user phone here 
-
-        
-          $user = new User();
-          $role = new Role();
-          $country = new Country();
-          $user->ip          = $request['ip']; //hidden input field. auto get the user ip
-          $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
-          $user->name        = $request['name']; // required 
-          $user->country_code = $country->get_country_code($request['country']); // select from db
-          $user->phone       = $request['phone']; 
-          $user->reg_code    = $reg_code;
-
-          $user_type = 'farmer';
-          $user->user_type   =  $role->get_role($user_type); // can select from role table
-          $user->farm_type   = $request['farm_type']; //select fron db 'farmer'
-          $user->password    = Hash::make($request['password']);
-          $user->status      = 'pending';
-          $user->save();         
-
-        }else if($request->account_type =="service provider"){
-
-            // validation
-            $this->validate($request, [
-              'name' => 'required',
-              'phone' => 'required|min:11|numeric|unique:users,phone',
-              'service_type' => 'required',
-              'password' => 'required|confirmed'
-
-          ]);      
-
-          //generate random code insert to otp table send otp to user phone
-          $reg_code   = str_random(6);//generate unique 6 string
-          $otp            = new Otp();
-          $otp->code      = $reg_code;
-
-          $otp->save();
-
-          //send otp as sms to user phone here 
-        
-          $user = new User();
-          $role = new Role();
-          $country = new Country();
-          $user->ip          = $request['ip']; //hidden input field. auto get the user ip
-          $user->country     = $request['country'];  // hidden field. auto get the user country from his ip
-          $user->name        = $request['name']; // required 
-          $user->country_code = $country->get_country_code($request['country']); // select from db
-          $user->phone       = $request['phone']; 
-          $user->reg_code    = $reg_code;
-
-          $user_type = 'service';
-          $user->user_type   =  $role->get_role($user_type); // can select from role table
-          $user->service_type = $request['service_type']; //select fron db 'service' 
-          $user->password    = Hash::make($request['password']);
-          $user->status      = 'pending';
-          $user->save();            
-        }
-
-
-          }
-
-          else{
-            return response('FME app not available in your country');
-          }
-
-        // upon successful registration create profile for user so user can edit their profile later
-        if($user){
-        // users profile page
-          $profile = new UserProfile();
-          $profile->user_id  = $user->id; //get inserted user id
-          $profile->save(); 
-
-        }
-
-      return response()->json($user);
- 
-  }
-
-
-public function updateUser(Request $request, $id){
-
+      //check if exist
+      $otp =  Otp::where('code', $getCode)->exists();
 
       $user  = User::where('reg_code', $otp)
               ->update([
                 'status' =>'verified'
-
+              ]);
      
-      $user->save();
-    // }
-    // else{
-    //         return response('Invalid code');
-    //       }
- 
       return response()->json($user);
-  }  
-
+  } 
 
 
   public function deleteUser($id){
@@ -185,24 +89,6 @@ public function updateUser(Request $request, $id){
       return response()->json($users);
  
   }
-  
-  // fetch all farm types
-  public function allFarmTypes(){
- 
-    $all_farm_types  = FarmType::all();
-
-    return response()->json($all_farm_types);
-
-  } 
-  
-  //fetch all service types
-  public function allServiceTypes(){
- 
-    $all_service_types  = ServiceType::all();
-
-    return response()->json($all_service_types);
-
-  } 
 
 
   function random_code($length)
@@ -227,10 +113,10 @@ public function updateUser(Request $request, $id){
         $password_reset_code  = $this->random_code(6);
         $user  = User::where('phone', $request->phone)
         ->update([
-          'reset_code' =>$password_reset_code
+          'reg_code' =>$password_reset_code
         ]);
         // just for testing, will remove it when bulk sms is implemented
-        return response()->json(['reset_code'=>$password_reset_code]);
+        return response()->json(['reg_code'=>$password_reset_code]);
       }
 
 
@@ -246,7 +132,7 @@ public function updateUser(Request $request, $id){
       'reset_code' => 'required'
       ]);
         //check if exist
-      $user =  User::where('reset_code', $request->reset_code)->exists();
+      $user =  User::where('reg_code', $request->reset_code)->exists();
       if($user){
 
         $user  = User::where('phone', $request->phone)
