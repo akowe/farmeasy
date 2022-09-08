@@ -20,7 +20,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('otp', ['uses' => 'UserController@getOtp']);
 
-    $router->post('user', ['uses' => 'UserController@createUser']);
+    $router->post('farmer', ['uses' => 'FarmerController@createFarmer']);
+
+    $router->get('all_farm_types', ['uses' => 'FarmerController@allFarmTypes']);   
+
+    $router->post('service', ['uses' => 'ServiceController@createService']);
+
+    $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
     $router->put('verify', ['uses' => 'UserController@verifyUser']);
 
@@ -35,10 +41,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
-
-    $router->get('all_farm_types', ['uses' => 'UserController@allFarmTypes']);
-
-    $router->get('all_service_types', ['uses' => 'UserController@allServiceTypes']);
 
     //authenticate login user
     $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
