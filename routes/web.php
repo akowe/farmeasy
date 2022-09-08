@@ -18,12 +18,9 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
 
-<<<<<<< HEAD
-    //$router->post('otp', ['uses' => 'UserController@getOtp']);
-=======
+
     $router->post('otp', ['uses' => 'UserController@getOtp']);
 
->>>>>>> f0d404eef2f8133cac9416c90cc9910e52c569d3
     $router->post('user', ['uses' => 'UserController@createUser']);
 
     $router->put('user/{id}', ['uses' => 'UserController@updateUser']);
