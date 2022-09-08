@@ -236,10 +236,10 @@ class UserController extends Controller
         $password_reset_code  = $this->random_code(6);
         $user  = User::where('phone', $request->phone)
         ->update([
-          'reset_code' =>$password_reset_code
+          'reg_code' =>$password_reset_code
         ]);
         // just for testing, will remove it when bulk sms is implemented
-        return response()->json(['reset_code'=>$password_reset_code]);
+        return response()->json(['reg_code'=>$password_reset_code]);
       }
 
 
@@ -255,7 +255,7 @@ class UserController extends Controller
       'reset_code' => 'required'
       ]);
         //check if exist
-      $user =  User::where('reset_code', $request->reset_code)->exists();
+      $user =  User::where('reg_code', $request->reset_code)->exists();
       if($user){
 
         $user  = User::where('phone', $request->phone)
