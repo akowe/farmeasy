@@ -51,7 +51,7 @@ class FarmerController extends Controller
             return response()->json(["message"=>"we can't identify your location, kindly try later"]);
           }
 
-          $user->country_code = $country->get_country_code($query_country); // select from db
+          $user->country_code = $country->get_country_code($request['country']); // select from db
 
           $user->phone       = $request['phone']; 
           $user->reg_code    = $reg_code;
