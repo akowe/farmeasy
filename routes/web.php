@@ -29,13 +29,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
-    $router->put('user/{id}', ['uses' => 'UserController@updateUser']);
+    $router->put('user', ['uses' => 'UserController@updateUser']);
 
-    $router->delete('user/{id}', ['uses' => 'UserController@deleteUser']);
+    $router->delete('user', ['uses' => 'UserController@deleteUser']);
 
-    $router->get('user', ['uses' => 'UserController@index']);
+    $router->get('users', ['uses' => 'UserController@index']);
 
-    $router->get('profile/{id}', ['uses' => 'UserController@getProfile']);
+    $router->post('verify', ['uses' => 'UserController@verifyUser']);
+    
+    $router->get('user', ['uses' => 'UserController@user']);
+
+    $router->get('profile', ['uses' => 'UserController@getProfile']);
 
     $router->post('profile', ['uses' => 'UserController@updateProfile']);
 

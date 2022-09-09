@@ -17,7 +17,7 @@ use App\FarmType;
 use App\ServiceType;
 use Carbon\Carbon;
 use Carbon\Profile;
-class FarmerController extends Controller
+class UserController extends Controller
 {
     //
    public function getOtp(Request $request){
@@ -41,16 +41,17 @@ class FarmerController extends Controller
       //check if exist
       $otp =  Otp::where('code', $getCode)->exists();
 
-      $user  = User::where('reg_code', $otp)
+      $user  = User::where('reg_code', $getCode)
               ->update([
                 'status' =>'verified'
               ]);
      
-      return response()->json($user);
+      return response()->json(["user"=>$user, "message"=>"Account successfully verified"]);
   } 
 
 
-  public function deleteUser($id){
+  public function deleteUser(Request $request){
+    $id = $request->id;
       $user  = User::find($id);
       $user->delete();
  
@@ -77,7 +78,8 @@ class FarmerController extends Controller
   }
 
     // get profile details
-    public function getProfile($id){
+    public function getProfile(Request $request){
+      $id =  $request->id;
       $profile = UserProfile::where('user_id', $id)->first();
         return response()->json($profile);  
     } 
@@ -90,6 +92,13 @@ class FarmerController extends Controller
  
   }
 
+  public function user(Request $request){
+ 
+    $id =  $request->id;
+    $user = User::where('id', $id)->first();
+      return response()->json($user);
+
+ }
 
   function random_code($length)
   {
@@ -111,12 +120,76 @@ class FarmerController extends Controller
 
         // bulk sms will be replaced here
         $password_reset_code  = $this->random_code(6);
+        $otp            = new Otp();
+        $otp->code      = $password_reset_code;
+        $otp->save();
+
         $user  = User::where('phone', $request->phone)
         ->update([
           'reg_code' =>$password_reset_code
         ]);
-        // just for testing, will remove it when bulk sms is implemented
-        return response()->json(['reg_code'=>$password_reset_code]);
+        $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
+        if ($query && $query['status'] == 'success') {
+         $query_country =$query['country'];
+        }else{
+          return response()->json(["message"=>"we can't identify your location, kindly try later"]);
+        }
+
+        $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
+        $sms_message = 'Kindly use this '.$password_reset_code.' code to reset your password.'. "\r\n";
+        $country_code = $country->get_country_code($query_country);
+        $payload = array(   
+          'to'=>$country_code.ltrim($request['phone'], '0'),
+          'from'=>'fastbeep',
+          'sms'=>$sms_message,
+          'channel'=> 'generic',
+          'type'=>'plain',
+          'api_key'=>$sms_api_key, 
+        );
+        $post_data = json_encode($payload);   
+            
+        if (isset($request['phone']) && !empty($request['phone'])) {
+          $curl = curl_init();
+          curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://api.ng.termii.com/api/sms/send',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          //CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_SSL_VERIFYPEER => false,
+          //CURLOPT_CAINFO, "C:/xampp/cacert.pem",
+          //CURLOPT_CAPATH, "C:/xampp/cacert.pem",
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS =>$post_data,
+          CURLOPT_HTTPHEADER => array(
+            'Content-Type: application/json'
+          ),
+          ));
+          $response = curl_exec($curl);
+          $err = curl_error($curl);
+          $res = json_decode($response, true);
+          
+          if($err){
+            return response()->json(["error"=>$err, "message"=>"Message is not sent"]);
+          }else{
+            if($response){
+              $data = array(
+                  'message' => $sms_message,
+                  'date' => date('Y-m-d H:i:sa'),
+                  'recipient' => $recipient,
+                  'user' => $user_id
+              );
+              return response()->json([ "message"=>"Message successfully sent"]);
+            }else{
+              return response()->json([ "message"=>"Message is not sent"]);
+            }
+          }
+                        
+        } else{
+          return response()->json([ "message"=>"your phone number can not be determined"]);
+        }
       }
 
 

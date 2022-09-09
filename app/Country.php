@@ -11,6 +11,11 @@ class Country extends Model
 
      function get_country_code($country){
         $getCountryCode= DB::table($this->table)->where('country', $country)->first();
-        return $getCountryCode->country_code;
+        if($getCountryCode){
+            return $getCountryCode->country_code;
+        }else{
+            return response()->json(["message"=>"This application is not allowed in ".ucfirst($country)]);
+        }
+        
     }
 }

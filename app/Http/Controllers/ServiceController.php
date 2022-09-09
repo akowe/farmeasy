@@ -24,7 +24,7 @@ class ServiceController extends Controller
             // validation
             $this->validate($request, [
               'name' => 'required',
-              'phone' => 'required|min:11|numeric|unique:users,phone',
+              'phone' => 'required|numeric|unique:users,phone',
               'service_type' => 'required',
               'password' => 'required|confirmed'
 
