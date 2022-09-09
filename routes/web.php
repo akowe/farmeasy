@@ -37,9 +37,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('verify', ['uses' => 'UserController@verifyUser']);
     
-    $router->get('user', ['uses' => 'UserController@user']);
+    $router->get('user/{id}', ['uses' => 'UserController@user']);
 
-    $router->get('profile', ['uses' => 'UserController@getProfile']);
+    $router->get('profile/{id}', ['uses' => 'UserController@getProfile']);
 
     $router->post('profile', ['uses' => 'UserController@updateProfile']);
 
