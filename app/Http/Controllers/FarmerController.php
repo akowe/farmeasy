@@ -29,7 +29,7 @@ class FarmerController extends Controller
           ]);      
 
           //generate random code insert to otp table send otp to user phone
-          $reg_code   = str_random(6);//generate unique 6 string
+          $reg_code   = random_int(100000, 999999); //random unique 6 figure str_random(6)
           $otp            = new Otp();
           $otp->code      = $reg_code;
 

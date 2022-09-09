@@ -119,7 +119,7 @@ class UserController extends Controller
       if($user){
 
         // bulk sms will be replaced here
-        $password_reset_code  = $this->random_code(6);
+        $password_reset_code  = $this->random_int(100000, 999999); //random_code(6);
         $otp            = new Otp();
         $otp->code      = $password_reset_code;
         $otp->save();
