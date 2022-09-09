@@ -47,6 +47,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
 
+    //select country code
+    $router->get('country_code', ['uses' => 'UserController@CountryCode']);  
+
     //authenticate login user
     $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
 

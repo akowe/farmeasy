@@ -239,4 +239,14 @@ class UserController extends Controller
       }
    }
 
+
+   //fetch country code from databade. country table
+    public function CountryCode(){
+ 
+    $country_code  = Country::all();
+
+    return response()->json($country_code);
+
+  } 
+
 }
