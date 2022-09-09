@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -17,6 +16,12 @@ use App\FarmType;
 use App\ServiceType;
 use Carbon\Carbon;
 use Carbon\Profile;
+
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Laravel\Lumen\Auth\Authorizable;
+
 class UserController extends Controller
 {
     //
@@ -229,14 +234,28 @@ class UserController extends Controller
         'password' => 'required'
 
     ]);
-    $condition= array('phone'=>$request->phone);
-    $user = User::where($condition)->first();
+      $condition= array('phone'=>$request->phone);
+      $user = User::where($condition)->first();
+          if (Hash::check($request->input('password'),$user->password) && $user->status =='verified') {
+            $apikey = base64_encode(str_random(40));
+            User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
+            return response()->json(['status' => 'success','api_key' => $apikey]);
+          }else{
+            return response()->json(['status' => 'fail', 'message'=>'Phone number or password is wrong'],401);
+          }
+      
+   }
 
-      if ( Hash::check($request->input('password'), $user->password) && $user->status =='verified') {
-         return response()->json(['status' => 'verified', 'user'=>$user],200);
-      }else{
-        return response()->json(['status' => 'fail', 'message'=>'Phone number or password is wrong'],401);
-      }
+   public function logout(){
+    if(Auth::check()){
+      $user = Auth::user();
+      $user->api_key = null;
+      $user->save();
+      return response()->json(["status" =>null, "message"=>"Successfully logout"]);
+    }else{
+      return response()->json(["status" =>null, "message"=>"Already logout"]);
+    }
+
    }
 
 }
