@@ -17,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         //
     }
-
+     // pass the api key to the header
     /**
      * Boot the authentication services for the application.
      *

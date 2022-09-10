@@ -1,6 +1,6 @@
 <?php 
 
-
+// created a config folder to add auth file
 return [
     'defaults' => [
         'guard' => 'api',
