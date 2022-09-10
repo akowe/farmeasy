@@ -73,6 +73,7 @@ class FarmerController extends Controller
               $profile->save(); 
     
             }
+            //implemented sms
           $payload = array(   
             'to'=>$country_code.''.ltrim($request['phone'], '0'),
             'from'=>'fastbeep',
