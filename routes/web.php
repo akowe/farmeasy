@@ -46,8 +46,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //select country code
     $router->get('country_code', ['uses' => 'UserController@CountryCode']);  
+
     $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
+
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
+
 });
 
 
@@ -59,9 +62,5 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($
 
     $router->post('profile', ['uses' => 'UserController@updateProfile']);
 
-   
-
-    //authenticate login user
-    $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
 
 });
