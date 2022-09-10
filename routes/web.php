@@ -29,13 +29,24 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
-    $router->put('user', ['uses' => 'UserController@updateUser']);
+   // $router->put('user', ['uses' => 'UserController@updateUser']);
 
     $router->delete('user', ['uses' => 'UserController@deleteUser']);
 
     $router->get('users', ['uses' => 'UserController@index']);
+    
+    $router->get('user', ['uses' => 'UserController@user']);
+
+    $router->get('logout', ['uses' => 'UserController@logout']);
+
+    //authenticate login user
+    $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
 
     $router->post('verify', ['uses' => 'UserController@verifyUser']);
+});
+
+
+$router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($router) {
     
     $router->get('user/{id}', ['uses' => 'UserController@user']);
 
@@ -46,6 +57,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
+
 
     //select country code
     $router->get('country_code', ['uses' => 'UserController@CountryCode']);  
