@@ -51,7 +51,7 @@ class ServiceController extends Controller
             return response()->json(["message"=>"we can't identify your location, kindly try later"]);
           }
 
-          $user->country_code = $country->get_country_code($query_country); // select from db
+          $user->country_code = $country->get_country_code($request['country']); // select from db
 
           $user->phone       = $request['phone']; 
           $user->reg_code    = $reg_code;
@@ -63,7 +63,7 @@ class ServiceController extends Controller
           $user->status      = 'pending';
           $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
           $sms_message = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
-          $country_code = $country->get_country_code($query_country);
+          $country_code = $country->get_country_code($request['country']);
           $user->save();            
           // upon successful registration create profile for user so user can edit their profile later
           if($user){
