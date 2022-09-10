@@ -65,12 +65,19 @@ class UserController extends Controller
   
   // update profile details
   public function updateProfile(Request $request){
+ // validation
+            $this->validate($request, [
+              'address' => 'required',
+              'location' => 'required',
+
+          ]);   
+
     $user_id = $request->user_id;
     $profile = array(
       'email' => $request->input('email'), 
       'business_name'   => $request->input('business_name'),
-      'address' => $request->input('address'),
-      'location' => $request->input('location'),
+      'address' => $request['address'],
+      'location' => $request['location'],
       'bank_name' => $request->input('bank_name'),
       'account_name' => $request->input('account_name'), 
       'account_number'  => $request->input('account_number')
