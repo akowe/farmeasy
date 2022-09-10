@@ -44,7 +44,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('verify', ['uses' => 'UserController@verifyUser']);
 
-    
     //select country code
     $router->get('country_code', ['uses' => 'UserController@CountryCode']);  
 });
