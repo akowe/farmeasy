@@ -124,7 +124,7 @@ class UserController extends Controller
       if($user){
 
         // bulk sms will be replaced here
-        $password_reset_code  = $this->random_int(100000, 999999); //random_code(6);
+        $password_reset_code  =random_int(100000, 999999); //random_code(6);
         $otp            = new Otp();
         $otp->code      = $password_reset_code;
         $otp->save();
@@ -133,6 +133,7 @@ class UserController extends Controller
         ->update([
           'reg_code' =>$password_reset_code
         ]);
+          $country = new Country();
         $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
         if ($query && $query['status'] == 'success') {
          $query_country =$query['country'];
@@ -142,7 +143,7 @@ class UserController extends Controller
 
         $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
         $sms_message = 'Kindly use this '.$password_reset_code.' code to reset your password.'. "\r\n";
-        $country_code = $country->get_country_code($query_country);
+        $country_code = $country->get_country_code($request['country']);
         $payload = array(   
           'to'=>$country_code.ltrim($request['phone'], '0'),
           'from'=>'fastbeep',
@@ -183,8 +184,7 @@ class UserController extends Controller
               $data = array(
                   'message' => $sms_message,
                   'date' => date('Y-m-d H:i:sa'),
-                  'recipient' => $recipient,
-                  'user' => $user_id
+                  
               );
               return response()->json([ "message"=>"Message successfully sent"]);
             }else{
