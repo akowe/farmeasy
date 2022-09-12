@@ -158,6 +158,7 @@ class UserController extends Controller
     $this->validate($request, [
       'phone' => 'required|min:11|numeric',
       ]);
+     $country = new Country();
         //check if exist
       $user =  User::where('phone', $request->phone)->exists();
       if($user){
