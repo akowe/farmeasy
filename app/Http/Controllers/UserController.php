@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
-use Auth;
+use App\Http\Helper\ResponseBuilder;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -17,6 +17,12 @@ use App\FarmType;
 use App\ServiceType;
 use Carbon\Carbon;
 use Carbon\Profile;
+
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Laravel\Lumen\Auth\Authorizable;
+
 class UserController extends Controller
 {
     //
@@ -47,6 +53,12 @@ class UserController extends Controller
               ]);
      
       return response()->json(["user"=>$user, "message"=>"Account successfully verified"]);
+      $status = true;
+      $message ="Account sucessfully verified";
+      $error = "";
+      $data = $user;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
   } 
 
 
@@ -54,8 +66,13 @@ class UserController extends Controller
     $id = $request->id;
       $user  = User::find($id);
       $user->delete();
- 
-      return response()->json('Removed successfully.');
+      $status = true;
+      $message ="Removed successfully";
+      $error = "";
+      $data = "";
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+     
   }
   
   // update profile details
@@ -73,22 +90,36 @@ class UserController extends Controller
 
     $profile  = UserProfile::where('user_id', $user_id)
     ->update($profile);
-
-      return response()->json($profile);  
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $profile;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);    
   }
 
     // get profile details
     public function getProfile(Request $request){
       $id =  $request->id;
       $profile = UserProfile::where('user_id', $id)->first();
-        return response()->json($profile);  
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $profile;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
     } 
 
   public function index(){
  
       $users  = User::all();
  
-      return response()->json($users);
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
  
   }
 
@@ -96,7 +127,13 @@ class UserController extends Controller
  
     $id =  $request->id;
     $user = User::where('id', $id)->first();
-      return response()->json($user);
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $user;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+   
 
  }
 
@@ -124,7 +161,7 @@ class UserController extends Controller
         $otp->code      = $password_reset_code;
         $otp->save();
 
-        $user  = User::where('phone', $request->phone)
+        /*$user  = User::where('phone', $request->phone)
         ->update([
           'reg_code' =>$password_reset_code
         ]);
@@ -133,11 +170,11 @@ class UserController extends Controller
          $query_country =$query['country'];
         }else{
           return response()->json(["message"=>"we can't identify your location, kindly try later"]);
-        }
-
+        }*/
+        $country_code = $country->get_country_code($request->country);
         $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
         $sms_message = 'Kindly use this '.$password_reset_code.' code to reset your password.'. "\r\n";
-        $country_code = $country->get_country_code($query_country);
+        //$country_code = $country->get_country_code($query_country);
         $payload = array(   
           'to'=>$country_code.ltrim($request['phone'], '0'),
           'from'=>'fastbeep',
@@ -175,20 +212,32 @@ class UserController extends Controller
             return response()->json(["error"=>$err, "message"=>"Message is not sent"]);
           }else{
             if($response){
-              $data = array(
-                  'message' => $sms_message,
-                  'date' => date('Y-m-d H:i:sa'),
-                  'recipient' => $recipient,
-                  'user' => $user_id
-              );
-              return response()->json([ "message"=>"Message successfully sent"]);
+              $status = true;
+              $message ="Message successfully sent";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);   
+             
             }else{
-              return response()->json([ "message"=>"Message is not sent"]);
+              $status = true;
+              $message ="Message is not sent";
+              $error = "";
+              $data = "";
+              $code = 400;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);   
+                    
             }
           }
                         
         } else{
-          return response()->json([ "message"=>"your phone number can not be determined"]);
+          $status = false;
+          $message ="Phone number can not be determined";
+          $error = "";
+          $data = "";
+          $code = 400;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+         
         }
       }
 
@@ -199,11 +248,19 @@ class UserController extends Controller
    public  function userResetPassword(Request $request){
 
     //validattion
-    $this->validate($request, [
-      'phone' => 'required|min:11|numeric',
+    $validator =Validator ::make($request->all(), [
+      'phone' => 'required|numeric',
       'new_password' => 'required',
-      'reset_code' => 'required'
-      ]);
+      'reset' => 'reuired'
+    ]);      
+   if($validator->fails()){
+    $status = false;
+    $message ="";
+    $error = $validator->errors()->first();
+    $data = "";
+    $code = 401;                
+    ResponseBuilder::result($status, $message, $error, $data, $code);   
+   } 
         //check if exist
       $user =  User::where('reg_code', $request->reset_code)->exists();
       if($user){
@@ -212,10 +269,21 @@ class UserController extends Controller
         ->update([
           'password' => Hash::make($request['new_password'])
         ]);
-
-        return response()->json(['message'=>'Password successfully change'], 200);
+        $status = true;
+        $message ="Message successfully sent";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+       
       }else{
-        return response()->json(['message'=>'Reset code is wrong'],401);
+        $status = true;
+        $message ="Reset Code is wrong";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+       
       }
 
 
@@ -224,19 +292,78 @@ class UserController extends Controller
   // authenticate user for login
   public function authenticateUser(Request $request){
       // validation
-      $this->validate($request, [
-        'phone' => 'required|min:11|numeric',
-        'password' => 'required'
+             // validation
+             $validator =Validator ::make($request->all(), [
+              'phone' => 'required|numeric',
+              'password' => 'required|confirmed'
 
-    ]);
-    $condition= array('phone'=>$request->phone);
-    $user = User::where($condition)->first();
+          ]);      
+           if($validator->fails()){
+            $status = false;
+            $message ="";
+            $error = $validator->errors()->first();
+            $data = "";
+            $code = 401;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code);   
+           } 
+      $condition= array('phone'=>$request->phone);
+      $user = User::where($condition)->first();
+          if (Hash::check($request->input('password'),$user->password) && $user->status =='verified') {
+            $apikey = base64_encode(str_random(40));
+            User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
+            $status = true;
+            $message ="";
+            $error = "";
+            $data = $apikey;
+            $code = 200;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          }else{
+            $status = false;
+            $message ="Phone number or password is wrong";
+            $error = "";
+            $data = $apikey;
+            $code = 401;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          }
+      
+   }
 
-      if ( Hash::check($request->input('password'), $user->password) && $user->status =='verified') {
-         return response()->json(['status' => 'verified', 'user'=>$user],200);
-      }else{
-        return response()->json(['status' => 'fail', 'message'=>'Phone number or password is wrong'],401);
-      }
+   // fetch all countries
+   public function allCountries(){
+ 
+    $countries = Country::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $countries;
+    $code = 200; 
+    return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+  }  
+   public function logout(){
+
+    if(Auth::user()){
+ 
+      $status = true;
+      $message ="Successfully logout";
+      $error = "";
+      $data ="";
+      $code = 200; 
+      $user = Auth::user();
+      $user->api_key = null;
+      $user->save();
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+    }else{
+      $status = true;
+      $message ="Already logout";
+      $error = "";
+      $data ="";
+      $code = 200; 
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+     
+    }
+
    }
 
 }
