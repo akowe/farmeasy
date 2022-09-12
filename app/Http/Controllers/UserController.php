@@ -303,7 +303,7 @@ class UserController extends Controller
              // validation
              $validator =Validator ::make($request->all(), [
               'phone' => 'required|numeric',
-              'password' => 'required|confirmed'
+              'password' => 'required'
 
           ]);      
            if($validator->fails()){
