@@ -77,12 +77,19 @@ class UserController extends Controller
   
   // update profile details
   public function updateProfile(Request $request){
+ // validation
+            $this->validate($request, [
+              'address' => 'required',
+              'location' => 'required',
+
+          ]);   
+
     $user_id = $request->user_id;
     $profile = array(
       'email' => $request->input('email'), 
       'business_name'   => $request->input('business_name'),
-      'address' => $request->input('address'),
-      'location' => $request->input('location'),
+      'address' => $request['address'],
+      'location' => $request['location'],
       'bank_name' => $request->input('bank_name'),
       'account_name' => $request->input('account_name'), 
       'account_number'  => $request->input('account_number')
@@ -156,7 +163,7 @@ class UserController extends Controller
       if($user){
 
         // bulk sms will be replaced here
-        $password_reset_code  = $this->random_code(6);
+        $password_reset_code  =random_int(100000, 999999); //random_code(6);
         $otp            = new Otp();
         $otp->code      = $password_reset_code;
         $otp->save();
@@ -165,6 +172,7 @@ class UserController extends Controller
         ->update([
           'reg_code' =>$password_reset_code
         ]);
+          $country = new Country();
         $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
         if ($query && $query['status'] == 'success') {
          $query_country =$query['country'];
@@ -365,5 +373,15 @@ class UserController extends Controller
     }
 
    }
+
+
+   //fetch country code from databade. country table
+    public function CountryCode(){
+ 
+    $country_code  = Country::all();
+
+    return response()->json($country_code);
+
+  } 
 
 }

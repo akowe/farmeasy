@@ -39,7 +39,7 @@ class ServiceController extends Controller
             return ResponseBuilder::result($status, $message, $error, $data, $code);   
            }
           //generate random code insert to otp table send otp to user phone
-          $reg_code   = str_random(6);//generate unique 6 string
+          $reg_code   = random_int(100000, 999999); // str_random(6);//generate unique 6 string
           $otp            = new Otp();
           $otp->code      = $reg_code;
 
