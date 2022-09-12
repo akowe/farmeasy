@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Http\Helper\ResponseBuilder;
+
 class Country extends Model
 {
     //
@@ -14,7 +16,12 @@ class Country extends Model
         if($getCountryCode){
             return $getCountryCode->country_code;
         }else{
-            return response()->json(["message"=>"This application is not allowed in ".ucfirst($country)]);
+            $status = false;
+            $message ="This application is not allowed in".ucfirst($country);
+            $error = '';
+            $code = 400;     
+            ResponseBuilder::result($status, $message, $error, $code);               
+            
         }
         
     }
