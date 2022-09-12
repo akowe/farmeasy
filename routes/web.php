@@ -60,6 +60,5 @@ $router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($
 
     $router->post('profile', ['uses' => 'UserController@updateProfile']);
 
- 
 
 });
