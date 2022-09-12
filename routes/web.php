@@ -15,7 +15,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-
+//add some new route 
 $router->group(['prefix' => 'api'], function () use ($router) {
 
 
@@ -29,13 +29,30 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
-    $router->put('user', ['uses' => 'UserController@updateUser']);
+   // $router->put('user', ['uses' => 'UserController@updateUser']);
 
     $router->delete('user', ['uses' => 'UserController@deleteUser']);
 
     $router->get('users', ['uses' => 'UserController@index']);
+    
+    $router->get('user', ['uses' => 'UserController@user']);
+
+    $router->get('logout', ['uses' => 'UserController@logout']);
+
+    $router->get('countries', ['uses' => 'UserController@allCountries']);
+    //authenticate login user
+    $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
 
     $router->post('verify', ['uses' => 'UserController@verifyUser']);
+    
+    $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
+
+    $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
+
+});
+
+
+$router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($router) {
     
     $router->get('user', ['uses' => 'UserController@user']);
 
@@ -43,11 +60,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('profile', ['uses' => 'UserController@updateProfile']);
 
-    $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
-
-    $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
-
-    //authenticate login user
-    $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
+ 
 
 });
