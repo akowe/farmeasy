@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Helper\ResponseBuilder;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -20,13 +21,21 @@ class FarmerController extends Controller
     public function createFarmer(Request $request){
 
             // validation
-            $this->validate($request, [
+            $validator =Validator ::make($request->all(), [
               'name' => 'required',
               'phone' => 'required|numeric|unique:users,phone',
               'farm_type' => 'required',
               'password' => 'required|confirmed'
 
           ]);      
+           if($validator->fails()){
+            $status = false;
+            $message ="";
+            $error = $validator->errors()->first();
+            $data = "";
+            $code = 400;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code);   
+           }     
 
           //generate random code insert to otp table send otp to user phone
           $reg_code   = str_random(6);//generate unique 6 string
@@ -43,16 +52,9 @@ class FarmerController extends Controller
           $user->ip = $request['ip']; //hidden input field. auto get the user ip
          
           $user->name        = $request['name']; // required 
-          $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
-          if ($query && $query['status'] == 'success') {
-           $query_country =$query['country'];
-           $user->country     =$query_country;  // hidden field. auto get the user country from his ip
-          }else{
-            return response()->json(["message"=>"we can't identify your location, kindly try later"]);
-          }
 
-          $user->country_code = $country->get_country_code($query_country); // select from db
-
+          $user->country_code = $country->get_country_code($request->country); // select from db
+          $user->country = $request->country;
           $user->phone       = $request['phone']; 
           $user->reg_code    = $reg_code;
 
@@ -63,7 +65,7 @@ class FarmerController extends Controller
           $user->status      = 'pending';
           $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
           $sms_message = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
-          $country_code = $country->get_country_code($query_country);
+          $country_code = $country->get_country_code($request->country);
           $user->save();            
           // upon successful registration create profile for user so user can edit their profile later
           if($user){
@@ -73,6 +75,7 @@ class FarmerController extends Controller
               $profile->save(); 
     
             }
+            //implemented sms
           $payload = array(   
             'to'=>$country_code.''.ltrim($request['phone'], '0'),
             'from'=>'fastbeep',
@@ -107,17 +110,39 @@ class FarmerController extends Controller
             $res = json_decode($response, true);
             
             if($err){
-              return response()->json(["error"=>$err, "message"=>"Message is not sent"]);
+              $status = false;
+              $message ="message is not sent";
+              $error = $err;
+              $data ="";
+              $code = 400;
+              return ResponseBuilder::result($status, $message, $error, $data, $code);
+              
             }else{
               if($response){
-                return response()->json($user);
+                $status = true;
+                $message ="message sent successfully";
+                $error = "";
+                $data = "";
+                $code = 200;                
+                return ResponseBuilder::result($status, $message, $error, $data, $code);
               }else{
-                return response()->json([ "message"=>"Message is not sent"]);
+                $status = false;
+                $message ="message is not sent";
+                $error = "";
+                $data = "";
+                $code = 400;                
+                return ResponseBuilder::result($status, $message, $error, $data, $code);               
               }
             }
                           
           } else{
-            return response()->json([ "message"=>"your phone number can not be determined"]);
+            $status = false;
+            $message ="your phone number can not be determined";
+            $error = "";
+            $data = "";
+            $code = 400;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code);  
+            
           }
         
  
@@ -129,7 +154,13 @@ class FarmerController extends Controller
  
     $all_farm_types  = FarmType::all();
 
-    return response()->json($all_farm_types);
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    
 
   } 
 
