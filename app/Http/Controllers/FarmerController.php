@@ -55,8 +55,7 @@ class FarmerController extends Controller
                 
                 $countryCode= $country->get_country_code($request->country); // select from db
                 if($countryCode !="false"){
-                  //$user->country_code = $countryCode->country_code;
-                  $user->country_code = $country->get_country_code($request->country);
+                  $user->country_code = $countryCode->country_code;
                 }else{
                   $status = false;
                   $message ="This application is not allowed in ".ucfirst($request->country);

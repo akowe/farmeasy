@@ -31,7 +31,7 @@ class ServiceController extends Controller
 
       ]);       
 
-          if($validator->fails()){
+         if($validator->fails()){
             $status = false;
             $message ="";
             $error = $validator->errors()->first();
@@ -67,9 +67,8 @@ class ServiceController extends Controller
                 }
                 $user->country      = $request->country;
                 $user->phone       = $request['phone']; 
-                $user->ip = $request->ip;
                 $user->reg_code    = $reg_code;
-                $user->user_type   =  '4'; // can select from role table
+                $user->user_type   =  '5'; // can select from role table
                 $user->service_type   = $request['service_type']; //select fron db 'service' 
                 $user->password    = Hash::make($request['password']);
                 $user->status      = 'pending';
