@@ -18,8 +18,8 @@ class CreateProfileTable extends Migration
             $table->string('user_id')->unique();
             $table->string('email')->nullable();
             $table->string('business_name')->nullable();
-            $table->string('address');
-            $table->string('location');
+            $table->string('address')->nullable();
+            $table->string('location')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('account_name')->nullable();
             $table->string('account_number')->nullable();
