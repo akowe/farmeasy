@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Helper\ResponseBuilder;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -23,21 +22,23 @@ class ServiceController extends Controller
 
 
             // validation
-            $validator =Validator ::make($request->all(), [
+            $this->validate($request, [
               'name' => 'required',
               'phone' => 'required|numeric|unique:users,phone',
               'service_type' => 'required',
               'password' => 'required|confirmed'
 
           ]);      
-           if($validator->fails()){
+
+            if($validator->fails()){
             $status = false;
             $message ="";
             $error = $validator->errors()->first();
             $data = "";
-            $code = 401;                
+            $code = 400;                
             return ResponseBuilder::result($status, $message, $error, $data, $code);   
-           }
+           } 
+
           //generate random code insert to otp table send otp to user phone
           $reg_code   = random_int(100000, 999999); // str_random(6);//generate unique 6 string
           $otp            = new Otp();
@@ -50,9 +51,17 @@ class ServiceController extends Controller
           $user = new User();
           $role = new Role();
           $country = new Country();
-          $user->ip          = $request['ip']; //hidden input field. auto get the user i
+          $user->ip          = $request['ip']; //hidden input field. auto get the user ip
           
-          $user->name        = $request['name'];
+          // $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
+          // if ($query && $query['status'] == 'success') {
+          //  $query_country =$query['country'];
+          //  $user->country     =$query_country;  // hidden field. auto get the user country from his ip
+          // }else{
+          //   return response()->json(["message"=>"we can't identify your location, kindly try later"]);
+          // }
+
+          $user->name        = $request['name']; // required 
           $user->country_code = $country->get_country_code($request->country); // select from db
           $user->country = $request->country;
           $user->phone       = $request['phone']; 
@@ -63,9 +72,8 @@ class ServiceController extends Controller
           $user->service_type = $request['service_type']; //select fron db 'service' 
           $user->password    = Hash::make($request['password']);
           $user->status      = 'pending';
-          $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
-          $sms_message = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
-          $country_code = $country->get_country_code($request->country);
+       
+          
           $user->save();            
           // upon successful registration create profile for user so user can edit their profile later
           if($user){
@@ -76,6 +84,9 @@ class ServiceController extends Controller
     
             }
             //implemented the sms
+            $country_code = $country->get_country_code($request['country']);
+            $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
+          $sms_message = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
           $payload = array(   
             'to'=>$country_code.''.ltrim($request['phone'], '0'),
             'from'=>'fastbeep',
@@ -110,53 +121,30 @@ class ServiceController extends Controller
             $res = json_decode($response, true);
             
             if($err){
-              $status = false;
-              $message ="message is not sent";
-              $error = $err;
-              $data ="";
-              $code = 400;
-              return ResponseBuilder::result($status, $message, $error, $data, $code);
-              
+              return response()->json(["error"=>$err, "message"=>"Message is not sent"]);
             }else{
               if($response){
-                $status = true;
-                $message ="message sent successfully";
-                $error = "";
-                $data = "";
-                $code = 200;                
-                return ResponseBuilder::result($status, $message, $error, $data, $code);
+                return response()->json($user);
               }else{
-                $status = false;
-                $message ="message is not sent";
-                $error = "";
-                $data = "";
-                $code = 400;                
-                return ResponseBuilder::result($status, $message, $error, $data, $code);               
+                return response()->json([ "message"=>"Message is not sent"]);
               }
             }
                           
           } else{
-            $status = false;
-            $message ="your phone number can not be determined";
-            $error = "";
-            $data = "";
-            $code = 400;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);  
-            
+            return response()->json([ "message"=>"your phone number can not be determined"]);
           }
+          
  
   }
 
   
   //fetch all service types
   public function allServiceTypes(){
+ 
     $all_service_types  = ServiceType::all();
-    $status = true;
-    $message ="";
-    $error = "";
-    $data = $all_service_types;
-    $code = 200;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+    return response()->json($all_service_types);
+
   } 
 
 

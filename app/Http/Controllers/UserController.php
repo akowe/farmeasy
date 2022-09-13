@@ -178,17 +178,7 @@ class UserController extends Controller
         $otp->code      = $password_reset_code;
         $otp->save();
 
-        /*$user  = User::where('phone', $request->phone)
-        ->update([
-          'reg_code' =>$password_reset_code
-        ]);
-          $country = new Country();
-        $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
-        if ($query && $query['status'] == 'success') {
-         $query_country =$query['country'];
-        }else{
-          return response()->json(["message"=>"we can't identify your location, kindly try later"]);
-        }*/
+      
         $country_code = $country->get_country_code($request->country);
         $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
         $sms_message = 'Kindly use this '.$password_reset_code.' code to reset your password.'. "\r\n";

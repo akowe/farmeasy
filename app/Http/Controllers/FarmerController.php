@@ -63,9 +63,8 @@ class FarmerController extends Controller
           $user->farm_type = $request['farm_type']; //select fron db 'service' 
           $user->password    = Hash::make($request['password']);
           $user->status      = 'pending';
-          $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
-          $sms_message = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
-          $country_code = $country->get_country_code($request->country);
+         
+        
           $user->save();            
           // upon successful registration create profile for user so user can edit their profile later
           if($user){
@@ -76,6 +75,9 @@ class FarmerController extends Controller
     
             }
             //implemented sms
+            $country_code = $country->get_country_code($request['country']);
+          $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
+          $sms_message = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
           $payload = array(   
             'to'=>$country_code.''.ltrim($request['phone'], '0'),
             'from'=>'fastbeep',
