@@ -14,7 +14,7 @@ class CreateOtpTable extends Migration
     public function up()
     {
         Schema::create('otp', function (Blueprint $table) {
-            $table->increments('id');
+             $table->bigIncrements('id');
             $table->string('code');
             $table->timestamps();
         });

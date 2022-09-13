@@ -14,7 +14,7 @@ class CreateFarmTypeTable extends Migration
     public function up()
     {
         Schema::create('farm_type', function (Blueprint $table) {
-            $table->increments('id');
+             $table->bigIncrements('id');
             $table->string('farm');
             $table->string('status')->nullable(); // status can be approved or regected. if approve it become visible on frontend
             $table->timestamps();
