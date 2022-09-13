@@ -82,7 +82,7 @@ class ServiceController extends Controller
               $profile->user_id  = $user->id; //get inserted user id
               $profile->save(); 
     
-            }
+
             //implemented the sms
             $country_code = $country->get_country_code($request['country']);
             $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
@@ -133,6 +133,8 @@ class ServiceController extends Controller
           } else{
             return response()->json([ "message"=>"your phone number can not be determined"]);
           }
+            }// if $user
+            
           
  
   }
