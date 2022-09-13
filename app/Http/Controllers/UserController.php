@@ -398,7 +398,12 @@ class UserController extends Controller
  
     $country_code  = Country::all();
 
-    return response()->json($country_code);
+    $status = true;
+    $message ="";
+    $error = "";
+    $data =$country_code;
+    $code = 200; 
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
   } 
 
