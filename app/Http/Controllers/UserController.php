@@ -45,20 +45,29 @@ class UserController extends Controller
       $getCode = $request->input('code');
 
       //check if exist
-      $otp =  Otp::where('code', $getCode)->exists();
+        $otp =  Otp::where('code', $getCode)->exists();
+        if($otp){
+          $user  = User::where('reg_code', $getCode)
+          ->update([
+            'status' =>'verified'
+          ]);
 
-      $user  = User::where('reg_code', $getCode)
-              ->update([
-                'status' =>'verified'
-              ]);
-     
-      return response()->json(["user"=>$user, "message"=>"Account successfully verified"]);
-      $status = true;
-      $message ="Account sucessfully verified";
-      $error = "";
-      $data = $user;
-      $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+        $status = true;
+        $message ="verified";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+       }else{
+        
+        $status = false;
+        $message ="kindly put your right verification code";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+       }
+ 
   } 
 
 
@@ -244,7 +253,7 @@ class UserController extends Controller
           $message ="Phone number can not be determined";
           $error = "";
           $data = "";
-          $code = 400;                
+          $code = 401;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);   
          
         }
@@ -286,7 +295,7 @@ class UserController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
        
       }else{
-        $status = true;
+        $status = false;
         $message ="Reset Code is wrong";
         $error = "";
         $data = "";
@@ -317,7 +326,9 @@ class UserController extends Controller
            } 
       $condition= array('phone'=>$request->phone);
       $user = User::where($condition)->first();
-          if (Hash::check($request->input('password'),$user->password) && $user->status =='verified') {
+      if($user){
+         if($user->status =="verified"){
+          if (Hash::check($request->input('password'),$user->password)) {
             $apikey = base64_encode(str_random(40));
             User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
             $status = true;
@@ -328,12 +339,28 @@ class UserController extends Controller
             return ResponseBuilder::result($status, $message, $error, $data, $code); 
           }else{
             $status = false;
-            $message ="Phone number or password is wrong";
+            $message ="Kindly provide the right password";
             $error = "";
-            $data = $apikey;
+            $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
           }
+         }else{
+          $status = false;
+          $message ="Kindly verify your account";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);         
+         }
+      }else{
+        $status = true;
+        $message ="Kindly put the right phone number";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);        
+      }
       
    }
 
