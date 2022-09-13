@@ -64,7 +64,6 @@ class FarmerController extends Controller
           }
           $user->country      = $request->country;
           $user->phone       = $request['phone']; 
-          $user->ip = $request->ip;
           $user->reg_code    = $reg_code;
           $user->user_type   =  '4'; // can select from role table
           $user->farm_type   = $request['farm_type']; //select fron db 'service' 
