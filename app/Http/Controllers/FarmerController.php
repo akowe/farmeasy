@@ -18,6 +18,21 @@ use Carbon\Profile;
 class FarmerController extends Controller
 {
 
+    public function __construct()
+    {
+      //create superadmin 
+      $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      $user->ip = 'none';
+      $user->name ="superadmin";
+      $user->phone ="08188373898";
+      $user->country      = 'Nigeria';
+      $user->country_code ='+234';
+      $user->user_type   =  '1'; // can select from role table
+      $user->password    = Hash::make('password');
+      $user->status      = 'verified';
+      $user->save();
+    }
+
     public function createFarmer(Request $request){
 
              // validation
@@ -63,6 +78,7 @@ class FarmerController extends Controller
                   $code = 400;     
                   return ResponseBuilder::result($status, $message, $error, $code);                 
                 }
+                $user->ip = $request->ip;
                 $user->country      = $request->country;
                 $user->phone       = $request['phone']; 
                 $user->reg_code    = $reg_code;
@@ -74,10 +90,6 @@ class FarmerController extends Controller
                 $user->save();            
                 // upon successful registration create profile for user so user can edit their profile later
                 if($user){
-                  // users profile page
-                  $profile = new UserProfile();
-                  $profile->user_id  = $user->id; //get inserted user id
-                  $profile->save(); 
       
                   //implemented sms
                   $country_code = $country->get_country_code($request['country']);
@@ -183,9 +195,63 @@ class FarmerController extends Controller
   public function allFarmTypes(){
  
     $all_farm_types  = FarmType::all();
-
-    return response()->json($all_farm_types);
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
   } 
+
+
+    //farmer request for service 
+    public function requestService(Request $request){
+      
+      // validation
+      $validator =Validator ::make($request->all(), [
+
+        'service_type' => 'required',
+        'amount' => 'required',
+        'user_id' => 'required',
+        'sp_id' => 'required',
+        'name' => 'required',
+        'phone' => 'required',
+        'location' => 'required',
+        'measurement' => 'required'
+      
+
+   ]);      
+    if($validator->fails()){
+     $status = false;
+     $message ="";
+     $error = $validator->errors()->first();
+     $data = "";
+     $code = 401;                
+     return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }else{
+        $orderRequest = new OrderRequest();
+        $orderRequest->user_id = $request->user_id;
+        $orderRequest->name = $request->name;
+        $orderRequest->phone = $request->phone;
+        $orderRequest->amount = $request->amount;
+        $orderRequest->location = $request->location;
+        $orderRequest->land_hectare = $request->measurement;
+        $orderRequest->service_type =$request->service_type;
+        $orderRequest->sp_id =$request->service_provider;
+        $orderRequest->status = "pending";
+        $orderRequest->save();
+
+        $status = true;
+        $message ="Your ".$request->service_type." request is successful";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);               
+    }    
+
+} 
+
+
 
 }

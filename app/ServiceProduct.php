@@ -3,12 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+//use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ServiceProduct extends Model
 {
     //
-    use HasFactory;
+    //use HasFactory;
 
     protected $table = 'product_service';
 }

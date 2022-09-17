@@ -33,11 +33,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-   
-    
 }

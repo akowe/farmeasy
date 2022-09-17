@@ -14,7 +14,9 @@ use App\Otp;
 use App\Role;
 use App\Country;
 use App\FarmType;
+use App\FeedBack;
 use App\ServiceType;
+use App\OrderRequest;
 use Carbon\Carbon;
 use Carbon\Profile;
 
@@ -25,7 +27,22 @@ use Laravel\Lumen\Auth\Authorizable;
 
 class UserController extends Controller
 {
-    //
+  
+  public function __construct()
+  {
+      //create superadmin  
+      $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      $user->ip = 'none';
+      $user->name ="superadmin";
+      $user->phone ="08188373898";
+      $user->country      = 'Nigeria';
+      $user->country_code ='+234';
+      $user->user_type   =  '1'; // can select from role table
+      $user->password    = Hash::make('password');
+      $user->status      = 'verified';
+      $user->save();
+  }
+
    public function getOtp(Request $request){
         //generate new otp
           $code   = str_random(6);
@@ -52,12 +69,18 @@ class UserController extends Controller
             'status' =>'verified'
           ]);
 
-        $status = true;
-        $message ="verified";
-        $error = "";
-        $data = "";
-        $code = 200;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          $user  = User::where('reg_code', $getCode)->first();
+             
+        // users profile page
+          $profile = new UserProfile();
+          $profile->user_id  = $user->id; //get inserted user id
+          $profile->save(); 
+          $status = true;
+          $message ="verified";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
        }else{
         
         $status = false;
@@ -72,58 +95,98 @@ class UserController extends Controller
 
 
   public function deleteUser(Request $request){
+
     $id = $request->id;
-      $user  = User::find($id);
-      $user->delete();
+    $user  = User::where('id', $id)->first();
+    if($user){
+      $user  = User::where('id', $id)
+      ->update([
+        'status' =>'delete'
+      ]);
       $status = true;
-      $message ="Removed successfully";
+      $message ="You have succssfully deleted a user ";
       $error = "";
       $data = "";
       $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }else{
+      $status = false;
+      $message ="User not found";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+ 
      
   }
   
   // update profile details
   public function updateProfile(Request $request){
- // validation
-            $this->validate($request, [
-              'address' => 'required',
-              'location' => 'required',
+ 
+    // validation
+    $validator =Validator ::make($request->all(), [
+      'email' => 'required',
+      'business_name' => 'required',
+      'address' => 'required',
+      'location' => 'required',
+      'bank_name' => 'required',
+      'account_name' => 'required',
+      'account_number' => 'required|numeric',
+      ]);  
 
-          ]);   
+      if($validator->fails()){
+        $status = false;
+        $message ="";
+        $error = $validator->errors()->first();
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }else{ 
 
-    $user_id = $request->user_id;
-    $profile = array(
-      'email' => $request->input('email'), 
-      'business_name'   => $request->input('business_name'),
-      'address' => $request['address'],
-      'location' => $request['location'],
-      'bank_name' => $request->input('bank_name'),
-      'account_name' => $request->input('account_name'), 
-      'account_number'  => $request->input('account_number')
-    );
 
-    $profile  = UserProfile::where('user_id', $user_id)
-    ->update($profile);
-    $status = true;
-    $message ="";
-    $error = "";
-    $data = $profile;
-    $code = 200;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);    
+        $user_id = $request->user_id;
+        $profile = array(
+          'email' => $request->input('email'), 
+          'business_name'   => $request->input('business_name'),
+          'address' => $request['address'],
+          'location' => $request['location'],
+          'bank_name' => $request->input('bank_name'),
+          'account_name' => $request->input('account_name'), 
+          'account_number'  => $request->input('account_number')
+        );
+
+      $profile  = UserProfile::where('user_id', $user_id)
+      ->update($profile);
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $profile;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+    }
   }
 
     // get profile details
     public function getProfile(Request $request){
       $id =  $request->id;
       $profile = UserProfile::where('user_id', $id)->first();
-      $status = true;
-      $message ="";
-      $error = "";
-      $data = $profile;
-      $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
+      if($profile){
+        $status = true;
+        $message ="";
+        $error = "";
+        $data = $profile;
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);
+      }else{
+        $status = false;
+        $message ="No user with this profile";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);        
+      }
+
     } 
 
   public function index(){
@@ -143,12 +206,22 @@ class UserController extends Controller
  
     $id =  $request->id;
     $user = User::where('id', $id)->first();
-    $status = true;
-    $message ="";
-    $error = "";
-    $data = $user;
-    $code = 200;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    if($user){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $user;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }else{
+      $status = false;
+      $message ="User with id ".$request->id." is not found";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);      
+    }
+   
    
 
  }
@@ -353,6 +426,7 @@ class UserController extends Controller
       }
       
    }
+  
 
    // fetch all countries
    public function allCountries(){
@@ -392,7 +466,29 @@ class UserController extends Controller
 
    }
 
+    // get location by user_id
+    public function getLocation(Request $request){
+      $user_id = $request->user_id;
+      $profile = UserProfile::where("user_id", $user_id)->first();
+      if($profile ){
+          $location = array("location" => $profile->location);
+          $status = true;
+          $message ="";
+          $error = "";
+          $data = $location;
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }else{
+          $status = false;
+          $message ="";
+          $error = "";
+          $data = "No location found";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);
+      }
 
+  
+    } 
    //fetch country code from databade. country table
     public function CountryCode(){
  
@@ -406,5 +502,56 @@ class UserController extends Controller
     return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
   } 
+
+
+    // feedback
+    public function feedBack (Request $request){
+      // validation
+          $validator =Validator ::make($request->all(), [
+  
+              'subject' => 'required',
+              'service_type' => 'required',
+              'message' => 'required',
+              'user_id' => 'required'
+          
+      
+          ]);      
+          if($validator->fails()){
+          $status = false;
+          $message ="";
+          $error = $validator->errors()->first();
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+          }else{
+              $feedback = new FeedBack();
+              $feedback->subject = $request->subject;
+              $feedback->service_type = $request->service_type;
+              $feedback->message = $request->message;
+              $feedback->user_id = $request->user_id;
+              $feedback->save();
+              $status = true;
+              $message ="Feedback successfully submitted";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          
+          }            
+}
+ 
+  // fetch all feedbacks
+  public function getFeedBack(){
+ 
+    $feedbacks  = FeedBack::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $feedbacks;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
 
 }

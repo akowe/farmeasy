@@ -31,8 +31,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
    // $router->put('user', ['uses' => 'UserController@updateUser']);
 
-    $router->delete('user', ['uses' => 'UserController@deleteUser']);
-
     $router->get('users', ['uses' => 'UserController@index']);
     
     $router->get('user', ['uses' => 'UserController@user']);
@@ -40,6 +38,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('logout', ['uses' => 'UserController@logout']);
 
     $router->get('countries', ['uses' => 'UserController@allCountries']);
+
     //authenticate login user
     $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
 
@@ -52,13 +51,52 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 });
 
 
-$router->group(['prefix' => 'api', 'middleware' => ['auth']], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     
     $router->get('user', ['uses' => 'UserController@user']);
 
     $router->get('profile', ['uses' => 'UserController@getProfile']);
 
-    $router->post('profile', ['uses' => 'UserController@updateProfile']);
+    $router->put('profile', ['uses' => 'UserController@updateProfile']);
+
+    $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
+
+    $router->post('agent', ['uses' => 'AdminController@createAgent']); 
+
+    $router->post('feedback', ['uses' => 'UserController@feedBack']);
+
+    $router->get('feedbacks', ['uses' => 'UserController@getFeedBack']); 
+
+    $router->get('all_famer_request', ['uses' => 'AgentController@allRequestByLocation']);
+    
+    $router->post('farmer_request', ['uses' => 'FarmerController@requestService']);
+
+    $router->post('admin_request', ['uses' => 'AdminController@requestService']);
+
+    $router->put('approve_request', ['uses' => 'AgentController@approveRequest']);
+
+    $router->post('agent_request', ['uses' => 'AgentController@requestService']);
+
+    $router->post('product', ['uses' => 'AgentController@addProduct']);
+
+    $router->get('products', ['uses' => 'AgentController@allProducts']);
+
+    $router->get('location', ['uses' => 'UserController@getLocation']);  
+
+    $router->get('agents', ['uses' => 'AgentController@getAgentsByLocation']); 
+
+    $router->get('agent_locations', ['uses' => 'AgentController@getAllAgentsLocation']); 
+
+    $router->get('service_providers', ['uses' => 'ServiceController@getAllServiceProviders']);
+    
+    $router->get('service_provider_location', ['uses' => 'ServiceController@getServiceProviderLocation']);
+    
+    $router->post('sell', ['uses' => 'AgentController@gsellProduct']); 
+
+});
 
 
+$router->group(['prefix' => 'api', 'middleware' => ['auth', 'delete:superadmin']], function () use ($router) {
+    
+    $router->delete('user', ['uses' => 'UserController@deleteUser']);
 });

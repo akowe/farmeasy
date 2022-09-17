@@ -11,6 +11,7 @@ use App\User;
 use App\UserProfile;
 use App\Otp;
 use App\Role;
+use App\ServiceProduct;
 use App\Country;
 use App\ServiceType;
 use Carbon\Carbon;
@@ -18,7 +19,20 @@ use Carbon\Profile;
 class ServiceController extends Controller
 {
 
-
+  public function __construct()
+  {
+      //create superadmin  
+      $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      $user->ip = 'none';
+      $user->name ="superadmin";
+      $user->phone ="08188373898";
+      $user->country      = 'Nigeria';
+      $user->country_code ='+234';
+      $user->user_type   =  '1'; // can select from role table
+      $user->password    = Hash::make('password');
+      $user->status      = 'verified';
+      $user->save();
+  }
     public function createService(Request $request){
 
 
@@ -65,6 +79,7 @@ class ServiceController extends Controller
                   $code = 400;     
                   return ResponseBuilder::result($status, $message, $error, $code);                 
                 }
+                $user->ip = $request->ip;
                 $user->country      = $request->country;
                 $user->phone       = $request['phone']; 
                 $user->reg_code    = $reg_code;
@@ -76,11 +91,6 @@ class ServiceController extends Controller
                 $user->save();            
                 // upon successful registration create profile for user so user can edit their profile later
                 if($user){
-                  // users profile page
-                  $profile = new UserProfile();
-                  $profile->user_id  = $user->id; //get inserted user id
-                  $profile->save(); 
-      
                   //implemented sms
                   $country_code = $country->get_country_code($request['country']);
       
@@ -181,7 +191,94 @@ class ServiceController extends Controller
  
   }
 
+  //add new product
+  public function addProduct(Request $request){
+        // validation
+        $validator =Validator ::make($request->all(), [
+          'name' => 'required',
+          'product_type' => 'required',
+          'quantity' => 'required',
+          'price' => 'required',
+          'rent_sell' => 'required',
+          'description' => 'required',
+          'user_id' => 'required'
+      
   
+      ]);      
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }else{
+          $product = new ServiceProduct();
+          $product->product_name = $request->name;
+          $product->product_type = $request->product_type;
+          $product->qty = $request->quantity;
+          $product->price = $request->price;
+          $product->rent_sell = $request->rent_sell;
+          $product->description = $request->description;
+          $product->user_id = $request->user_id;
+          $product->save();
+
+          $status = true;
+          $message ="You have successfully created ".$request->name." as a product";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      
+      } 
+  }
+
+   // fetch all service providers
+   public function getAllServiceProviders(){
+    
+    $serviceProviders = User::where("user_type", "5")->get();
+     if($serviceProvider){
+      $service_providers = array();
+      foreach($serviceProviders as  $serviceProvider){
+        $service_providers['sp_id'] = $serviceProvider->id;
+        $service_providers['name'] = $serviceProvider->name;
+      
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $service_providers;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+     }else{
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);       
+     }
+
+  } 
+
+
+  
+
+  //fetch all product
+  public function allProducts(){
+ 
+    $all_products  = ServiceProduct::all();
+
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_products;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+
+  } 
+
   //fetch all service types
   public function allServiceTypes(){
  

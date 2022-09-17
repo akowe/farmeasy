@@ -5,10 +5,10 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Request extends Model
+class OrderRequest extends Model
 {
     //
-    use HasFactory;
+    ///use HasFactory;
 
     protected $table = 'request';
 }
