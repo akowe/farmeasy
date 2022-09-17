@@ -127,12 +127,12 @@ class UserController extends Controller
     // validation
     $validator =Validator ::make($request->all(), [
       'email' => 'required',
-      'business_name' => 'required',
+      'business_name' => 'string',
       'address' => 'required',
       'location' => 'required',
-      'bank_name' => 'required',
-      'account_name' => 'required',
-      'account_number' => 'required|numeric',
+      'bank_name' => 'string',
+      'account_name' => 'string',
+      'account_number' => 'numeric',
       ]);  
 
       if($validator->fails()){
