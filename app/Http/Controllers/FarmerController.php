@@ -15,22 +15,22 @@ use App\Country;
 use App\FarmType;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\OrderRequest;
 class FarmerController extends Controller
 {
 
     public function __construct()
     {
       //create superadmin 
-      $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      $user->ip = 'none';
-      $user->name ="superadmin";
-      $user->phone ="08188373898";
-      $user->country      = 'Nigeria';
-      $user->country_code ='+234';
-      $user->user_type   =  '1'; // can select from role table
-      $user->password    = Hash::make('password');
-      $user->status      = 'verified';
-      $user->save();
+      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      // $user->name ="superadmin";
+      // $user->phone ="08188373898";
+      // $user->country      = 'Nigeria';
+      // $user->country_code ='+234';
+      // $user->user_type   =  '1'; // can select from role table
+      // $user->password    = Hash::make('password');
+      // $user->status      = 'verified';
+      // $user->save();
     }
 
     public function createFarmer(Request $request){
@@ -78,7 +78,7 @@ class FarmerController extends Controller
                   $code = 400;     
                   return ResponseBuilder::result($status, $message, $error, $code);                 
                 }
-                $user->ip = $request->ip;
+              
                 $user->country      = $request->country;
                 $user->phone       = $request['phone']; 
                 $user->reg_code    = $reg_code;
@@ -237,8 +237,8 @@ class FarmerController extends Controller
         $orderRequest->amount = $request->amount;
         $orderRequest->location = $request->location;
         $orderRequest->land_hectare = $request->measurement;
-        $orderRequest->service_type =$request->service_type;
-        $orderRequest->sp_id =$request->service_provider;
+        $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
+        $orderRequest->sp_id =$request->service_provider; //this should be selest from dropdown
         $orderRequest->status = "pending";
         $orderRequest->save();
 

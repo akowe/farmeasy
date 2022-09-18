@@ -14,6 +14,7 @@ use App\Role;
 use App\OrderRequest;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\Country;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -26,23 +27,23 @@ class SuperAdminController extends Controller
     public function __construct()
     {
       //create superadmin  
-      $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      $user->ip = 'none';
-      $user->name ="superadmin";
-      $user->phone ="08188373898";
-      $user->country      = 'Nigeria';
-      $user->country_code ='+234';
-      $user->user_type   =  '1'; // can select from role table
-      $user->password    = Hash::make('password');
-      $user->status      = 'verified';
-      $user->save();
+      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      // $user->ip = 'none';
+      // $user->name ="superadmin";
+      // $user->phone ="08188373898";
+      // $user->country      = 'Nigeria';
+      // $user->country_code ='+234';
+      // $user->user_type   =  '1'; // can select from role table
+      // $user->password    = Hash::make('password');
+      // $user->status      = 'verified';
+      // $user->save();
     }    
     // create admin 
     public function createAdmin(Request $request){
       
         // validation
         $validator =Validator ::make($request->all(), [
-         'ip' => 'required',
+        
          'name' => 'required',
          'country' => 'required',
          'phone' => 'required',
@@ -56,9 +57,10 @@ class SuperAdminController extends Controller
        $code = 401;                
        return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{
+        $name = $request['name'];
         $country = new Country();               
         $user = new User();
-        $user->name         = $request['name']; // required 
+        $user->name = $name;// required 
         
         $countryCode= $country->get_country_code($request->country); // select from db
         if($countryCode !="false"){
@@ -70,14 +72,22 @@ class SuperAdminController extends Controller
           $code = 400;     
           return ResponseBuilder::result($status, $message, $error, $code);                 
         }
+
+         //generate random code insert to otp table send otp to user phone
+          $reg_code   = random_int(100000, 999999); //random unique 6 figure str_random(6)
+          $otp        = new Otp();
+          $otp->code  = $reg_code;
+          $otp->save();
+
         $user->country      = $request->country;
         $user->phone       = $request['phone']; 
         $user->reg_code    = $reg_code;
         $user->user_type   =  '2'; // can select from role table
-        $user->farm_type   = $request['farm_type']; //select fron db 'service' 
+        // $user->farm_type   = $request['farm_type']; //Creating admin do not need this f 
         $user->password    = Hash::make($request['password']);
         $user->status      = 'verified';
-    
+        $user->save();
+        
         $status = true;
         $message ="You have successfull created ".$name." as an Admin";
         $error = "";

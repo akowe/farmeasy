@@ -31,16 +31,16 @@ class UserController extends Controller
   public function __construct()
   {
       //create superadmin  
-      $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      $user->ip = 'none';
-      $user->name ="superadmin";
-      $user->phone ="08188373898";
-      $user->country      = 'Nigeria';
-      $user->country_code ='+234';
-      $user->user_type   =  '1'; // can select from role table
-      $user->password    = Hash::make('password');
-      $user->status      = 'verified';
-      $user->save();
+      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      // $user->ip = 'none';
+      // $user->name ="superadmin";
+      // $user->phone ="08188373898";
+      // $user->country      = 'Nigeria';
+      // $user->country_code ='+234';
+      // $user->user_type   =  '1'; // can select from role table
+      // $user->password    = Hash::make('password');
+      // $user->status      = 'verified';
+      // $user->save();
   }
 
    public function getOtp(Request $request){
@@ -127,12 +127,12 @@ class UserController extends Controller
     // validation
     $validator =Validator ::make($request->all(), [
       'email' => 'required',
-      'business_name' => 'required',
+      'business_name' => 'string',
       'address' => 'required',
       'location' => 'required',
-      'bank_name' => 'required',
-      'account_name' => 'required',
-      'account_number' => 'required|numeric',
+      'bank_name' => 'string',
+      'account_name' => 'string',
+      'account_number' => 'numeric',
       ]);  
 
       if($validator->fails()){
