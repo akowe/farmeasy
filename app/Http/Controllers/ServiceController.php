@@ -191,47 +191,7 @@ class ServiceController extends Controller
  
   }
 
-  //add new product
-  public function addProduct(Request $request){
-        // validation
-        $validator =Validator ::make($request->all(), [
-          'name' => 'required',
-          'product_type' => 'required',
-          'quantity' => 'required',
-          'price' => 'required',
-          'rent_sell' => 'required',
-          'description' => 'required',
-          'user_id' => 'required'
-      
-  
-      ]);      
-      if($validator->fails()){
-      $status = false;
-      $message ="";
-      $error = $validator->errors()->first();
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
-      }else{
-          $product = new ServiceProduct();
-          $product->product_name = $request->name;
-          $product->product_type = $request->product_type;
-          $product->qty = $request->quantity;
-          $product->price = $request->price;
-          $product->rent_sell = $request->rent_sell;
-          $product->description = $request->description;
-          $product->user_id = $request->user_id;
-          $product->save();
 
-          $status = true;
-          $message ="You have successfully created ".$request->name." as a product";
-          $error = "";
-          $data = "";
-          $code = 200;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      
-      } 
-  }
 
    // fetch all service providers
    public function getAllServiceProviders(){
@@ -261,38 +221,6 @@ class ServiceController extends Controller
 
   } 
 
-
-  
-
-  //fetch all product
-  public function allProducts(){
- 
-    $all_products  = ServiceProduct::all();
-
-    $status = true;
-    $message ="";
-    $error = "";
-    $data = $all_products;
-    $code = 200;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code); 
-
-
-  } 
-
-  //fetch all service types
-  public function allServiceTypes(){
- 
-    $all_service_types  = ServiceType::all();
-
-    $status = true;
-    $message ="";
-    $error = "";
-    $data = $all_service_types;
-    $code = 200;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code); 
-
-
-  } 
 
 
 }
