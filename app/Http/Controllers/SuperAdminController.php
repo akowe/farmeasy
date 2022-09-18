@@ -77,6 +77,7 @@ class SuperAdminController extends Controller
           $reg_code   = random_int(100000, 999999); //random unique 6 figure str_random(6)
           $otp        = new Otp();
           $otp->code  = $reg_code;
+          $otp->save();
 
         $user->country      = $request->country;
         $user->phone       = $request['phone']; 
@@ -85,7 +86,8 @@ class SuperAdminController extends Controller
         // $user->farm_type   = $request['farm_type']; //Creating admin do not need this f 
         $user->password    = Hash::make($request['password']);
         $user->status      = 'verified';
-    
+        $user->save();
+        
         $status = true;
         $message ="You have successfull created ".$name." as an Admin";
         $error = "";

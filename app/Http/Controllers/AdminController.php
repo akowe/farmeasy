@@ -14,6 +14,7 @@ use App\Role;
 use App\OrderRequest;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\Country;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -48,7 +49,6 @@ class AdminController extends Controller
 
         // validation
      $validator =Validator::make($request->all(), [
-        'ip' => 'required',
         'name' => 'required',
         'country' => 'required',
         'phone' => 'required',
@@ -92,7 +92,7 @@ class AdminController extends Controller
            $user->country      = $request->country;
            $user->phone       = $request['phone']; 
            $user->reg_code    = $reg_code;
-           $user->user_type   =  '2'; // can select from role table
+           $user->user_type   =  '3'; // can select from role table
            $user->password    = Hash::make($request['password']);
            $user->status      = 'pending';
            
@@ -246,3 +246,5 @@ class AdminController extends Controller
     }
 
 }
+
+}//class

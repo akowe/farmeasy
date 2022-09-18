@@ -15,6 +15,7 @@ use App\Country;
 use App\FarmType;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\OrderRequest;
 class FarmerController extends Controller
 {
 
@@ -236,8 +237,8 @@ class FarmerController extends Controller
         $orderRequest->amount = $request->amount;
         $orderRequest->location = $request->location;
         $orderRequest->land_hectare = $request->measurement;
-        $orderRequest->service_type =$request->service_type;
-        $orderRequest->sp_id =$request->service_provider;
+        $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
+        $orderRequest->sp_id =$request->service_provider; //this should be selest from dropdown
         $orderRequest->status = "pending";
         $orderRequest->save();
 
