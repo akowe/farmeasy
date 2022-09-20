@@ -34,7 +34,6 @@ class FarmerController extends Controller
     }
 
     public function createFarmer(Request $request){
-
              // validation
           $validator =Validator::make($request->all(), [
             'name' => 'required',
@@ -103,7 +102,7 @@ class FarmerController extends Controller
       
                                   $gsm = array();
                   $country_code = $country_code;
-                  $arr_recipient = explode(',', $request['phone']);
+                  $arr_recipient = explode(',', ltrim($request['phone'], "0"));
       
                   $generated_id = uniqid('int_', false);
                   $generated_id = substr($generated_id, 0, 30);
@@ -230,24 +229,41 @@ class FarmerController extends Controller
      $code = 401;                
      return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }else{
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id = $request->user_id;
-        $orderRequest->name = $request->name;
-        $orderRequest->phone = $request->phone;
-        $orderRequest->amount = $request->amount;
-        $orderRequest->location = $request->location;
-        $orderRequest->land_hectare = $request->measurement;
-        $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
-        $orderRequest->sp_id =$request->service_provider; //this should be selest from dropdown
-        $orderRequest->status = "pending";
-        $orderRequest->save();
-
-        $status = true;
-        $message ="Your ".$request->service_type." request is successful";
-        $error = "";
-        $data = "";
-        $code = 200;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);               
+     
+        $profile = UserProfile::where(function($q){
+          return $q->whereNull("email")->orWhereNull("business_name")->orWhereNull("address")
+          ->orWhereNull("location")->orWhereNull("bank_name")->orWhereNull("account_name")
+          ->orWhereNull("account_number")->orWhereNull("profile_update_at");
+        })->first();
+        if($profile){
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id = $request->user_id;
+          $orderRequest->name = $request->name;
+          $orderRequest->phone = $request->phone;
+          $orderRequest->amount = $request->amount;
+          $orderRequest->location = $request->location;
+          $orderRequest->land_hectare = $request->measurement;
+          $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
+          $orderRequest->sp_id =$request->sp_id; //this should be selest from dropdown
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+  
+          $status = true;
+          $message =Ucwords($request->name)." your ".$request->service_type." request is successful";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);            
+  
+        }else{
+          $status = false;
+          $message ="Update your profile";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);          
+        }
+             
     }    
 
 } 

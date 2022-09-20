@@ -48,6 +48,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
 
+    $router->get('all_farmer_agent_request', ['uses' => 'ServiceController@allFarmerAgentRequestByLocation']);
+
 });
 
 
@@ -61,13 +63,13 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
 
-    $router->post('agent', ['uses' => 'AdminController@createAgent']); 
+    $router->post('agent', ['uses' => 'UserController@createAgent']); 
 
     $router->post('feedback', ['uses' => 'UserController@feedBack']);
 
     $router->get('feedbacks', ['uses' => 'UserController@getFeedBack']); 
 
-    $router->get('all_famer_request', ['uses' => 'AgentController@allRequestByLocation']);
+    $router->get('all_farmer_request', ['uses' => 'AgentController@allFarmerRequestByLocation']);
     
     $router->post('farmer_request', ['uses' => 'FarmerController@requestService']);
 
@@ -77,21 +79,21 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('agent_request', ['uses' => 'AgentController@requestService']);
 
-    $router->post('product', ['uses' => 'AgentController@addProduct']);
+    $router->post('product', ['uses' => 'ServiceController@addProduct']);
 
-    $router->get('products', ['uses' => 'AgentController@allProducts']);
-
-    $router->get('location', ['uses' => 'UserController@getLocation']);  
+    $router->get('products', ['uses' => 'ServiceController@allProducts']);
 
     $router->get('agents', ['uses' => 'AgentController@getAgentsByLocation']); 
 
-    $router->get('agent_locations', ['uses' => 'AgentController@getAllAgentsLocation']); 
+    
 
-    $router->get('service_providers', ['uses' => 'ServiceController@getAllServiceProviders']);
+    $router->get('all_request', ['uses' => 'SuperAdminController@allRequest']);
     
-    $router->get('service_provider_location', ['uses' => 'ServiceController@getServiceProviderLocation']);
+    $router->get('service_provider_by_location', ['uses' => 'ServiceController@getServiceProviderByLocation']);   
     
-    $router->post('sell', ['uses' => 'AgentController@gsellProduct']); 
+    $router->post('sell', ['uses' => 'AgentController@forSell']); 
+
+    $router->get('all_for_sell', ['uses' => 'AgentController@allForSell']); 
 
 });
 

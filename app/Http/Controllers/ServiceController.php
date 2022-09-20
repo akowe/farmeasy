@@ -12,6 +12,7 @@ use App\UserProfile;
 use App\Otp;
 use App\Role;
 use App\ServiceProduct;
+use App\OrderRequest;
 use App\Country;
 use App\ServiceType;
 use Carbon\Carbon;
@@ -22,16 +23,28 @@ class ServiceController extends Controller
   public function __construct()
   {
       //create superadmin  
-      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      // $user->ip = 'none';
-      // $user->name ="superadmin";
-      // $user->phone ="08188373898";
-      // $user->country      = 'Nigeria';
-      // $user->country_code ='+234';
-      // $user->user_type   =  '1'; // can select from role table
-      // $user->password    = Hash::make('password');
-      // $user->status      = 'verified';
-      // $user->save();
+
+      $user = User::where("phone","08188373898")->first();
+      if($user){
+        $status = false;
+        $message ="Phone number already taken";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }else{
+        $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+        $user->name ="superadmin";
+        $user->phone ="08188373898";
+        $user->country      = 'Nigeria';
+        $user->country_code ='+234';
+        $user->user_type   =  '1'; // can select from role table
+        $user->password    = Hash::make('password');
+        $user->status      = 'verified';
+        $user->save();
+      }      
+
+  
   }
     public function createService(Request $request){
 
@@ -79,7 +92,6 @@ class ServiceController extends Controller
                   $code = 400;     
                   return ResponseBuilder::result($status, $message, $error, $code);                 
                 }
-               
                 $user->country      = $request->country;
                 $user->phone       = $request['phone']; 
                 $user->reg_code    = $reg_code;
@@ -103,7 +115,7 @@ class ServiceController extends Controller
       
                                   $gsm = array();
                   $country_code = $country_code;
-                  $arr_recipient = explode(',', $request['phone']);
+                  $arr_recipient = explode(',', ltrim($request['phone'], "0"));
       
                   $generated_id = uniqid('int_', false);
                   $generated_id = substr($generated_id, 0, 30);
@@ -193,17 +205,25 @@ class ServiceController extends Controller
 
 
 
-   // fetch all service providers
-   public function getAllServiceProviders(){
-    
-    $serviceProviders = User::where("user_type", "5")->get();
-     if($serviceProvider){
-      $service_providers = array();
-      foreach($serviceProviders as  $serviceProvider){
-        $service_providers['sp_id'] = $serviceProvider->id;
-        $service_providers['name'] = $serviceProvider->name;
-      
+   // fetch service provider location
+   public function getServiceProviderByLocation(Request $request){
+     $location = $request->location;
+     $service_type =$request->service_type;
+     $service_providers = array();
+
+    $profiles = UserProfile::where("location", $location)->get();
+
+     if($profiles){
+     
+      foreach($profiles as $profile){
+       
+        $user = User::where(array("id" => $profile->user_id, "service_type"=>$service_type))->exists();
+        if($user){
+          $user = User::where(array("id" => $profile->user_id, "service_type"=>$service_type))->first();
+          $service_providers[] = array("id"=>$user->id, "name"=>$user->name);
+        }     
       }
+
       $status = true;
       $message ="";
       $error = "";
@@ -221,6 +241,102 @@ class ServiceController extends Controller
 
   } 
 
+ // all farmer and agent request by location
+ public function allFarmerAgentRequestByLocation(Request $request){
+  $location = $request->location;
+  $all_request = OrderRequest::where("location", $location)->get();
+  if($all_request){
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_request;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }else{
+    $status = false;
+    $message ="";
+    $error = "";
+    $data = "No request currently available";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }
+
+}  
+
+
+  //fetch all service types
+  public function allServiceTypes(){
+ 
+    $all_service_types  = ServiceType::all();
+
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_service_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+
+  } 
+
+
+  //add new product
+  public function addProduct(Request $request){
+    // validation
+    $validator =Validator ::make($request->all(), [
+      'name' => 'required',
+      'product_type' => 'required',
+      'quantity' => 'required',
+      'price' => 'required',
+      'rent_sell' => 'required',
+      'description' => 'required',
+      'user_id' => 'required'
+  
+
+  ]);      
+  if($validator->fails()){
+  $status = false;
+  $message ="";
+  $error = $validator->errors()->first();
+  $data = "";
+  $code = 401;                
+  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+  }else{
+      $product = new ServiceProduct();
+      $product->product_name = $request->name;
+      $product->product_type = $request->product_type;
+      $product->qty = $request->quantity;
+      $product->price = $request->price;
+      $product->rent_sell = $request->rent_sell;
+      $product->description = $request->description;
+      $product->user_id = $request->user_id;
+      $product->save();
+
+      $status = true;
+      $message ="You have successfully created ".$request->name." as a product";
+      $error = "";
+      $data = "";
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+  } 
+}
+
+
+  //fetch all product
+  public function allProducts(){
+    $all_products  = ServiceProduct::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_products;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+
+  }   
 
 
 }

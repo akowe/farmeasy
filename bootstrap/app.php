@@ -67,7 +67,8 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    'delete' => App\Http\Middleware\DeletePermission::class
+    'delete' => App\Http\Middleware\DeletePermission::class,
+    'edit' => App\Http\Middleware\DeletePermission::class
  ]);
 
 /*

@@ -46,7 +46,9 @@ class AgentController extends Controller
         // validation
         $validator =Validator ::make($request->all(), [
           'service_type' => 'required',
-          'service_provider' => 'required',
+          'sp_id' => 'required',
+          'name' => 'required',
+          'phone' => 'required',
           'amount' => 'required',
           'user_id' => 'required',
           'location' => 'required',
@@ -62,22 +64,39 @@ class AgentController extends Controller
        $code = 401;                
        return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{
+        $profile = UserProfile::where(function($q){
+          return $q->whereNull("email")->orWhereNull("business_name")->orWhereNull("address")
+          ->orWhereNull("location")->orWhereNull("bank_name")->orWhereNull("account_name")
+          ->orWhereNull("account_number")->orWhereNull("profile_update_at");
+        })->first();
+        if($profile){
+          $status = false;
+          $message ="Update your profile";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+        }else{
           $orderRequest = new OrderRequest();
           $orderRequest->user_id = $request->user_id;
           $orderRequest->amount = $request->amount;
+          $orderRequest->name = $request->name;
+          $orderRequest->phone = $request->phone;
           $orderRequest->location = $request->location;
           $orderRequest->land_hectare = $request->measurement;
           $orderRequest->service_type =$request->service_type;
-          $orderRequest->sp_id =$request->service_provider;
+          $orderRequest->sp_id =$request->sp_id;
           $orderRequest->status = "accepted";
           $orderRequest->save();
   
           $status = true;
-          $message ="Your ".$request->service_type." request is successful";
+          $message =Ucwords($request->name)." your ".$request->service_type." request is successful";
           $error = "";
           $data = "";
           $code = 200;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);               
+          return ResponseBuilder::result($status, $message, $error, $data, $code);     
+        }        
+          
       }    
   
   }
@@ -90,8 +109,8 @@ class AgentController extends Controller
       
        // validation
        $validator =Validator ::make($request->all(), [
-        'agent_id' => 'required',
-        'status' => 'accepted',
+        'user_id' => 'required',
+        'agent_id' => 'required'
         ]);      
         if($validator->fails()){
         $status = false;
@@ -102,9 +121,9 @@ class AgentController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
         }else{ 
 
-            $request  = OrderRequest::where('agent_id',$request->agent_id)
+            $request  = OrderRequest::where('user_id',$request->user_id)
             ->update([
-            'land_hectare' =>$request->input('meaurement'),
+             'agent_id' => $request->agent_id,
             'status' => "accepted"
             ]);
 
@@ -120,77 +139,22 @@ class AgentController extends Controller
 
    } 
 
- //fetch all agent by location 
-  public function getAgentsByLocation(Request $request){
-    $location = $request->location;
-    $allProfile= UserProfile::where("location", $location)->get();
-    if($allProfile){
-        $agents = array();
-        foreach($allProfile as $profile){
-            $user= User::where("id", $profile->user_id)->first();
-            $agents['agent_id'] = $user->id;
-            $agents['agent_name'] = $user->name;
-        }
-        $status = true;
-        $message ="";
-        $error = "";
-        $data = $agents;
-        $code = 200;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
-    }else{
-        $status = false;
-        $message ="No agent available for ".$request->location." location";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
-    }
-
-
-  } 
-
-  // fetch all location 
-  public function getAllAgentsLocation(){
-    $locations = array();
-    $users= User::where("id", "3")->get();
-    if($users){
-        foreach($users as $user){
-         
-            $allProfile= UserProfile::where("user_id", $user->id)->first();
-            foreach($allProfile as $profile){
-  
-              $locations['location'] = $profile->location;
-          
-          }          
-      }
-         
-          $status = true;
-          $message ="";
-          $error = "";
-          $data = $locations;
-          $code = 200;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code); 
-  
-    }else{
-
-          $status = false;
-          $message ="No location available";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code); 
-  
-    }
-
-
-  }
-
-  // 
-  public function allRequestByLocation(Request $request){
+  // all farmer request by location
+  public function allFarmerRequestByLocation(Request $request){
     $location = $request->location;
     $all_request = OrderRequest::where("location", $location)->get();
+    $all_farmer_request =array();
     if($all_request){
+      foreach($all_request as $main_request){
+          $user_id = $main_request->user_id;
+          $user = User::where("id", $user_id)->first();
+          if($user->user_type =="4"){
+            $all_request = OrderRequest::where("user_id", $user->id)->get();
+            $all_farmer_request = $all_request;
+          }
+
+      }
       $status = true;
       $message ="";
       $error = "";
@@ -210,19 +174,14 @@ class AgentController extends Controller
 
   }  
   
-  //add new product
-  public function addProduct(Request $request){
+  //for sell
+  public function forSell(Request $request){
     // validation
     $validator =Validator ::make($request->all(), [
       'name' => 'required',
-      'product_type' => 'required',
+      'crop_type' => 'required',
       'quantity' => 'required',
-      'price' => 'required',
-      'rent_sell' => 'required',
-      'description' => 'required',
-      'user_id' => 'required'
-  
-
+      'amount' => 'required'
   ]);      
   if($validator->fails()){
   $status = false;
@@ -232,15 +191,10 @@ class AgentController extends Controller
   $code = 401;                
   return ResponseBuilder::result($status, $message, $error, $data, $code);   
   }else{
-      $product = new ServiceProduct();
-      $product->product_name = $request->name;
-      $product->product_type = $request->product_type;
-      $product->qty = $request->quantity;
-      $product->price = $request->price;
-      $product->rent_sell = $request->rent_sell;
-      $product->description = $request->description;
-      $product->user_id = $request->user_id;
-      $product->save();
+    // wht table should i give sell
+     // $sell =? ;
+    
+      //$sell->save();
 
       $status = true;
       $message ="You have successfully created ".$request->name." as a product";
@@ -250,22 +204,6 @@ class AgentController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
   
   } 
-}
-
-
-  //fetch all product
-  public function allProducts(){
- 
-    $all_products  = ServiceProduct::all();
-
-    $status = true;
-    $message ="";
-    $error = "";
-    $data = $all_products;
-    $code = 200;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code); 
-
-
-  } 
+}  
 
 }

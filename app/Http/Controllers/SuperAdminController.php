@@ -147,32 +147,8 @@ class SuperAdminController extends Controller
 } 
 
 
-    // get location by user_id
-    public function getLocation(Request $request){
-      $user_id = $request->user_id;
-      $profile = UserProfile::where("user_id", $user_id)->first();
-      if($profile ){
-          $location = array("location" => $profile->location);
-          $status = true;
-          $message ="";
-          $error = "";
-          $data = $location;
-          $code = 200;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      }else{
-          $status = false;
-          $message ="";
-          $error = "";
-          $data = "No location found";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);
-      }
-
-  
-    }  
-
-  // fetch all request order
-  public function allOrder(){
+  // fetch all request 
+  public function allRequest(){
  
     $all_orders = OrderRequest::all();
     $status = true;
