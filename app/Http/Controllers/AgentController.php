@@ -65,9 +65,7 @@ class AgentController extends Controller
        return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{
         $profile = UserProfile::where(function($q){
-          return $q->whereNull("email")->orWhereNull("business_name")->orWhereNull("address")
-          ->orWhereNull("location")->orWhereNull("bank_name")->orWhereNull("account_name")
-          ->orWhereNull("account_number")->orWhereNull("profile_update_at");
+          return $q->whereNull("profile_update_at");
         })->first();
         if($profile){
           $status = false;
