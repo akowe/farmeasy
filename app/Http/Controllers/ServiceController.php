@@ -312,6 +312,7 @@ class ServiceController extends Controller
       $product->rent_sell = $request->rent_sell;
       $product->description = $request->description;
       $product->user_id = $request->user_id;
+      $product->prod_status="pending";
       $product->save();
 
       $status = true;
