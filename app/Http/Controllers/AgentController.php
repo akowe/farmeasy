@@ -107,7 +107,7 @@ class AgentController extends Controller
       
        // validation
        $validator =Validator ::make($request->all(), [
-        'user_id' => 'required',
+        'id' => 'required',
         'agent_id' => 'required'
         ]);      
         if($validator->fails()){
@@ -119,7 +119,7 @@ class AgentController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
         }else{ 
 
-            $request  = OrderRequest::where('user_id',$request->user_id)
+            $request  = OrderRequest::where('id',$request->id)
             ->update([
              'agent_id' => $request->agent_id,
             'status' => "accepted"
