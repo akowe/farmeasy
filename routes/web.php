@@ -48,7 +48,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
 
-    $router->get('all_farmer_agent_request', ['uses' => 'ServiceController@allFarmerAgentRequestByLocation']);
+  
 
 });
 
@@ -79,13 +79,15 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('agent_request', ['uses' => 'AgentController@requestService']);
 
+    $router->delete('user', ['uses' => 'UserController@deleteUser']);
+
     $router->post('product', ['uses' => 'ServiceController@addProduct']);
 
     $router->get('products', ['uses' => 'ServiceController@allProducts']);
 
     $router->get('agents', ['uses' => 'AgentController@getAgentsByLocation']); 
 
-    
+    $router->get('all_farmer_agent_request', ['uses' => 'ServiceController@allFarmerAgentRequestByLocation']);
 
     $router->get('all_request', ['uses' => 'SuperAdminController@allRequest']);
     
@@ -98,7 +100,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 });
 
 
-$router->group(['prefix' => 'api', 'middleware' => ['auth', 'delete:superadmin']], function () use ($router) {
+/*$router->group(['prefix' => 'api', 'middleware' => ['auth', 'delete:superadmin']], function () use ($router) {
     
     $router->delete('user', ['uses' => 'UserController@deleteUser']);
-});
+});*/
+

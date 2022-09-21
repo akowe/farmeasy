@@ -335,8 +335,6 @@ class ServiceController extends Controller
     $code = 200;                
     return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
-
   }   
-
 
 }

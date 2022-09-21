@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helper\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -251,29 +252,46 @@ class UserController extends Controller
 
 
   public function deleteUser(Request $request){
+      $id = $request->id;
+      $user  = User::where('id', $id)->first();
+     if(Gate::allows('destroy', $user)){
 
-    $id = $request->id;
-    $user  = User::where('id', $id)->first();
-    if($user){
-      $user  = User::where('id', $id)
-      ->update([
-        'status' =>'delete'
-      ]);
-      $status = true;
-      $message ="You have succssfully deleted a user ";
-      $error = "";
-      $data = "";
-      $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);  
-    }else{
+       if($user->user_type =="1"){
+        $status = true;
+        $message ="Oops Can't delete the admin";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);         
+       }else if($user !="1"){
+
+         $user  = User::where('id', $id)
+         ->update([
+           'status' =>'delete'
+         ]);
+         $status = true;
+         $message ="You have successfully deleted a user";
+         $error = "";
+         $data = "";
+         $code = 200;                
+         return ResponseBuilder::result($status, $message, $error, $data, $code);  
+       }else{
+         $status = false;
+         $message ="User not found";
+         $error = "";
+         $data = "";
+         $code = 401;                
+         return ResponseBuilder::result($status, $message, $error, $data, $code);  
+       }
+
+     }else{
       $status = false;
-      $message ="User not found";
+      $message ="Not Authorized to delete a user";
       $error = "";
       $data = "";
       $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);  
-    }
- 
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+     }
      
   }
   
@@ -623,7 +641,7 @@ class UserController extends Controller
 
    }
 
-   
+
    //fetch country code from databade. country table
     public function CountryCode(){
  
