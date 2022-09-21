@@ -147,7 +147,7 @@ class AgentController extends Controller
       foreach($all_request as $main_request){
           $user_id = $main_request->user_id;
           $user = User::where("id", $user_id)->first();
-          if($user->user_type =="4"){
+          if($user->user_type =="4" && $user->user_type =="3" ){
             $all_request = OrderRequest::where("user_id", $user->id)->get();
             $all_farmer_request = $all_request;
           }
