@@ -282,7 +282,7 @@ class UserController extends Controller
  
     // validation
     $validator =Validator ::make($request->all(), [
-      'email' => 'required',
+      'email' => 'string',
       'business_name' => 'string',
       'address' => 'required',
       'location' => 'required',
