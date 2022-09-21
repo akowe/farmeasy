@@ -14,6 +14,7 @@ use App\Role;
 use App\OrderRequest;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\UserProfile;
 use App\Country;
 
 use Illuminate\Auth\Authenticatable;
@@ -53,13 +54,11 @@ class AdminController extends Controller
       $validator =Validator ::make($request->all(), [
 
         'service_type' => 'required',
-        'amount' => 'required',
         'user_id' => 'required',
         'name' => 'required',
-        'service_provider' => 'required',
+        'sp_id' => 'required',
         'phone' => 'required',
         'location' => 'required',
-        'agent_id' => 'required'
       
 
    ]);      
@@ -71,13 +70,7 @@ class AdminController extends Controller
      $code = 401;                
      return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }else{
-     
-      $profile = UserProfile::where(function($q){
-        return $q->whereNull("email")->orWhereNull("business_name")->orWhereNull("address")
-        ->orWhereNull("location")->orWhereNull("bank_name")->orWhereNull("account_name")
-        ->orWhereNull("account_number")->orWhereNull("profile_update_at");
-      })->first();
-      if($profile){
+   
         $orderRequest = new OrderRequest();
         $orderRequest->user_id = $request->user_id;
         $orderRequest->name = $request->name;
@@ -96,14 +89,7 @@ class AdminController extends Controller
         $code = 200;                
         return ResponseBuilder::result($status, $message, $error, $data, $code);            
 
-      }else{
-        $status = false;
-        $message ="Update your profile";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);          
-      }               
+                  
     }
 
 }
