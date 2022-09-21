@@ -65,9 +65,7 @@ class AgentController extends Controller
        return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{
         $profile = UserProfile::where(function($q){
-          return $q->whereNull("email")->orWhereNull("business_name")->orWhereNull("address")
-          ->orWhereNull("location")->orWhereNull("bank_name")->orWhereNull("account_name")
-          ->orWhereNull("account_number")->orWhereNull("profile_update_at");
+          return $q->whereNull("profile_update_at");
         })->first();
         if($profile){
           $status = false;
@@ -109,7 +107,7 @@ class AgentController extends Controller
       
        // validation
        $validator =Validator ::make($request->all(), [
-        'user_id' => 'required',
+        'id' => 'required',
         'agent_id' => 'required'
         ]);      
         if($validator->fails()){
@@ -121,7 +119,7 @@ class AgentController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
         }else{ 
 
-            $request  = OrderRequest::where('user_id',$request->user_id)
+            $request  = OrderRequest::where('id',$request->id)
             ->update([
              'agent_id' => $request->agent_id,
             'status' => "accepted"
@@ -149,7 +147,7 @@ class AgentController extends Controller
       foreach($all_request as $main_request){
           $user_id = $main_request->user_id;
           $user = User::where("id", $user_id)->first();
-          if($user->user_type =="4"){
+          if($user->user_type =="4" && $user->user_type =="3" ){
             $all_request = OrderRequest::where("user_id", $user->id)->get();
             $all_farmer_request = $all_request;
           }

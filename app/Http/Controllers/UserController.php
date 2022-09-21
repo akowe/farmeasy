@@ -300,7 +300,7 @@ class UserController extends Controller
  
     // validation
     $validator =Validator ::make($request->all(), [
-      'email' => 'required',
+      'email' => 'string',
       'business_name' => 'string',
       'address' => 'required',
       'location' => 'required',
@@ -658,7 +658,7 @@ class UserController extends Controller
 
 
     // feedback
-    public function feedBack (Request $request){
+    public function feedBack(Request $request){
       // validation
           $validator =Validator ::make($request->all(), [
   

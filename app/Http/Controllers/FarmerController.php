@@ -231,9 +231,7 @@ class FarmerController extends Controller
     }else{
      
         $profile = UserProfile::where(function($q){
-          return $q->whereNull("email")->orWhereNull("business_name")->orWhereNull("address")
-          ->orWhereNull("location")->orWhereNull("bank_name")->orWhereNull("account_name")
-          ->orWhereNull("account_number")->orWhereNull("profile_update_at");
+          return $q->whereNull("profile_update_at");
         })->first();
         if($profile){
           $orderRequest = new OrderRequest();

@@ -24,25 +24,25 @@ class ServiceController extends Controller
   {
       //create superadmin  
 
-      $user = User::where("phone","08188373898")->first();
-      if($user){
-        $status = false;
-        $message ="Phone number already taken";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      }else{
-        $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-        $user->name ="superadmin";
-        $user->phone ="08188373898";
-        $user->country      = 'Nigeria';
-        $user->country_code ='+234';
-        $user->user_type   =  '1'; // can select from role table
-        $user->password    = Hash::make('password');
-        $user->status      = 'verified';
-        $user->save();
-      }      
+      // $user = User::where("phone","08188373898")->first();
+      // if($user){
+      //   $status = false;
+      //   $message ="Phone number already taken";
+      //   $error = "";
+      //   $data = "";
+      //   $code = 401;                
+      //   return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      // }else{
+      //   $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
+      //   $user->name ="superadmin";
+      //   $user->phone ="08188373898";
+      //   $user->country      = 'Nigeria';
+      //   $user->country_code ='+234';
+      //   $user->user_type   =  '1'; // can select from role table
+      //   $user->password    = Hash::make('password');
+      //   $user->status      = 'verified';
+      //   $user->save();
+      //}      
 
   
   }
@@ -312,6 +312,7 @@ class ServiceController extends Controller
       $product->rent_sell = $request->rent_sell;
       $product->description = $request->description;
       $product->user_id = $request->user_id;
+      $product->prod_status="pending";
       $product->save();
 
       $status = true;
