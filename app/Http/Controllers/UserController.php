@@ -640,7 +640,7 @@ class UserController extends Controller
 
 
     // feedback
-    public function feedBack (Request $request){
+    public function feedBack(Request $request){
       // validation
           $validator =Validator ::make($request->all(), [
   
