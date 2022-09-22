@@ -240,11 +240,11 @@ class ServiceController extends Controller
      }
 
   } 
-
- // all farmer and agent request by location
+ 
+ // all farmer and agent request by location for his own only
  public function allFarmerAgentRequestByLocation(Request $request){
   $location = $request->location;
-  $all_request = OrderRequest::where("location", $location)->where('status','!=','remove')->get();
+  $all_request = OrderRequest::where("location", $location)->where('sp_id', $request->user_id)->where('status','!=','remove')->get();
   if($all_request){
     $status = true;
     $message ="";

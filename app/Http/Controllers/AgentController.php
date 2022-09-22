@@ -137,7 +137,7 @@ class AgentController extends Controller
 
    } 
 
-
+ 
   // all farmer request by location
   public function allFarmerRequestByLocation(Request $request){
     $location = $request->location;
