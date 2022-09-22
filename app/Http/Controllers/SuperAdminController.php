@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helper\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\User;
 use App\Otp;
 use App\Role;
@@ -160,7 +161,49 @@ class SuperAdminController extends Controller
 
   }    
 
+  public function deleteOrderRequest(Request $request,  User $user){
+    $request_id = $request->request_id;
+    $orderRequest  = OrderRequest::where('id', $request_id)->first();
+    if(Gate::allows('destroy', $user)){
+      if($orderRequest){
+        if($orderRequest->status =="remove"){
+          $status = false;
+          $message ="This order has already been deleted";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        }else{
+          $orderRequest  = OrderRequest::where('id', $request_id)
+          ->update([
+            'status' =>'remove'
+          ]);
+          $status = true;
+          $message ="You have successfully deleted a request order";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+        }
 
+      }else{
+        $status = false;
+        $message ="Order request not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
 
+    }else{
+      $status = false;
+      $message ="Not Authorized to delete an";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+   
+  }
 
 }

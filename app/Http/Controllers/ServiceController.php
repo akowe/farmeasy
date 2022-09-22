@@ -244,7 +244,7 @@ class ServiceController extends Controller
  // all farmer and agent request by location
  public function allFarmerAgentRequestByLocation(Request $request){
   $location = $request->location;
-  $all_request = OrderRequest::where("location", $location)->get();
+  $all_request = OrderRequest::where("location", $location)->where('status','!=','remove')->get();
   if($all_request){
     $status = true;
     $message ="";
@@ -324,7 +324,28 @@ class ServiceController extends Controller
   
   } 
 }
+  //fetch all product by service
+  public function allProductsByServiceProvider(Request $request){
+    $sp_id  = $request->sp_id;
+    $all_products  = ServiceProduct::where("user_id", $sp_id)->get();
+    if($all_products){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_products;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="No product currently available";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
 
+
+  }  
 
   //fetch all product
   public function allProducts(){

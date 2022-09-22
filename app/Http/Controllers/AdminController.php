@@ -59,8 +59,6 @@ class AdminController extends Controller
         'sp_id' => 'required',
         'phone' => 'required',
         'location' => 'required',
-      
-
    ]);      
     if($validator->fails()){
      $status = false;
@@ -93,5 +91,78 @@ class AdminController extends Controller
     }
 
 }
+    //edit farmer request
+    public function editFarmerAgent(Request $request){
+      
+      // validation
+      $validator =Validator ::make($request->all(), [
+
+        'agent_id' => 'required',
+        'sp_id' => 'required',
+        'phone' => 'required',
+        'location'=> 'required',
+        'measurement' => 'required',
+    ]);  
+   if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }else{ 
+
+      $agent_id = $request->agent_id;
+      $profile = array(
+        'sp_id' =>$request->input('sp_id'),
+        'phone' => $request->input('phone'), 
+        'measurement' => $request['measurement'],
+        'location' => $request['location']
+      );
+
+      $orderRequest  = OrderRequest::where('agent_id', $agent_id)
+      ->update($orderRequest);
+      $status = true;
+      $message ="Request successfully updated";
+      $error = "";
+      $data = "";
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+  }
+
+    //assign request to agent
+    public function assignRequestTogent(Request $request){
+      
+      // validation
+      $validator =Validator ::make($request->all(), [
+        'agent_id' => 'required',
+        'request_id' => 'required'
+    ]);  
+   if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }else{ 
+
+      $request_id = $request->request_id;
+      $orderRequest = array(
+        'agent_id' =>$request->input('agent_id')
+      );
+
+      $orderRequest  = OrderRequest::where('id', $request_id)
+      ->update($orderRequest);
+      $status = true;
+      $message ="You have successfully assigned request to an agent";
+      $error = "";
+      $data = "";
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+  }
+
 
 }//class

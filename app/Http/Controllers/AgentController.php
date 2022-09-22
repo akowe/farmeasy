@@ -86,11 +86,11 @@ class AgentController extends Controller
           $orderRequest->sp_id =$request->sp_id;
           $orderRequest->status = "accepted";
           $orderRequest->save();
-  
+           
           $status = true;
           $message =Ucwords($request->name)." your ".$request->service_type." request is successful";
           $error = "";
-          $data = "";
+          $data = array("status"=>"payment");
           $code = 200;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);     
         }        
@@ -129,7 +129,7 @@ class AgentController extends Controller
             $status = true;
             $message ="You have successully accepted the order";
             $error = "";
-            $data = "";
+            $data = $data = array("status"=>"payment");
             $code = 200;                
             return ResponseBuilder::result($status, $message, $error, $data, $code); 
         }
@@ -141,7 +141,7 @@ class AgentController extends Controller
   // all farmer request by location
   public function allFarmerRequestByLocation(Request $request){
     $location = $request->location;
-    $all_request = OrderRequest::where("location", $location)->get();
+    $all_request = OrderRequest::where("location", $location)->where('status','!=','remove')->get();
     $all_farmer_request =array();
     if($all_request){
       foreach($all_request as $main_request){

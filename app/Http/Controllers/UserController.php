@@ -264,17 +264,25 @@ class UserController extends Controller
         $code = 200;                
         return ResponseBuilder::result($status, $message, $error, $data, $code);         
        }else if($user !="1"){
-
-         $user  = User::where('id', $id)
-         ->update([
-           'status' =>'delete'
-         ]);
-         $status = true;
-         $message ="You have successfully deleted a user";
-         $error = "";
-         $data = "";
-         $code = 200;                
-         return ResponseBuilder::result($status, $message, $error, $data, $code);  
+        if($user->status =="remove"){
+          $status = false;
+          $message ="This user has already been deleted";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+         }else{
+          $user  = User::where('id', $id)
+          ->update([
+            'status' =>'remove'
+          ]);
+          $status = true;
+          $message ="You have successfully deleted a user";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        } 
        }else{
          $status = false;
          $message ="User not found";
@@ -367,7 +375,6 @@ class UserController extends Controller
   public function index(){
  
       $users  = User::all();
- 
       $status = true;
       $message ="";
       $error = "";
@@ -382,12 +389,22 @@ class UserController extends Controller
     $id =  $request->id;
     $user = User::where('id', $id)->first();
     if($user){
-      $status = true;
-      $message ="";
-      $error = "";
-      $data = $user;
-      $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
+      if($user->status =="remove"){
+        $status = false;
+        $message ="User with id ".$request->id." is not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);
+      }else{
+        $status = true;
+        $message ="";
+        $error = "";
+        $data = $user;
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);
+      }
+
     }else{
       $status = false;
       $message ="User with id ".$request->id." is not found";
@@ -547,28 +564,34 @@ class UserController extends Controller
 
   // authenticate user for login
   public function authenticateUser(Request $request){
-      // validation
-             // validation
-             $validator =Validator ::make($request->all(), [
-              'phone' => 'required|numeric',
-              'password' => 'required'
 
-          ]);      
-           if($validator->fails()){
-            $status = false;
-            $message ="";
-            $error = $validator->errors()->first();
-            $data = "";
-            $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);   
-           } 
-      $condition= array('phone'=>$request->phone);
-      $user = User::where($condition)->first();
-      if($user){
-         if($user->status =="verified"){
-          if (Hash::check($request->input('password'),$user->password)) {
-            $apikey = base64_encode(str_random(40));
-            User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
+    // validation
+    $validator =Validator ::make($request->all(), [
+    'phone' => 'required|numeric',
+    'password' => 'required'
+
+    ]);      
+    if($validator->fails()){
+    $status = false;
+    $message ="";
+    $error = $validator->errors()->first();
+    $data = "";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    } 
+
+    $condition= array('phone'=>$request->phone);
+    $user = User::where($condition)->first();
+    if($user){
+      if($user->status =="verified"){
+        if (Hash::check($request->input('password'),$user->password)) {
+          $apikey = base64_encode(str_random(40));
+          User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
+
+          $profile = UserProfile::where(function($q){
+            return $q->whereNull("profile_update_at");
+          })->first();
+          if($profile){                  
             $status = true;
             $message ="";
             $error = "";
@@ -577,28 +600,38 @@ class UserController extends Controller
             return ResponseBuilder::result($status, $message, $error, $data, $code); 
           }else{
             $status = false;
-            $message ="Kindly provide the right password";
+            $message ="Update your profile";
             $error = "";
             $data = "";
             $code = 401;                
             return ResponseBuilder::result($status, $message, $error, $data, $code);             
-          }
-         }else{
+
+          }                  
+        }else{
           $status = false;
-          $message ="Kindly verify your account";
+          $message ="Kindly provide the right password";
           $error = "";
           $data = "";
           $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);         
-         }
+          return ResponseBuilder::result($status, $message, $error, $data, $code);             
+        }
       }else{
-        $status = true;
-        $message ="Kindly put the right phone number";
+        $status = false;
+        $message ="Kindly verify your account";
         $error = "";
         $data = "";
         $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);        
+        return ResponseBuilder::result($status, $message, $error, $data, $code);         
       }
+    }else{
+      $status = true;
+      $message ="Kindly put the right phone number";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);        
+    }
+
       
    }
   
