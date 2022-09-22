@@ -598,7 +598,7 @@ class UserController extends Controller
             return ResponseBuilder::result($status, $message, $error, $data, $code);                  
             
           }else{
-                 $status = true;
+            $status = true;
             $message ="";
             $error = "";
             $data = $apikey;

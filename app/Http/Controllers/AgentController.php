@@ -88,7 +88,7 @@ class AgentController extends Controller
           $orderRequest->save();
            
           $status = true;
-          $message =Ucwords($request->name)." your ".$request->service_type." request is successful";
+          $message =Ucwords($request->name)." your request for".$request->service_type." is successful";
           $error = "";
           $data = array("status"=>"payment");
           $code = 200;                
