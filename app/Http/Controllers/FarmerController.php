@@ -230,10 +230,10 @@ class FarmerController extends Controller
      return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }else{
      
-        $profile = UserProfile::where(function($q){
-          return $q->whereNull("profile_update_at");
-        })->first();
-        if($profile){
+        // $profile = UserProfile::where(function($q){
+        //   return $q->whereNull("profile_update_at");
+        // })->first();
+        // if($profile){
           $orderRequest = new OrderRequest();
           $orderRequest->user_id = $request->user_id;
           $orderRequest->name = $request->name;
@@ -253,14 +253,7 @@ class FarmerController extends Controller
           $code = 200;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);            
   
-        }else{
-          $status = false;
-          $message ="Update your profile";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);          
-        }
+       
              
     }    
 

@@ -64,17 +64,17 @@ class AgentController extends Controller
        $code = 401;                
        return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{
-        $profile = UserProfile::where(function($q){
-          return $q->whereNull("profile_update_at");
-        })->first();
-        if($profile){
-          $status = false;
-          $message ="Update your profile";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);   
-        }else{
+        // $profile = UserProfile::where(function($q){
+        //   return $q->whereNull("profile_update_at");
+        // })->first();
+        // if($profile){
+        //   $status = false;
+        //   $message ="Update your profile";
+        //   $error = "";
+        //   $data = "";
+        //   $code = 401;                
+        //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
+        // }else{
           $orderRequest = new OrderRequest();
           $orderRequest->user_id = $request->user_id;
           $orderRequest->amount = $request->amount;
@@ -88,12 +88,12 @@ class AgentController extends Controller
           $orderRequest->save();
            
           $status = true;
-          $message =Ucwords($request->name)." your request for".$request->service_type." is successful";
+          $message =Ucwords($request->name)." your request for " .$request->service_type. " is successful";
           $error = "";
           $data = array("status"=>"payment");
           $code = 200;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);     
-        }        
+        //}        
           
       }    
   
