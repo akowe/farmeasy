@@ -588,23 +588,22 @@ class UserController extends Controller
           $apikey = base64_encode(str_random(40));
           User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
 
-          $profile = UserProfile::where(function($q){
-            return $q->whereNull("profile_update_at");
-          })->first();
-          if($profile){                  
-            $status = true;
-            $message ="";
-            $error = "";
-            $data = $apikey;
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
-          }else{
-            $status = false;
+          $profile = UserProfile::where(['user_id' => $user->id, 'profile_update_at' => null])->first();
+          if($profile){ 
+           $status = false;
             $message ="Update your profile";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);             
+            return ResponseBuilder::result($status, $message, $error, $data, $code);                  
+            
+          }else{
+                 $status = true;
+            $message ="";
+            $error = "";
+            $data = $apikey;
+            $code = 200;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code);       
 
           }                  
         }else{
