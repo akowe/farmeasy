@@ -372,7 +372,10 @@ class UserController extends Controller
 
     } 
 
+// this should be for admin only
   public function index(){
+
+    if( Auth::user()->role == '2'){
  
       $users  = User::all();
       $status = true;
@@ -381,12 +384,21 @@ class UserController extends Controller
       $data = $users;
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+    else{
+      $status = false;
+        $message ="You don't have permission to view this page";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }
  
   }
 
   public function user(Request $request){
- 
-    $id =  $request->id;
+  $id = Auth::user()->id;
+    //$id =  $request->id;
     $user = User::where('id', $id)->first();
     if($user){
       if($user->status =="remove"){

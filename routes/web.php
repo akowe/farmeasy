@@ -75,6 +75,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->delete('user', ['uses' => 'UserController@deleteUser']);
 
+    //this should be for admin only
     $router->get('users', ['uses' => 'UserController@index']);
 
     $router->post('product', ['uses' => 'ServiceController@addProduct']);
