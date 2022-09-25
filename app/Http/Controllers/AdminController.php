@@ -70,7 +70,7 @@ class AdminController extends Controller
     }else{
    
         $orderRequest = new OrderRequest();
-        $orderRequest->user_id = $request->user_id;
+        $orderRequest->user_id = Auth::user()->id;
         $orderRequest->name = $request->name;
         $orderRequest->phone = $request->phone;
         $orderRequest->amount = $request->amount;
