@@ -50,7 +50,6 @@ class AgentController extends Controller
           'name' => 'required',
           'phone' => 'required',
           'amount' => 'required',
-          'user_id' => 'required',
           'location' => 'required',
           'measurement' => 'required'
         
@@ -76,7 +75,7 @@ class AgentController extends Controller
         //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
         // }else{
           $orderRequest = new OrderRequest();
-          $orderRequest->user_id = $request->user_id;
+          $orderRequest->user_id = Auth::user()->id;
           $orderRequest->amount = $request->amount;
           $orderRequest->name = $request->name;
           $orderRequest->phone = $request->phone;

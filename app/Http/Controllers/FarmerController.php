@@ -212,7 +212,6 @@ class FarmerController extends Controller
 
         'service_type' => 'required',
         'amount' => 'required',
-        'user_id' => 'required',
         'sp_id' => 'required',
         'name' => 'required',
         'phone' => 'required',
@@ -235,7 +234,7 @@ class FarmerController extends Controller
         // })->first();
         // if($profile){
           $orderRequest = new OrderRequest();
-          $orderRequest->user_id = $request->user_id;
+          $orderRequest->user_id = Auth::user()->id;
           $orderRequest->name = $request->name;
           $orderRequest->phone = $request->phone;
           $orderRequest->amount = $request->amount;
