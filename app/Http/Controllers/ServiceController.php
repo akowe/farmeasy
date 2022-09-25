@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helper\ResponseBuilder;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -244,7 +245,7 @@ class ServiceController extends Controller
  // all farmer and agent request by location for his own only
  public function allFarmerAgentRequestByLocation(Request $request){
   $location = $request->location;
-  $all_request = OrderRequest::where("location", $location)->where('sp_id', $request->user_id)->where('status','!=','remove')->get();
+  $all_request = OrderRequest::where("location", $location)->where('sp_id', Auth::user()->id)->where('status','!=','remove')->get();
   if($all_request){
     $status = true;
     $message ="";
@@ -291,8 +292,7 @@ class ServiceController extends Controller
       'quantity' => 'required',
       'price' => 'required',
       'rent_sell' => 'required',
-      'description' => 'required',
-      'user_id' => 'required'
+      'description' => 'required'
   
 
   ]);      
@@ -311,7 +311,7 @@ class ServiceController extends Controller
       $product->price = $request->price;
       $product->rent_sell = $request->rent_sell;
       $product->description = $request->description;
-      $product->user_id = $request->user_id;
+      $product->user_id = Auth::user()->id;
       $product->prod_status="pending";
       $product->save();
 
