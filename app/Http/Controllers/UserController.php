@@ -327,7 +327,8 @@ class UserController extends Controller
       }else{ 
 
 
-        $user_id = $request->user_id;
+        //$user_id = $request->user_id;
+        $user_id = Auth::user()->id;
         $profile = array(
           'email' => $request->input('email'), 
           'business_name'   => $request->input('business_name'),
@@ -352,7 +353,8 @@ class UserController extends Controller
 
     // get profile details
     public function getProfile(Request $request){
-      $id =  $request->id;
+      //$id =  $request->id;
+      $id = Auth::user()->id;
       $profile = UserProfile::where('user_id', $id)->first();
       if($profile){
         $status = true;
@@ -699,8 +701,8 @@ class UserController extends Controller
   
               'subject' => 'required',
               'service_type' => 'required',
-              'message' => 'required',
-              'user_id' => 'required'
+              'message' => 'required'
+             
           
       
           ]);      
@@ -716,7 +718,7 @@ class UserController extends Controller
               $feedback->subject = $request->subject;
               $feedback->service_type = $request->service_type;
               $feedback->message = $request->message;
-              $feedback->user_id = $request->user_id;
+              $feedback->user_id = Auth::user()->id;
               $feedback->save();
               $status = true;
               $message ="Feedback successfully submitted";
