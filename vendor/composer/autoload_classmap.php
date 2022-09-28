@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\BecomeAgent' => $baseDir . '/app/BecomeAgent.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Country' => $baseDir . '/app/Country.php',
     'App\\Events\\Event' => $baseDir . '/app/Events/Event.php',
@@ -35,6 +36,8 @@ return array(
     'App\\OrderRequest' => $baseDir . '/app/OrderRequest.php',
     'App\\Otp' => $baseDir . '/app/Otp.php',
     'App\\Payment' => $baseDir . '/app/Payment.php',
+    'App\\Policies\\PricePolicy' => $baseDir . '/app/Policies/PricePolicy.php',
+    'App\\Policies\\ServiceTypePolicy' => $baseDir . '/app/Policies/ServiceTypePolicy.php',
     'App\\Policies\\UserPolicy' => $baseDir . '/app/Policies/UserPolicy.php',
     'App\\Price' => $baseDir . '/app/Price.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
@@ -46,6 +49,7 @@ return array(
     'App\\User' => $baseDir . '/app/User.php',
     'App\\UserProfile' => $baseDir . '/app/UserProfile.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'BecomeAgentSeeder' => $baseDir . '/database/seeds/BecomeAgentSeeder.php',
     'Carbon\\Carbon' => $vendorDir . '/nesbot/carbon/src/Carbon/Carbon.php',
     'Carbon\\CarbonInterval' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
     'Carbon\\CarbonPeriod' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonPeriod.php',

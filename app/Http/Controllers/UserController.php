@@ -18,8 +18,10 @@ use App\FarmType;
 use App\FeedBack;
 use App\ServiceType;
 use App\OrderRequest;
+use App\BecomeAgent;
 use Carbon\Carbon;
 use Carbon\Profile;
+
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -835,5 +837,43 @@ class UserController extends Controller
 
   } 
 
+
+
+ public function BecomeAnAgent(Request $request){
+      // validation
+          $validator =Validator ::make($request->all(), [
+  
+            'name'        => 'required',
+            'location'    => 'required',
+            'email'       => 'string',
+            'phone'       => 'required'
+             
+          ]);   
+             
+          if($validator->fails()){
+          $status = false;
+          $message ="";
+          $error = $validator->errors()->first();
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+          }else{
+              $agent = new BecomeAgent();
+              $agent->name    = $request->name;
+              $agent->phone   = $request->phone;
+              $agent->location = $request->location;
+              $agent->email   =  $request->email;
+              $agent->save();
+              
+              $status = true;
+              $message ="Request successfull, You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          
+          }            
+}
+ 
 
 }

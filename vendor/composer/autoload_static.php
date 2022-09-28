@@ -425,6 +425,7 @@ class ComposerStaticInit75970421610e9ea9238a12de740c5fa6
     );
 
     public static $classMap = array (
+        'App\\BecomeAgent' => __DIR__ . '/../..' . '/app/BecomeAgent.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Country' => __DIR__ . '/../..' . '/app/Country.php',
         'App\\Events\\Event' => __DIR__ . '/../..' . '/app/Events/Event.php',
@@ -454,6 +455,8 @@ class ComposerStaticInit75970421610e9ea9238a12de740c5fa6
         'App\\OrderRequest' => __DIR__ . '/../..' . '/app/OrderRequest.php',
         'App\\Otp' => __DIR__ . '/../..' . '/app/Otp.php',
         'App\\Payment' => __DIR__ . '/../..' . '/app/Payment.php',
+        'App\\Policies\\PricePolicy' => __DIR__ . '/../..' . '/app/Policies/PricePolicy.php',
+        'App\\Policies\\ServiceTypePolicy' => __DIR__ . '/../..' . '/app/Policies/ServiceTypePolicy.php',
         'App\\Policies\\UserPolicy' => __DIR__ . '/../..' . '/app/Policies/UserPolicy.php',
         'App\\Price' => __DIR__ . '/../..' . '/app/Price.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
@@ -465,6 +468,7 @@ class ComposerStaticInit75970421610e9ea9238a12de740c5fa6
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\UserProfile' => __DIR__ . '/../..' . '/app/UserProfile.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'BecomeAgentSeeder' => __DIR__ . '/../..' . '/database/seeds/BecomeAgentSeeder.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\CarbonPeriod' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonPeriod.php',

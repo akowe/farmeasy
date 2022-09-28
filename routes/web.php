@@ -42,6 +42,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
 
+    //request to become an agent
+    $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
+
 });
 
 
@@ -53,12 +56,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->get('profile', ['uses' => 'UserController@getProfile']);
 
     $router->put('profile', ['uses' => 'UserController@updateProfile']);
-
-
-    
-
-   
-
 
     $router->post('feedback', ['uses' => 'UserController@feedBack']);
 
