@@ -50,7 +50,8 @@ class UserController extends Controller
     $validator =Validator::make($request->all(), [
         'name' => 'required',
         'country' => 'required',
-        'phone' => 'required'
+        'phone' => 'required',
+        'password' => 'required'
 
     ]);      
 
@@ -71,7 +72,7 @@ class UserController extends Controller
     if($otp->save()){
        //send otp as sms to user phone here 
      
-       $user_type = 'admin';
+       //$user_type = 'admin';
        // $role = new Role();
        $country = new Country();
       
@@ -91,6 +92,7 @@ class UserController extends Controller
        $user->phone       = $request['phone']; 
        $user->reg_code    = $reg_code;
        $user->user_type   =  '3'; // can select from role table
+       $user->password    = Hash::make($request->password);
        $user->status      = 'pending';
        
        $user->save();            

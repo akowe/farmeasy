@@ -204,16 +204,12 @@ class FarmerController extends Controller
       $validator =Validator ::make($request->all(), [
 
         'service_type' => 'required',
-<<<<<<< HEAD
-=======
         'amount' => 'required',
         'sp_id' => 'required',
         'name' => 'required',
         'phone' => 'required',
         'location' => 'required',
         'measurement' => 'required'
->>>>>>> a835464a4ff8353e68ad8a8d698d2a33b4455911
-      
 
    ]);      
     if($validator->fails()){
@@ -250,11 +246,7 @@ class FarmerController extends Controller
              
     }    
 
-<<<<<<< HEAD
-  } 
-=======
-}
->>>>>>> a835464a4ff8353e68ad8a8d698d2a33b4455911
+
 
 //farmer click to request Tractor service
 public function HireTractor(Request $request){

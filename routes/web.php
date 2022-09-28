@@ -54,15 +54,12 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->put('profile', ['uses' => 'UserController@updateProfile']);
 
-<<<<<<< HEAD
-    $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
 
-    $router->post('agent', ['uses' => 'UserController@createAgent']); 
+    
 
-    $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
+   
 
-=======
->>>>>>> a835464a4ff8353e68ad8a8d698d2a33b4455911
+
     $router->post('feedback', ['uses' => 'UserController@feedBack']);
 
     $router->get('feedbacks', ['uses' => 'UserController@getFeedBack']); 
@@ -89,6 +86,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
 
      // AGENT ACCOUNT
+    $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
+
     $router->get('all_farmer_request', ['uses' => 'AgentController@allFarmerRequestByLocation']);
 
     $router->put('approve_request', ['uses' => 'AgentController@approveRequest']);
@@ -128,7 +127,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->put('assign_request_to_agent', ['uses' => 'AdminController@assignRequestToAgent']); 
 
-<<<<<<< HEAD
+
     $router->get('prices', ['uses' => 'PriceController@allPrices']);
 
     $router->get('price', ['uses' => 'PriceController@editPrice']);
@@ -149,14 +148,15 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('all_payments', ['uses' => 'PaymentController@allPayment']); 
     
-=======
+
     
 
     //SUPER ADMIN
     $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
 
+    $router->post('agent', ['uses' => 'UserController@createAgent']); 
+
     $router->get('all_request', ['uses' => 'SuperAdminController@allRequest']);
->>>>>>> a835464a4ff8353e68ad8a8d698d2a33b4455911
 
     $router->delete('delete_order_request', ['uses' => 'SuperAdminController@deleteOrderRequest']);
 
