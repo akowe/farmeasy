@@ -47,29 +47,28 @@ class UserController extends Controller
   public function createAgent(Request $request){
 
     // validation
- $validator =Validator::make($request->all(), [
-    'name' => 'required',
-    'country' => 'required',
-    'phone' => 'required',
-    'password' => 'required'
+    $validator =Validator::make($request->all(), [
+        'name' => 'required',
+        'country' => 'required',
+        'phone' => 'required'
 
- ]);      
+    ]);      
 
- if($validator->fails()){
-   $status = false;
-   $message ="";
-   $error = $validator->errors()->first();
-   $data = "";
-   $code = 400;                
-   return ResponseBuilder::result($status, $message, $error, $data, $code);   
-   }     
+    if($validator->fails()){
+    $status = false;
+    $message ="";
+    $error = $validator->errors()->first();
+    $data = "";
+    $code = 400;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }     
 
    //generate random code insert to otp table send otp to user phone
    $reg_code   = random_int(100000, 999999); //random unique 6 figure str_random(6)
    $otp            = new Otp();
    $otp->code      = $reg_code;
 
-   if($otp->save()){
+    if($otp->save()){
        //send otp as sms to user phone here 
      
        $user_type = 'admin';
@@ -92,7 +91,6 @@ class UserController extends Controller
        $user->phone       = $request['phone']; 
        $user->reg_code    = $reg_code;
        $user->user_type   =  '3'; // can select from role table
-       $user->password    = Hash::make($request['password']);
        $user->status      = 'pending';
        
        $user->save();            
@@ -197,8 +195,59 @@ class UserController extends Controller
      return ResponseBuilder::result($status, $message, $error, $data, $code); 
    }    
 
-}    
+  }    
 
+  public function verifyAgent(Request $request){
+
+    // validation
+    $validator =Validator::make($request->all(), [
+      'code' => 'required',
+      'password' => 'required|confirmed'
+
+    ]);      
+
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+       $getCode = $request->input('code');
+
+       //check if exist
+         $otp =  Otp::where('code', $getCode)->exists();
+         if($otp){
+           $user  = User::where('reg_code', $getCode)
+           ->update([
+             'status' =>'verified',
+             'password' => Hash::make($request->password)
+           ]);
+ 
+           $user  = User::where('reg_code', $getCode)->first();
+             
+         // users profile page
+           $profile = UserProfile::firstOrNew(['user_id' => $user->id]);
+           $profile->user_id  = $user->id; //get inserted user id
+           $profile->save(); 
+           $status = true;
+           $message ="verified";
+           $error = "";
+           $data = "";
+           $code = 200;                
+           return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        }else{
+         
+         $status = false;
+         $message ="kindly put your right verification code";
+         $error = "";
+         $data = "";
+         $code = 401;                
+         return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        }
+
+  }    
 
    public function getOtp(Request $request){
         //generate new otp
@@ -215,6 +264,21 @@ class UserController extends Controller
   //update user with  otp
   public function verifyUser(Request $request){
       
+
+     // validation
+     $validator =Validator::make($request->all(), [
+      'code' => 'required'
+
+    ]);      
+
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }    
       //Input::get('code')
       $getCode = $request->input('code');
 
@@ -252,45 +316,72 @@ class UserController extends Controller
 
 
   public function deleteUser(Request $request){
+
+     // validation
+     $validator =Validator::make($request->all(), [
+      'id' => 'required'
+    ]);      
+
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+
       $id = $request->id;
       $user  = User::where('id', $id)->first();
      if(Gate::allows('destroy', $user)){
-
-       if($user->user_type =="1"){
-        $status = true;
-        $message ="Oops Can't delete the admin";
-        $error = "";
-        $data = "";
-        $code = 200;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);         
-       }else if($user !="1"){
-        if($user->status =="remove"){
+        // validation
+        $validator =Validator ::make($request->all(), [
+          'id' => 'required'
+        ]);  
+        if($validator->fails()){
           $status = false;
-          $message ="This user has already been deleted";
-          $error = "";
+          $message ="";
+          $error = $validator->errors()->first();
           $data = "";
           $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code); 
-         }else{
-          $user  = User::where('id', $id)
-          ->update([
-            'status' =>'remove'
-          ]);
-          $status = true;
-          $message ="You have successfully deleted a user";
-          $error = "";
-          $data = "";
-          $code = 200;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code); 
-        } 
-       }else{
-         $status = false;
-         $message ="User not found";
-         $error = "";
-         $data = "";
-         $code = 401;                
-         return ResponseBuilder::result($status, $message, $error, $data, $code);  
-       }
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+        }else{ 
+          if($user->user_type =="1"){
+            $status = true;
+            $message ="Oops Can't delete the admin";
+            $error = "";
+            $data = "";
+            $code = 200;                
+            return ResponseBuilder::result($status, $message, $error, $data, $code);         
+           }else if($user !="1"){
+            if($user->status =="remove"){
+              $status = false;
+              $message ="This user has already been deleted";
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+             }else{
+              $user  = User::where('id', $id)
+              ->update([
+                'status' =>'remove'
+              ]);
+              $status = true;
+              $message ="You have successfully deleted a user";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            } 
+           }else{
+             $status = false;
+             $message ="User not found";
+             $error = "";
+             $data = "";
+             $code = 401;                
+             return ResponseBuilder::result($status, $message, $error, $data, $code);  
+           }
+        }
 
      }else{
       $status = false;
@@ -312,9 +403,9 @@ class UserController extends Controller
       'business_name' => 'string',
       'address' => 'required',
       'location' => 'required',
-      'bank_name' => 'string',
-      'account_name' => 'string',
-      'account_number' => 'numeric',
+      'bank_name' => 'required',
+      'account_name' => 'required',
+      'account_number' => 'required|numeric',
       ]);  
 
       if($validator->fails()){
@@ -352,6 +443,20 @@ class UserController extends Controller
 
     // get profile details
     public function getProfile(Request $request){
+
+    // validation
+    $validator =Validator::make($request->all(), [
+      'id' => 'required'
+    ]);      
+
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }       
       $id =  $request->id;
       $profile = UserProfile::where('user_id', $id)->first();
       if($profile){
@@ -385,7 +490,20 @@ class UserController extends Controller
   }
 
   public function user(Request $request){
- 
+     // validation
+     $validator =Validator::make($request->all(), [
+      'id' => 'required',
+
+    ]);      
+
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
     $id =  $request->id;
     $user = User::where('id', $id)->first();
     if($user){
@@ -522,7 +640,7 @@ class UserController extends Controller
 
     //validattion
     $validator =Validator ::make($request->all(), [
-      'phone' => 'required|numeric',
+      'phone' => 'required|min:11|numeric',
       'new_password' => 'required',
       'reset' => 'reuired'
     ]);      
@@ -567,7 +685,7 @@ class UserController extends Controller
 
     // validation
     $validator =Validator ::make($request->all(), [
-    'phone' => 'required|numeric',
+    'phone' => 'required|min:11|numeric',
     'password' => 'required'
 
     ]);      
@@ -684,13 +802,10 @@ class UserController extends Controller
     public function feedBack(Request $request){
       // validation
           $validator =Validator ::make($request->all(), [
-  
               'subject' => 'required',
               'service_type' => 'required',
               'message' => 'required',
               'user_id' => 'required'
-          
-      
           ]);      
           if($validator->fails()){
           $status = false;

@@ -204,20 +204,13 @@ class FarmerController extends Controller
   } 
 
 
-    //farmer request for service 
-    public function requestService(Request $request){
+    //farmer request for tractor
+    public function requestTractor(Request $request){
       
       // validation
       $validator =Validator ::make($request->all(), [
 
         'service_type' => 'required',
-        'amount' => 'required',
-        'user_id' => 'required',
-        'sp_id' => 'required',
-        'name' => 'required',
-        'phone' => 'required',
-        'location' => 'required',
-        'measurement' => 'required'
       
 
    ]);      
@@ -234,30 +227,28 @@ class FarmerController extends Controller
         //   return $q->whereNull("profile_update_at");
         // })->first();
         // if($profile){
+          $amount = $request->measurement * $request->amount;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id = $request->user_id;
           $orderRequest->name = $request->name;
           $orderRequest->phone = $request->phone;
-          $orderRequest->amount = $request->amount;
-          $orderRequest->location = $request->location;
+          $orderRequest->amount = $amount;
           $orderRequest->land_hectare = $request->measurement;
+          $orderRequest->location = $request->location;
           $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
           $orderRequest->sp_id =$request->sp_id; //this should be selest from dropdown
           $orderRequest->status = "pending";
           $orderRequest->save();
-  
           $status = true;
           $message =Ucwords($request->name)." your request for ".$request->service_type." is successful";
           $error = "";
           $data = "";
           $code = 200;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);            
-  
-       
              
     }    
 
-} 
+  } 
 
 
 

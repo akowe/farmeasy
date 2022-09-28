@@ -57,6 +57,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('agent', ['uses' => 'UserController@createAgent']); 
 
+    $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
+
     $router->post('feedback', ['uses' => 'UserController@feedBack']);
 
     $router->get('feedbacks', ['uses' => 'UserController@getFeedBack']); 
@@ -99,8 +101,26 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->put('assign_request_to_agent', ['uses' => 'AdminController@assignRequestToAgent']); 
 
-  
+    $router->get('prices', ['uses' => 'PriceController@allPrices']);
 
+    $router->get('price', ['uses' => 'PriceController@editPrice']);
+
+    $router->put('update_price', ['uses' => 'PriceController@updatePrice']);
+
+    $router->post('add_service_type', ['uses' => 'SuperAdminController@addServiceType']); 
+
+    $router->get('edit_service_type', ['uses' => 'SuperAdminController@editServiceType']);
+
+    $router->put('update_service_type', ['uses' => 'SuperAdminController@updateServiceType']);
+
+    $router->put('delete_service_type', ['uses' => 'SuperAdminController@deleteServiceType']);
+
+    $router->get('get_price_by_service_type', ['uses' => 'PriceController@getPriceByServiceType']);
+
+    $router->post('payment', ['uses' => 'PaymentController@payment']); 
+
+    $router->get('all_payments', ['uses' => 'PaymentController@allPayment']); 
+    
 
 });
 

@@ -52,7 +52,7 @@ class ServiceController extends Controller
       // validation
       $validator =Validator::make($request->all(), [
         'name' => 'required',
-        'phone' => 'required|numeric|unique:users,phone',
+        'phone' => 'required|min:11|numeric|unique:users,phone',
         'service_type' => 'required',
         'password' => 'required|confirmed'
 

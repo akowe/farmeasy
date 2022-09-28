@@ -48,8 +48,8 @@ class AgentController extends Controller
           'service_type' => 'required',
           'sp_id' => 'required',
           'name' => 'required',
-          'phone' => 'required',
-          'amount' => 'required',
+          'phone' => 'required|min:11|numeric',
+          'amount' => 'required|numeric',
           'user_id' => 'required',
           'location' => 'required',
           'measurement' => 'required'
@@ -75,9 +75,10 @@ class AgentController extends Controller
         //   $code = 401;                
         //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
         // }else{
+          $amount = $request->measurement * $request->amount;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id = $request->user_id;
-          $orderRequest->amount = $request->amount;
+          $orderRequest->amount = $amount;
           $orderRequest->name = $request->name;
           $orderRequest->phone = $request->phone;
           $orderRequest->location = $request->location;
@@ -119,17 +120,19 @@ class AgentController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
         }else{ 
 
-            $request  = OrderRequest::where('id',$request->id)
+            $requestResult  = OrderRequest::where('id',$request->id)
             ->update([
              'agent_id' => $request->agent_id,
             'status' => "accepted"
             ]);
-
+            $requestResult = OrderRequest::where('id',$request->id)->first();
+            
+           
     
             $status = true;
-            $message ="You have successully accepted the order";
+            $message ="Transaction successful";
             $error = "";
-            $data = $data = array("status"=>"payment");
+            $data = $data = array("status"=>"successful");
             $code = 200;                
             return ResponseBuilder::result($status, $message, $error, $data, $code); 
         }
@@ -179,29 +182,29 @@ class AgentController extends Controller
       'name' => 'required',
       'crop_type' => 'required',
       'quantity' => 'required',
-      'amount' => 'required'
-  ]);      
-  if($validator->fails()){
-  $status = false;
-  $message ="";
-  $error = $validator->errors()->first();
-  $data = "";
-  $code = 401;                
-  return ResponseBuilder::result($status, $message, $error, $data, $code);   
-  }else{
-    // wht table should i give sell
-     // $sell =? ;
-    
-      //$sell->save();
+      'amount' => 'required|numeric'
+    ]);      
+    if($validator->fails()){
+    $status = false;
+    $message ="";
+    $error = $validator->errors()->first();
+    $data = "";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }else{
+      // wht table should i give sell
+      // $sell =? ;
+      
+        //$sell->save();
 
-      $status = true;
-      $message ="You have successfully created ".$request->name." as a product";
-      $error = "";
-      $data = "";
-      $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code); 
-  
-  } 
-}  
+        $status = true;
+        $message ="You have successfully created ".$request->name." as a product";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    
+    } 
+  }  
 
 }

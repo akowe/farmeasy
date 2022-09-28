@@ -10,6 +10,7 @@ use App\Http\Helper\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\User;
+use App\ServiceType;
 use App\Otp;
 use App\Role;
 use App\OrderRequest;
@@ -47,7 +48,7 @@ class SuperAdminController extends Controller
         
          'name' => 'required',
          'country' => 'required',
-         'phone' => 'required',
+         'phone' => 'required|min:11|numeric',
          'password' => 'required'
      ]);      
       if($validator->fails()){
@@ -107,11 +108,11 @@ class SuperAdminController extends Controller
       $validator =Validator ::make($request->all(), [
 
         'service_type' => 'required',
-        'amount' => 'required',
+        'amount' => 'required|numeric',
         'user_id' => 'required',
         'sp_id' => 'required',
         'name' => 'required',
-        'phone' => 'required',
+        'phone' => 'required|min:11|numeric',
         'location' => 'required',
         'measurement' => 'required'
       
@@ -160,7 +161,8 @@ class SuperAdminController extends Controller
     return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
   }    
-
+   
+  // delete order request
   public function deleteOrderRequest(Request $request,  User $user){
     $request_id = $request->request_id;
     $orderRequest  = OrderRequest::where('id', $request_id)->first();
@@ -197,7 +199,7 @@ class SuperAdminController extends Controller
 
     }else{
       $status = false;
-      $message ="Not Authorized to delete an";
+      $message ="Not Authorized to delete this order";
       $error = "";
       $data = "";
       $code = 401;                
@@ -205,5 +207,185 @@ class SuperAdminController extends Controller
     }
    
   }
+
+  //add service type
+  public function addServiceType(Request $request, User $user){
+    if(Gate::allows('create', $user)){
+      // validation
+      $validator =Validator ::make($request->all(), [
+        'service' => 'required'
+      ]);      
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }else{
+          $serviceType = ServiceType::firstOrNew(['service' => $request->service]);
+          $serviceType->service = $request->service;
+          $serviceType->save();
+
+          $status = true;
+          $message ="You have successfully created ".$request->service." as a service type";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+      } 
+    }else{
+      $status = false;
+      $message ="Not Authorized to add new service type";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }      
+  }
+  // edit service type
+  public function editServiceType(Request $request, User $user){
+    if(Gate::allows('edit', $user)){
+      // validation
+      $validator =Validator::make($request->all(), [
+      'service_type_id' => 'required'
+      ]);        
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+      $service_type_id = $request->service_type_id;
+      $serviceTypeResult  = ServiceType::where('id', $service_type_id )->first();  
+      if($serviceTypeResult){
+        $status = true;
+        $message ="";
+        $error = "";
+        $data = $serviceTypeResult;
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+      }else{
+          $status = false;
+          $message ="Service type not found";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+    }else{
+      $status = false;
+      $message ="Not Authorized to edit the service type";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }    
+     
+  }  
+   
+  //update service type
+  public function updateServiceType(Request $request, User $user){
+    if(Gate::allows('update', $user)){
+      // validation
+      $validator =Validator::make($request->all(), [
+      'service_type_id' => 'required',
+
+      ]);        
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+      $service_type = $request->service_type_id;
+      $serviceTypeResult  = ServiceType::where('id', $service_type_id)->first();  
+      if($serviceTypeResult){
+
+        $serviceTypeResult = ServiceType::where('id', $service_type_id)
+          ->update([
+          'price' =>$service_type 
+          ]);
+          $status = true;
+          $message ="You have successfully updated the service type";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+      }else{
+          $status = false;
+          $message ="Service type not found";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+    }else{
+      $status = false;
+      $message ="Not Authorized to update service type";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }    
+     
+  }   
+  
+  // delete service type
+  public function deleteServiceType(Request $request,  User $user){
+    $service_type_id = $request->id;
+    $serviceType  = ServiceType::where('id', $service_type_id)->first();
+    if(Gate::allows('destroy', $user)){
+      if($serviceType ){
+        if($serviceType->status =="remove"){
+          $status = false;
+          $message ="Service type has already been deleted";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        }else{
+          $serviceType   = ServiceType::where('id', $service_type_id)
+          ->update([
+            'status' =>'remove'
+          ]);
+          $status = true;
+          $message ="You have successfully deleted the service type";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+        }
+
+      }else{
+        $status = false;
+        $message ="Service type not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+
+    }else{
+      $status = false;
+      $message ="Not Authorized to delete this service type";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+   
+  }
+ 
+
 
 }

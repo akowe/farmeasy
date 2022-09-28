@@ -57,7 +57,9 @@ class AdminController extends Controller
         'user_id' => 'required',
         'name' => 'required',
         'sp_id' => 'required',
-        'phone' => 'required',
+        'phone' => 'required|min:11||numeric',
+        'measurement' => 'required|numeric',
+        'amount' => 'required|numeric',
         'location' => 'required',
    ]);      
     if($validator->fails()){
@@ -68,12 +70,12 @@ class AdminController extends Controller
      $code = 401;                
      return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }else{
-   
+        $amount = $request->measurement * $request->amount;
         $orderRequest = new OrderRequest();
         $orderRequest->user_id = $request->user_id;
         $orderRequest->name = $request->name;
         $orderRequest->phone = $request->phone;
-        $orderRequest->amount = $request->amount;
+        $orderRequest->amount = $amount;
         $orderRequest->location = $request->location;
         $orderRequest->land_hectare = $request->measurement;
         $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
@@ -92,43 +94,52 @@ class AdminController extends Controller
 
 }
     //edit farmer request
-    public function editFarmerAgent(Request $request){
-      
-      // validation
-      $validator =Validator ::make($request->all(), [
+    public function editFarmerAgent(Request $request, User $user){
+      if(Gate::allows('destroy', $user)){
+        // validation
+        $validator =Validator ::make($request->all(), [
+          'agent_id' => 'required',
+          'sp_id' => 'required',
+          'phone' => 'required',
+          'location'=> 'required',
+          'measurement' => 'required',
+        ]);  
+        if($validator->fails()){
+          $status = false;
+          $message ="";
+          $error = $validator->errors()->first();
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+        }else{ 
 
-        'agent_id' => 'required',
-        'sp_id' => 'required',
-        'phone' => 'required',
-        'location'=> 'required',
-        'measurement' => 'required',
-    ]);  
-   if($validator->fails()){
-      $status = false;
-      $message ="";
-      $error = $validator->errors()->first();
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
-    }else{ 
+          $agent_id = $request->agent_id;
+          $profile = array(
+            'sp_id' =>$request->input('sp_id'),
+            'phone' => $request->input('phone'), 
+            'measurement' => $request['measurement'],
+            'location' => $request['location']
+          );
 
-      $agent_id = $request->agent_id;
-      $profile = array(
-        'sp_id' =>$request->input('sp_id'),
-        'phone' => $request->input('phone'), 
-        'measurement' => $request['measurement'],
-        'location' => $request['location']
-      );
+          $orderRequest  = OrderRequest::where('agent_id', $agent_id)
+          ->update($orderRequest);
+          $status = true;
+          $message ="Request successfully updated";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        }
+  
+      }else{
+       $status = false;
+       $message ="Not Authorized to edit a request";
+       $error = "";
+       $data = "";
+       $code = 401;                
+       return ResponseBuilder::result($status, $message, $error, $data, $code);
+      }      
 
-      $orderRequest  = OrderRequest::where('agent_id', $agent_id)
-      ->update($orderRequest);
-      $status = true;
-      $message ="Request successfully updated";
-      $error = "";
-      $data = "";
-      $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code); 
-    }
   }
 
     //assign request to agent
