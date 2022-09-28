@@ -72,7 +72,7 @@ class AdminController extends Controller
     }else{
         $amount = $request->measurement * $request->amount;
         $orderRequest = new OrderRequest();
-        $orderRequest->user_id = $request->user_id;
+        $orderRequest->user_id = Auth::user()->id;
         $orderRequest->name = $request->name;
         $orderRequest->phone = $request->phone;
         $orderRequest->amount = $amount;

@@ -418,7 +418,8 @@ class UserController extends Controller
       }else{ 
 
 
-        $user_id = $request->user_id;
+        //$user_id = $request->user_id;
+        $user_id = Auth::user()->id;
         $profile = array(
           'email' => $request->input('email'), 
           'business_name'   => $request->input('business_name'),
@@ -443,21 +444,8 @@ class UserController extends Controller
 
     // get profile details
     public function getProfile(Request $request){
-
-    // validation
-    $validator =Validator::make($request->all(), [
-      'id' => 'required'
-    ]);      
-
-      if($validator->fails()){
-      $status = false;
-      $message ="";
-      $error = $validator->errors()->first();
-      $data = "";
-      $code = 400;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
-      }       
-      $id =  $request->id;
+      //$id =  $request->id;
+      $id = Auth::user()->id;
       $profile = UserProfile::where('user_id', $id)->first();
       if($profile){
         $status = true;
@@ -477,7 +465,10 @@ class UserController extends Controller
 
     } 
 
+// this should be for admin only
   public function index(){
+
+    if( Auth::user()->role == '2'){
  
       $users  = User::all();
       $status = true;
@@ -486,25 +477,21 @@ class UserController extends Controller
       $data = $users;
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+    else{
+      $status = false;
+        $message ="You don't have permission to view this page";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }
  
   }
 
   public function user(Request $request){
-     // validation
-     $validator =Validator::make($request->all(), [
-      'id' => 'required',
-
-    ]);      
-
-      if($validator->fails()){
-      $status = false;
-      $message ="";
-      $error = $validator->errors()->first();
-      $data = "";
-      $code = 400;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
-      } 
-    $id =  $request->id;
+  $id = Auth::user()->id;
+    //$id =  $request->id;
     $user = User::where('id', $id)->first();
     if($user){
       if($user->status =="remove"){
@@ -802,11 +789,13 @@ class UserController extends Controller
     public function feedBack(Request $request){
       // validation
           $validator =Validator ::make($request->all(), [
-              'subject' => 'required',
-              'service_type' => 'required',
-              'message' => 'required',
-              'user_id' => 'required'
-          ]);      
+  
+              // 'subject' => 'required',
+              // 'service_type' => 'required',
+              'message' => 'required'
+             
+          ]);   
+             
           if($validator->fails()){
           $status = false;
           $message ="";
@@ -816,10 +805,10 @@ class UserController extends Controller
           return ResponseBuilder::result($status, $message, $error, $data, $code);   
           }else{
               $feedback = new FeedBack();
-              $feedback->subject = $request->subject;
-              $feedback->service_type = $request->service_type;
+              // $feedback->subject = $request->subject;
+              // $feedback->service_type = $request->service_type;
               $feedback->message = $request->message;
-              $feedback->user_id = $request->user_id;
+              $feedback->user_id = Auth::user()->id;
               $feedback->save();
               $status = true;
               $message ="Feedback successfully submitted";

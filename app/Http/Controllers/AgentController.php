@@ -48,9 +48,8 @@ class AgentController extends Controller
           'service_type' => 'required',
           'sp_id' => 'required',
           'name' => 'required',
-          'phone' => 'required|min:11|numeric',
-          'amount' => 'required|numeric',
-          'user_id' => 'required',
+          'phone' => 'required',
+          'amount' => 'required',
           'location' => 'required',
           'measurement' => 'required'
         
@@ -77,8 +76,8 @@ class AgentController extends Controller
         // }else{
           $amount = $request->measurement * $request->amount;
           $orderRequest = new OrderRequest();
-          $orderRequest->user_id = $request->user_id;
-          $orderRequest->amount = $amount;
+          $orderRequest->user_id = Auth::user()->id;
+          $orderRequest->amount = $request->amount;
           $orderRequest->name = $request->name;
           $orderRequest->phone = $request->phone;
           $orderRequest->location = $request->location;
