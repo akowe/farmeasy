@@ -699,13 +699,12 @@ class UserController extends Controller
       // validation
           $validator =Validator ::make($request->all(), [
   
-              'subject' => 'required',
-              'service_type' => 'required',
+              // 'subject' => 'required',
+              // 'service_type' => 'required',
               'message' => 'required'
              
-          
-      
-          ]);      
+          ]);   
+             
           if($validator->fails()){
           $status = false;
           $message ="";
@@ -715,8 +714,8 @@ class UserController extends Controller
           return ResponseBuilder::result($status, $message, $error, $data, $code);   
           }else{
               $feedback = new FeedBack();
-              $feedback->subject = $request->subject;
-              $feedback->service_type = $request->service_type;
+              // $feedback->subject = $request->subject;
+              // $feedback->service_type = $request->service_type;
               $feedback->message = $request->message;
               $feedback->user_id = Auth::user()->id;
               $feedback->save();

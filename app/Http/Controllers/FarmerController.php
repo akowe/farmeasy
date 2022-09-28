@@ -17,21 +17,13 @@ use App\FarmType;
 use Carbon\Carbon;
 use Carbon\Profile;
 use App\OrderRequest;
+use App\ServiceType;
 class FarmerController extends Controller
 {
 
     public function __construct()
     {
-      //create superadmin 
-      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      // $user->name ="superadmin";
-      // $user->phone ="08188373898";
-      // $user->country      = 'Nigeria';
-      // $user->country_code ='+234';
-      // $user->user_type   =  '1'; // can select from role table
-      // $user->password    = Hash::make('password');
-      // $user->status      = 'verified';
-      // $user->save();
+    
     }
 
     public function createFarmer(Request $request){
@@ -257,8 +249,353 @@ class FarmerController extends Controller
              
     }    
 
-} 
+}
+
+//farmer click to request Tractor service
+public function HireTractor(Request $request){
+
+      $username   =  Auth::user()->name;
+      $user_id    =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+      $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Tractor service type from table
+      $tractor = ServiceType::where('id', '1')->first()->service;
+
+      if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+         $orderRequest = new OrderRequest();
+          $orderRequest->user_id  = $user_id;
+          $orderRequest->name     = $username;
+          $orderRequest->phone    = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type = $tractor;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status   = "pending";
+          $orderRequest->save();
+
+          $status = true;
+          $message =Ucwords($username).", You have requested for the ".$tractor."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+         
+          }
 
 
+
+//farmer click to request Plower service
+public function HirePlower(Request $request){
+
+      $username = Auth::user()->name;
+      $user_id =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+      $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Plower service type from table
+      $plower = ServiceType::where('id', '2')->first()->service;
+
+        if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$plower;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+
+          $status = true;
+           $message =Ucwords($username).", You have requested for the ".$plower."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+          }
+       }   
+
+
+  //farmer click to request Planter service
+public function HirePlanter(Request $request){
+
+      $username = Auth::user()->name;
+      $user_id =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+      $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Planter service type from table
+      $planter = ServiceType::where('id', '3')->first()->service;
+
+        if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$planter;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+
+          $status = true;
+          $message =Ucwords($username).", You have requested for the ".$planter."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+          }
+
+}
+
+
+//farmer click to request Seed service
+public function HireSeed(Request $request){
+
+      $username = Auth::user()->name;
+      $user_id =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+      $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Seed service type from table
+      $seed = ServiceType::where('id', '4')->first()->service;
+
+        if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$seed;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+
+          $status = true;
+          $message =Ucwords($username).", You have requested for the ".$seed."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+          }
+
+}
+
+
+//farmer click to request Pesticide service
+public function HirePesticide(Request $request){
+
+      $username = Auth::user()->name;
+      $user_id =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+      $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Pesticide service type from table
+      $pesticide = ServiceType::where('id', '5')->first()->service;
+
+        if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$pesticide;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+
+          $status = true;
+            $message =Ucwords($username).", You have requested for the ".$pesticide."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+          }
+}
+
+
+  //farmer click to request Fertilizer service
+public function HireFertilizer(Request $request){
+
+      $username = Auth::user()->name;
+      $user_id =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+      $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Fertilizer service type from table
+      $fertilizer = ServiceType::where('id', '6')->first()->service;
+
+        if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$fertilizer;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+
+          $status = true;
+          $message =Ucwords($username).", You have requested for the ".$fertilizer."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+          }   
+
+}
+
+
+          //farmer click to request Processor service
+  public function HireProcessor(Request $request){
+
+      $username = Auth::user()->name;
+      $user_id =  Auth::user()->id;
+      $user_phone = Auth::user()->phone;
+       $farm_type  = Auth::user()->farm_type;
+ 
+      //get login user location from profile table
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
+
+      //get Processor service type from table
+      $processor = ServiceType::where('id', '7')->first()->service;
+
+        if ($location == null){
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Kindly update your profile before requesting a service";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$processor;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
+
+          $status = true;
+           $message =Ucwords($username).", You have requested for the ".$processor."  Service. You will be contacted shortly.";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+          }    
+      } 
+
+
+
+
+       // Farmer View all his farm request status
+  public function FarmerRequestHistory(Request $request){
+    $user_id =  Auth::user()->id;
+    $all_request = OrderRequest::where("user_id", $user_id)->get();
+  
+    if($all_request){
+   
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No request currently available";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }
 
 }
