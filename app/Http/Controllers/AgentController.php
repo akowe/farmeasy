@@ -470,7 +470,7 @@ public function HireFertilizer(Request $request){
       $requestResult  = OrderRequest::where('id',$request->request_id)
       ->update([
         'sp_id' => $request->sp_id,
-        'amount' => $priceResult->price
+        'price' => $priceResult->price
       ]);
   
       $status = true;
