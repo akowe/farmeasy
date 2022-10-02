@@ -205,7 +205,7 @@ class ServiceController extends Controller
   }
 
   // fetch service provider by service type
-  public function getServiceProvidersByServiceType(){
+  public function getServiceProvidersByServiceType(Request $request){
     $service_type = $request->service_type;
     $users = User::where("service_type", $service_type )->get();
 
