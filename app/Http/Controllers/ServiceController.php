@@ -204,25 +204,16 @@ class ServiceController extends Controller
  
   }
 
+  // fetch service provider by service type
+  public function getServiceProvidersByServiceType(){
+    $service_type = $request->service_type;
+    $users = User::where("service_type", $service_type )->get();
 
-
-   // fetch service provider location
-   public function getServiceProviderByLocation(Request $request){
-     $location = $request->location;
-     $service_type =$request->service_type;
-     $service_providers = array();
-
-    $profiles = UserProfile::where("location", $location)->get();
-
-     if($profiles){
+     if($users){
      
-      foreach($profiles as $profile){
-       
-        $user = User::where(array("id" => $profile->user_id, "service_type"=>$service_type))->exists();
-        if($user){
-          $user = User::where(array("id" => $profile->user_id, "service_type"=>$service_type))->first();
-          $service_providers[] = array("id"=>$user->id, "name"=>$user->name);
-        }     
+      foreach($users as $user){
+      
+          $service_providers[] = array("id"=>$user->id, "name"=>$user->name);  
       }
 
       $status = true;
@@ -241,11 +232,14 @@ class ServiceController extends Controller
      }
 
   } 
+
  
  // all farmer and agent request by location for his own only
  public function allFarmerAgentRequestByLocation(Request $request){
-  $location = $request->location;
-  $all_request = OrderRequest::where("location", $location)->where('sp_id', Auth::user()->id)->where('status','!=','remove')->get();
+  $user_id = Auth::user()->id;
+  $profile = UserProfile::where(['user_id' => $user->id]);
+  $location = $profile->location;
+  $all_request = OrderRequest::where("location", $location)->where('sp_id', $user_id)->where('status','!=','remove')->get();
   if($all_request){
     $status = true;
     $message ="";

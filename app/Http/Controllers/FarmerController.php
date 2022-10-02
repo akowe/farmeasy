@@ -397,32 +397,32 @@ public function HireSeed(Request $request){
       //get Seed service type from table
       $seed = ServiceType::where('id', '4')->first()->service;
 
-        if (!$location){
-      $status = false;
-      $message ="Kindly update your profile before requesting a service";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      if (!$location){
+        $status = false;
+        $message ="Kindly update your profile before requesting a service";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
         $location = $location ->location;
-          $orderRequest = new OrderRequest();
-          $orderRequest->user_id =$user_id;
-          $orderRequest->name = $username;
-          $orderRequest->phone = $user_phone;
-          $orderRequest->location = $location;
-          $orderRequest->service_type =$seed;
-          $orderRequest->farm_type = $farm_type;
-          $orderRequest->status = "pending";
-          $orderRequest->save();
+        $orderRequest = new OrderRequest();
+        $orderRequest->user_id =$user_id;
+        $orderRequest->name = $username;
+        $orderRequest->phone = $user_phone;
+        $orderRequest->location = $location;
+        $orderRequest->service_type =$seed;
+        $orderRequest->farm_type = $farm_type;
+        $orderRequest->status = "pending";
+        $orderRequest->save();
 
-          $status = true;
-          $message =Ucwords($username).", You have requested for the ".$seed."  Service. You will be contacted shortly.";
-          $error = "";
-          $data = "";
-          $code = 200;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);  
-          }
+        $status = true;
+        $message =Ucwords($username).", You have requested for the ".$seed."  Service. You will be contacted shortly.";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
 
 }
 

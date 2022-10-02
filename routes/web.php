@@ -83,7 +83,27 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
 
      // AGENT ACCOUNT
-    $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
+     $router->post('farmer_request', ['uses' => 'AgentController@requestService']);
+
+     $router->post('tractor', ['uses' => 'AgentController@HireTractor']);
+ 
+     $router->post('plower', ['uses' => 'AgentController@HirePlower']);
+ 
+     $router->post('planter', ['uses' => 'AgentController@HirePlanter']);
+ 
+     $router->post('seed', ['uses' => 'AgentController@HireSeed']);
+ 
+     $router->post('pesticide', ['uses' => 'AgentController@HirePesticide']);
+ 
+     $router->post('fertilizer', ['uses' => 'AgentController@HireFertilizer']);
+ 
+     $router->post('processor', ['uses' => 'AgentController@HireProcessor']);
+
+     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
+
+     $router->put('update_request_by_service_provider', ['uses' => 'AgentController@updateRequestByServiceProvider']);
+    
+     $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
 
     $router->get('all_farmer_request', ['uses' => 'AgentController@allFarmerRequestByLocation']);
 
@@ -105,8 +125,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->get('products', ['uses' => 'ServiceController@allProducts']);
 
     $router->get('all_farmer_agent_request', ['uses' => 'ServiceController@allFarmerAgentRequestByLocation']);
-
-    $router->get('service_provider_by_location', ['uses' => 'ServiceController@getServiceProviderByLocation']);
 
     $router->get('all_products_by_service_provider', ['uses' => 'ServiceController@allProductsByServiceProvider']);  
 

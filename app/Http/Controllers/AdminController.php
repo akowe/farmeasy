@@ -98,8 +98,7 @@ class AdminController extends Controller
       if(Gate::allows('destroy', $user)){
         // validation
         $validator =Validator ::make($request->all(), [
-          'agent_id' => 'required',
-          'sp_id' => 'required',
+          'request_id' => 'required',
           'phone' => 'required',
           'location'=> 'required',
           'measurement' => 'required',
@@ -113,15 +112,15 @@ class AdminController extends Controller
           return ResponseBuilder::result($status, $message, $error, $data, $code);   
         }else{ 
 
-          $agent_id = $request->agent_id;
+          $request_id = $request->request_id;
+         
           $profile = array(
-            'sp_id' =>$request->input('sp_id'),
             'phone' => $request->input('phone'), 
             'measurement' => $request['measurement'],
             'location' => $request['location']
           );
 
-          $orderRequest  = OrderRequest::where('agent_id', $agent_id)
+          $orderRequest = OrderRequest::where('id', $request_id)
           ->update($orderRequest);
           $status = true;
           $message ="Request successfully updated";
@@ -161,7 +160,7 @@ class AdminController extends Controller
 
       $request_id = $request->request_id;
       $orderRequest = array(
-        'agent_id' =>$request->input('agent_id')
+        'agent_id' =>$request->agent_id
       );
 
       $orderRequest  = OrderRequest::where('id', $request_id)
