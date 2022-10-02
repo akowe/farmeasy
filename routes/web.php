@@ -99,6 +99,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
  
      $router->post('processor', ['uses' => 'AgentController@HireProcessor']);
 
+     $router->get('get_service_type_by_request', ['uses' => 'AgentController@getServiceTypeByRequest']); 
+
      $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
 
      $router->put('update_request_by_service_provider', ['uses' => 'AgentController@updateRequestByServiceProvider']);

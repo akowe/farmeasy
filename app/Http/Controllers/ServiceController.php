@@ -204,6 +204,34 @@ class ServiceController extends Controller
  
   }
 
+  // get service type by request id
+  public function getServiceTypeByRequest(Request $request){
+    $request_id = $request->request_id;
+    $requestResult = OrderRequest::where("id", $request_id)->first();
+
+    if($requestResult){
+     
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = array("service_type"=>$requestResult->service_type);
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "Request not found";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
+  
+
+
   // fetch service provider by service type
   public function getServiceProvidersByServiceType(Request $request){
     $service_type = $request->service_type;
