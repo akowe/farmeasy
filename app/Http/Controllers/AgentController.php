@@ -126,8 +126,48 @@ class AgentController extends Controller
             ]);
             $requestResult = OrderRequest::where('id',$request->id)->first();
             
-           
-    
+            $curl = curl_init();
+
+            $user_id = Auth::user()->id;
+            $profileResult = UserProfile::where('id',$user_id)->first();
+            $email = $profileResult->email;
+            $amount = $requestResult->amount; 
+            
+            // url to go to after payment
+            $callback_url = site_url().'/pay/callback.php';  
+            
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => json_encode([
+                'amount'=>$amount,
+                'email'=>$email,
+                'callback_url' => $callback_url
+              ]),
+              CURLOPT_HTTPHEADER => [
+                "authorization: Bearer sk_test_8fabc18c29f908e5b7540b54d38a4b097250c39b", //replace this with your own test key
+                "content-type: application/json",
+                "cache-control: no-cache"
+              ],
+            ));
+            
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            
+            if($err){
+              // there was an error contacting the Paystack API
+              die('Curl returned error: ' . $err);
+            }
+            
+            $tranx = json_decode($response, true);
+            
+            if(!$tranx['status']){
+              // there was an error from the API
+              print_r('API returned error: ' . $tranx['message']);
+            }
+                       
+   
             $status = true;
             $message ="Transaction successful";
             $error = "";

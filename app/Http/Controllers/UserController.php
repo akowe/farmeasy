@@ -403,8 +403,8 @@ class UserController extends Controller
  
     // validation
     $validator =Validator ::make($request->all(), [
-      'email' => 'string',
-      'business_name' => 'string',
+      'email' => 'required',
+      'business_name' => 'required',
       'address' => 'required',
       'location' => 'required',
       'bank_name' => 'required',
