@@ -15,6 +15,7 @@ use App\OrderRequest;
 use Carbon\Carbon;
 use App\UserProfile;
 use Carbon\Profile;
+use App\ServiceType;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
