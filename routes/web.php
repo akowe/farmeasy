@@ -102,7 +102,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
      $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
 
      $router->put('update_request_by_service_provider', ['uses' => 'AgentController@updateRequestByServiceProvider']);
-    
+     
+     $router->put('update_request_measurement', ['uses' => 'AgentController@updateRequestMeasurement']);
+     
      $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
 
     $router->get('all_farmer_request', ['uses' => 'AgentController@allFarmerRequestByLocation']);
