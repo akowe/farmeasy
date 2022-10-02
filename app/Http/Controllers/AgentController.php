@@ -487,10 +487,37 @@ public function HireFertilizer(Request $request){
       return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }
 
-     
- 
-
 } 
+
+
+  //update request measurement
+  public function updateRequestMeasurement(Request $request){
+      
+    $requestResult  = OrderRequest::where('id',$request->request_id)->first();
+    if($requestResult){
+      $measurement = $request->measurement;
+      $requestResult  = OrderRequest::where('id',$request->request_id)
+      ->update([
+        'measurement' => $measurement
+      ]);
+  
+      $status = true;
+      $message ="Measurement successfully updated";
+      $error = "";
+      $data ="";
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);       
+    }else{
+      $status = false;
+      $message ="Request is not found";
+      $error = "";
+      $data ="";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }
+
+}
+
   //approve  request
     public function approveRequest(Request $request){
       
