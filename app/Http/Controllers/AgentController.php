@@ -15,6 +15,7 @@ use App\OrderRequest;
 use Carbon\Carbon;
 use App\UserProfile;
 use Carbon\Profile;
+use App\ServiceType;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -599,8 +600,10 @@ public function HireFertilizer(Request $request){
   // all farmer request by location
   public function allFarmerRequestByLocation(){
     $user_id = Auth::user()->id;
-    $profile = UserProfile::where(['user_id' => $user->id]);
+    $profile = UserProfile::where(['user_id' => $user_id])->first();
+
     $location = $profile->location;
+
     $all_request = OrderRequest::where("location", $location)->where('status','!=','remove')->get();
     $all_farmer_request =array();
     if($all_request){
