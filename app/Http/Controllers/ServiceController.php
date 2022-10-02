@@ -237,7 +237,7 @@ class ServiceController extends Controller
  // all farmer and agent request by location for his own only
  public function allFarmerAgentRequestByLocation(Request $request){
   $user_id = Auth::user()->id;
-  $profile = UserProfile::where(['user_id' => $user->id]);
+  $profile = UserProfile::where(['user_id' => $user_id])->first();
   $location = $profile->location;
   $all_request = OrderRequest::where("location", $location)->where('sp_id', $user_id)->where('status','!=','remove')->get();
   if($all_request){

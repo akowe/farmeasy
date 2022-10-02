@@ -603,6 +603,7 @@ public function HireFertilizer(Request $request){
     $profile = UserProfile::where(['user_id' => $user_id])->first();
 
     $location = $profile->location;
+    
 
     $all_request = OrderRequest::where("location", $location)->where('status','!=','remove')->get();
     $all_farmer_request =array();
