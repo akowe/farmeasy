@@ -12,6 +12,7 @@ use App\User;
 use App\FeedBack;
 use App\Otp;
 use App\OrderRequest;
+use App\Price;
 use Carbon\Carbon;
 use App\UserProfile;
 use Carbon\Profile;
@@ -289,43 +290,43 @@ public function HirePlanter(Request $request){
 //farmer click to request Seed service
 public function HireSeed(Request $request){
 
-      $username = Auth::user()->name;
-      $user_id =  Auth::user()->id;
-      $user_phone = Auth::user()->phone;
-      $farm_type  = Auth::user()->farm_type;
+    $username = Auth::user()->name;
+    $user_id =  Auth::user()->id;
+    $user_phone = Auth::user()->phone;
+    $farm_type  = Auth::user()->farm_type;
  
-      //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+    //get login user location from profile table
+    $location = UserProfile::where('user_id', $user_id)->first();
 
-      //get Seed service type from table
-      $seed = ServiceType::where('id', '4')->first()->service;
+    //get Seed service type from table
+    $seed = ServiceType::where('id', '4')->first()->service;
 
-      if (!$location){
-        $status = false;
-        $message ="Kindly update your profile before requesting a service";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$seed;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
+    if (!$location){
+      $status = false;
+      $message ="Kindly update your profile before requesting a service";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $location = $location ->location;
+      $orderRequest = new OrderRequest();
+      $orderRequest->user_id =$user_id;
+      $orderRequest->name = $username;
+      $orderRequest->phone = $user_phone;
+      $orderRequest->location = $location;
+      $orderRequest->service_type =$seed;
+      $orderRequest->farm_type = $farm_type;
+      $orderRequest->status = "pending";
+      $orderRequest->save();
 
-        $status = true;
-        $message =Ucwords($username).", You have requested for the ".$seed."  Service. You will be contacted shortly.";
-        $error = "";
-        $data = "";
-        $code = 200;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);  
-      }
+      $status = true;
+      $message =Ucwords($username).", You have requested for the ".$seed."  Service. You will be contacted shortly.";
+      $error = "";
+      $data = "";
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
 
 }
 
@@ -499,7 +500,7 @@ public function HireFertilizer(Request $request){
       $measurement = $request->measurement;
       $requestResult  = OrderRequest::where('id',$request->request_id)
       ->update([
-        'measurement' => $measurement
+        'land_hectare' => $measurement
       ]);
   
       $status = true;
@@ -541,54 +542,10 @@ public function HireFertilizer(Request $request){
              'agent_id' => Auth::user()->id,
             'status' => "accepted"
             ]);
-            $requestResult = OrderRequest::where('id',$request->request_id)->first();
-            
-            $curl = curl_init();
-
-            $user_id = Auth::user()->id;
-            $profileResult = UserProfile::where('id',$user_id)->first();
-            $email = $profileResult->email;
-            $amount = $requestResult->amount; 
-            
-            // url to go to after payment
-            $callback_url = site_url().'/pay/callback.php';  
-            
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => json_encode([
-                'amount'=>$amount,
-                'email'=>$email,
-                'callback_url' => $callback_url
-              ]),
-              CURLOPT_HTTPHEADER => [
-                "authorization: Bearer sk_test_8fabc18c29f908e5b7540b54d38a4b097250c39b", //replace this with your own test key
-                "content-type: application/json",
-                "cache-control: no-cache"
-              ],
-            ));
-            
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            
-            if($err){
-              // there was an error contacting the Paystack API
-              die('Curl returned error: ' . $err);
-            }
-            
-            $tranx = json_decode($response, true);
-            
-            if(!$tranx['status']){
-              // there was an error from the API
-              print_r('API returned error: ' . $tranx['message']);
-            }
-                       
-   
             $status = true;
-            $message ="Transaction successful";
+            $message ="Request successfully accepted";
             $error = "";
-            $data = $data = array("status"=>"successful");
+            $data = $data = array("status"=>"payment");
             $code = 200;                
             return ResponseBuilder::result($status, $message, $error, $data, $code); 
         }
@@ -667,5 +624,7 @@ public function HireFertilizer(Request $request){
     
     } 
   }  
+
+
 
 }
