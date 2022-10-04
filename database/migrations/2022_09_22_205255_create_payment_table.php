@@ -16,7 +16,9 @@ class CreatePaymentTable extends Migration
         Schema::create('payment', function (Blueprint $table) {
             $table->increments('id');
             $table->string('request_id');
-            $table->string('pay_reference');
+            $table->string('agent_email');
+            $table->string('agent_phone');
+            $table->string('ref');
             $table->string('pay_status');
             $table->string('gateway_ref');
             $table->string('pay_date');

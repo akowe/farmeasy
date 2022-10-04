@@ -79,6 +79,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('processor', ['uses' => 'FarmerController@HireProcessor']);
 
+    $router->post('harvester', ['uses' => 'FarmerController@HireHarvester']);
+
     $router->get('farm_history', ['uses' => 'FarmerController@FarmerRequestHistory']); 
 
 
@@ -101,15 +103,32 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
      $router->get('get_service_type_by_request', ['uses' => 'AgentController@getServiceTypeByRequest']); 
 
-     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
-
-     $router->put('update_request_by_service_provider', ['uses' => 'AgentController@updateRequestByServiceProvider']);
+     $router->put('update_request_with_service_provider/{request_id}', ['uses' => 'AgentController@updateRequestWithServiceProvider']);
      
-     $router->put('update_request_measurement', ['uses' => 'AgentController@updateRequestMeasurement']);
+     $router->put('update_request_measurement/{request_id}', ['uses' => 'AgentController@updateRequestMeasurement']);
      
      $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
 
+     //ALL REQUEST IN AGENT LOCATION
+
     $router->get('all_farmer_request', ['uses' => 'AgentController@allFarmerRequestByLocation']);
+
+    $router->get('all_farmer_plower_request', ['uses' => 'AgentController@allFarmerPlowerRequest']);
+    
+    $router->get('all_farmer_tractor_request', ['uses' => 'AgentController@allFarmerTractorRequest']);
+
+    $router->get('all_farmer_planter_request', ['uses' => 'AgentController@allFarmerPlanterRequest']);
+
+    $router->get('all_farmer_seed_request', ['uses' => 'AgentController@allFarmerSeedRequest']);
+    
+    $router->get('all_farmer_pesticide_request', ['uses' => 'AgentController@allFarmerPesticideRequest']);
+
+    $router->get('all_farmer_fertilizer_request', ['uses' => 'AgentController@allFarmerFertilizerRequest']);
+    
+    $router->get('all_farmer_processor_request', ['uses' => 'AgentController@allFarmerProcessorRequest']);
+
+    $router->get('all_farmer_harvester_request', ['uses' => 'AgentController@allFarmerHarvesterRequest']);
+     //
 
     $router->put('approve_request', ['uses' => 'AgentController@approveRequest']);
 
@@ -119,11 +138,43 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('sell', ['uses' => 'AgentController@forSell']); 
 
-    $router->get('all_for_sell', ['uses' => 'AgentController@allForSell']); 
+    $router->get('all_for_sell', ['uses' => 'AgentController@allForSell']);
+
+     $router->get('all_agent_transaction', ['uses' => 'AgentController@allAgentPayment']);  
+    
+    //PAYSTACK API
+    $router->post('/pay', ['uses' => 'AgentController@pay']); 
+
+    $router->get('payment/{requset_id}', ['uses' => 'PaymentController@payment']); 
+
+    $router->get('all_payments', ['uses' => 'PaymentController@allPayment']); 
 
 
 
     //SERVICE PROVIDER
+    $router->get('tractor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTractor']);
+
+
+    $router->get('plower_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlower']);
+
+    $router->get('planter_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlanter']);
+    
+    $router->get('seed_service_provider', ['uses' => 'ServiceController@getServiceProvidersBySeed']);
+
+    $router->get('pesticide_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPesticide']);
+
+
+    $router->get('fertilizer_service_provider', ['uses' => 'ServiceController@getServiceProvidersByFertilizer']);
+
+    $router->get('processor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByProcessor']);
+
+    $router->get('harvester_service_provider', ['uses' => 'ServiceController@getServiceProvidersByHarvester']);
+
+
+    $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
+
+
+
      $router->post('product', ['uses' => 'ServiceController@addProduct']);
 
     $router->get('products', ['uses' => 'ServiceController@allProducts']);
@@ -163,9 +214,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('get_price_by_service_type', ['uses' => 'PriceController@getPriceByServiceType']);
 
-    $router->post('payment', ['uses' => 'PaymentController@payment']); 
-
-    $router->get('all_payments', ['uses' => 'PaymentController@allPayment']); 
+   
     
 
     
