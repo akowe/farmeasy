@@ -142,7 +142,7 @@ class AdminController extends Controller
   }
 
     //assign request to agent
-    public function assignRequestTogent(Request $request){
+    public function assignRequestToAgent(Request $request){
       
       // validation
       $validator =Validator ::make($request->all(), [
