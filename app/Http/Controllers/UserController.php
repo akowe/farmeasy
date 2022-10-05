@@ -100,7 +100,9 @@ class UserController extends Controller
        $user->save();            
        // upon successful registration create profile for user so user can edit their profile later
        if($user){
-
+        $profile = new UserProfile();
+        $profile->user_id = $user->id;
+        $profile->save();
          //implemented sms
          $country_code = $country->get_country_code($request['country']);
 
