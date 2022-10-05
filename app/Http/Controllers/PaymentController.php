@@ -29,7 +29,6 @@ class PaymentController extends Controller
       // else{ 
       //$request_id = $request->request_id;
 
-<<<<<<< HEAD
       //get reference from request table
       $requestRef = OrderRequest::where('id',$request_id)->first();
       $requestRef->reference;
@@ -72,126 +71,10 @@ class PaymentController extends Controller
              'pay_status' => 'Unpaid'
             ]);
     }
-=======
-
-  public function genReference($qtd){
-   
-    $Caracteres = 'ABCDEFGHIJKLMOPQRSTUVXWYZ0123456789';
-    $QuantidadeCaracteres = strlen($Caracteres);
-    $QuantidadeCaracteres--;
-
-    $Hash=NULL;
-
-    for($x=1;$x<=$qtd;$x++){
-        $Posicao = rand(0,$QuantidadeCaracteres);
-        $Hash .= substr($Caracteres,$Posicao,1);
-    }
-
-    return $Hash;
-}
-
-  //fetch all product
-  public function payment(){
-    $requestResult = OrderRequest::where('id',$request->request_id)->first();
-            
-    $curl = curl_init();
->>>>>>> 1f4e52118d9e2dcdecd1428954a93a1b43ca4dae
-
-    $user_id = Auth::user()->id;
-    $profileResult = UserProfile::where('id',$user_id)->first();
-    $email = $profileResult->email;
-    $amount = $$requestResult->measurement * $requestResult->price; 
-    
-    // url to go to after payment
-    //$callback_url = site_url().'/verify';
-   // echo $callback_url;
-    //exit;
-
-    
-    curl_setopt_array($curl, array(
-      CURLOPT_URL => "https://api.paystack.co/transaction/initialize",
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_CUSTOMREQUEST => "POST",
-      CURLOPT_POSTFIELDS => json_encode([
-        'amount'=>$amount,
-        'email'=>$email,
-        //'callback_url' => $callback_url
-      ]),
-      CURLOPT_HTTPHEADER => [
-        "authorization: Bearer sk_test_8fabc18c29f908e5b7540b54d38a4b097250c39b", //replace this with your own test key
-        "content-type: application/json",
-        "cache-control: no-cache"
-      ],
-    ));
-    
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-    
-    if($err){
-      // there was an error contacting the Paystack API
-      $status = false;
-      $message ="";
-      $error = $err;
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-    }
-    
-    $tranx = json_decode($response, true);
-    
-    if(!$tranx['status']){
-      // there was an error from the API
-     // print_r('API returned error: ' . $tranx['message']);
-      $status = false;
-      $message ="";
-      $error = $tranx['message'];
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);     
-    }    
-    var_dump($tranx['status']);
-    exit;
-        $payment = new Payment();
-<<<<<<< HEAD
-        $payment->request_id  = $request_id;
-        $payment->ref         = $reference;
-        $payment->pay_status  = $pay_status;
-        $payment->gateway_ref = $gateway_ref;
-        $payment->pay_date    = $paid_date;
-        $payment->amount      = $amount;
-        $payment->agent_email = $agent_email;
-        $payment->agent_phone = $agent_phone;
-=======
-        $payment->request_id= $request->request_id;
-        $payment->pay_reference = $this->genReference(6);
-        $payment->pay_status = "paid";
-        $payment->gateway_ref = $request->gateway_ref;
-        $payment->pay_date = $request->pay_date;
-        $payment->amount = $request->amount;
->>>>>>> 1f4e52118d9e2dcdecd1428954a93a1b43ca4dae
-        $payment->save();
-  
-        $status = true;
-        $message ="successfully";
-        $error = "";
-        $data =  $better_response;
-        $code = 200;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
-<<<<<<< HEAD
-    
-     // } 
-=======
->>>>>>> 1f4e52118d9e2dcdecd1428954a93a1b43ca4dae
-
-  
-  }
-
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> 1f4e52118d9e2dcdecd1428954a93a1b43ca4dae
+
   //fetch all payments
   public function allPayments(){
     
@@ -214,33 +97,6 @@ class PaymentController extends Controller
 
   }
 
-
-  /**
-     * Redirect the User to Paystack Payment Page
-     * @return Url
-     */
-    public function redirectToGateway()
-    {
-        try{
-            return Paystack::getAuthorizationUrl()->redirectNow();
-        }catch(\Exception $e) {
-            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
-        }        
-    }
-
-    /**
-     * Obtain Paystack payment information
-     * @return void
-     */
-    public function handleGatewayCallback()
-    {
-        $paymentDetails = Paystack::getPaymentData();
-
-        dd($paymentDetails);
-        // Now you have the payment details,
-        // you can store the authorization_code in your db to allow for recurrent subscriptions
-        // you can then redirect or do whatever you want
-    } 
 
 
 }

@@ -516,13 +516,10 @@ public function HireFertilizer(Request $request){
      {
        $requestResult  = OrderRequest::where('id',$request_id)
       ->update([
-<<<<<<< HEAD
+
         'sp_id' => $user->id,
         'hectare_rate' => $priceResult->price
-=======
-        'sp_id' => $request->sp_id,
-        'price' => $priceResult->price
->>>>>>> 1f4e52118d9e2dcdecd1428954a93a1b43ca4dae
+
       ]);
   
       $status = true;
@@ -579,11 +576,9 @@ public function HireFertilizer(Request $request){
 
       $requestResult  = OrderRequest::where('id',$request_id)
       ->update([
-<<<<<<< HEAD
+
         'farm_size' => $measurement
-=======
-        'land_hectare' => $measurement
->>>>>>> 1f4e52118d9e2dcdecd1428954a93a1b43ca4dae
+
       ]);
   
       $status = true;
