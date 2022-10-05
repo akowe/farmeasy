@@ -196,7 +196,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->put('edit_farmer_request', ['uses' => 'AdminController@editFarmerAgent']);
 
     $router->put('assign_request_to_agent', ['uses' => 'AdminController@assignRequestToAgent']); 
-
+ 
 
     $router->get('prices', ['uses' => 'PriceController@allPrices']);
 
