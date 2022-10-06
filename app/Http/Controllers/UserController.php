@@ -383,7 +383,7 @@ class UserController extends Controller
              return ResponseBuilder::result($status, $message, $error, $data, $code);  
            }
         }
-
+ 
      }else{
       $status = false;
       $message ="Not Authorized to delete a user";
