@@ -80,7 +80,12 @@ class FarmerController extends Controller
                 $user->status      = 'pending';
                 
                 $user->save();            
+                
                 // upon successful registration create profile for user so user can edit their profile later
+                  $profile            = new UserProfile();
+                  $profile->user_id   = $user->id;
+                  $profile->save();
+
                 if($user){
       
                   //implemented sms

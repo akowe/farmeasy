@@ -37,6 +37,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('authenticate', ['uses' => 'UserController@authenticateUser']);
 
     $router->post('verify', ['uses' => 'UserController@verifyUser']);
+
+    $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
     
     $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
 
@@ -107,7 +109,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
      
      $router->put('update_request_measurement/{request_id}', ['uses' => 'AgentController@updateRequestMeasurement']);
      
-     $router->post('verify_agent', ['uses' => 'UserController@verifyAgent']); 
+    
 
      //ALL REQUEST IN AGENT LOCATION
 
