@@ -10,7 +10,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
- 
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
@@ -19,19 +19,13 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api'], function () use ($router) {
 
 
-
     $router->post('otp', ['uses' => 'UserController@getOtp']);
 
     $router->post('farmer', ['uses' => 'FarmerController@createFarmer']);
 
-    //$router->post('otp', ['uses' => 'UserController@getOtp']);
-    $router->post('user', ['uses' => 'UserController@createUser']);
-
-
     $router->get('all_farm_types', ['uses' => 'FarmerController@allFarmTypes']);   
 
     $router->post('service', ['uses' => 'ServiceController@createService']);
-
 
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
@@ -243,7 +237,4 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 });
 
 
-
-    $router->get('user', ['uses' => 'UserController@index']);
-});
 
