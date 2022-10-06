@@ -206,7 +206,7 @@ class ServiceController extends Controller
 
   // get service type by request id
   public function getServiceTypeByRequest(Request $request){
-    $request_id = $request->request_id;
+    $request_id = $request->id;
     $requestResult = OrderRequest::where("id", $request_id)->first();
 
     if($requestResult){
@@ -230,7 +230,6 @@ class ServiceController extends Controller
 
   }  
   
-
 
   // fetch service provider by service type
   public function getServiceProvidersByServiceType(Request $request){
@@ -257,6 +256,249 @@ class ServiceController extends Controller
       $data = "";
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);       
+     }
+
+  } 
+
+
+
+  // fetch service provider by  Tractor service type
+  public function getServiceProvidersByTractor(Request $request){
+    
+    //get Tractor service type from table
+     $service_type = ServiceType::where('id', '1')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+
+  // fetch service provider by  Plower service type
+  public function getServiceProvidersByPlower(Request $request){
+    
+    //get Plower service type from table
+     $service_type = ServiceType::where('id', '2')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+ 
+  // fetch service provider by  Planter service type
+  public function getServiceProvidersByPlanter(Request $request){
+    
+    //get Planter service type from table
+     $service_type = ServiceType::where('id', '3')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+
+  // fetch service provider by  Seed service type
+  public function getServiceProvidersBySeed(Request $request){
+    
+    //get Seed service type from table
+     $service_type = ServiceType::where('id', '4')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+  // fetch service provider by  Pesticide service type
+  public function getServiceProvidersByPesticide(Request $request){
+    
+    //get Pesticide service type from table
+     $service_type = ServiceType::where('id', '5')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+   // fetch service provider by  Fertilizer service type
+  public function getServiceProvidersByFertilizer(Request $request){
+    
+    //get Fertilizer service type from table
+     $service_type = ServiceType::where('id', '6')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+    // fetch service provider by  Processor service type
+  public function getServiceProvidersByProcessor(Request $request){
+    
+    //get Processor service type from table
+     $service_type = ServiceType::where('id', '7')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+   // fetch service provider by  Havester service type
+  public function getServiceProvidersByHarvester(Request $request){
+    
+    //get Harvester service type from table
+     $service_type = ServiceType::where('id', '8')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
      }
 
   } 

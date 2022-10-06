@@ -33,17 +33,6 @@ class UserController extends Controller
   
   public function __construct()
   {
-      //create superadmin  
-      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      // $user->ip = 'none';
-      // $user->name ="superadmin";
-      // $user->phone ="08188373898";
-      // $user->country      = 'Nigeria';
-      // $user->country_code ='+234';
-      // $user->user_type   =  '1'; // can select from role table
-      // $user->password    = Hash::make('password');
-      // $user->status      = 'verified';
-      // $user->save();
   }
 
   public function createAgent(Request $request){
@@ -99,10 +88,12 @@ class UserController extends Controller
        
        $user->save();            
        // upon successful registration create profile for user so user can edit their profile later
-       if($user){
         $profile = new UserProfile();
         $profile->user_id = $user->id;
-        $profile->save();
+        
+        
+       if($profile->save()){
+
          //implemented sms
          $country_code = $country->get_country_code($request['country']);
 
@@ -171,7 +162,7 @@ class UserController extends Controller
            $status = true;
            $message ="message sent successfully";
            $error = "";
-           $data = "";
+           $data = $create_profile;
            $code = 200;                
            return ResponseBuilder::result($status, $message, $error, $data, $code);
          }
@@ -405,13 +396,14 @@ class UserController extends Controller
  
     // validation
     $validator =Validator ::make($request->all(), [
-      'email' => 'required',
-      'business_name' => 'required',
-      'address' => 'required',
-      'location' => 'required',
-      'bank_name' => 'required',
-      'account_name' => 'required',
-      'account_number' => 'required|numeric',
+      
+      'address'     => 'required',
+      'location'    => 'required',
+      'bank_name'   => 'string',
+      'account_name' => 'string',
+      'account_number' => 'string',
+      'email'         => 'string',
+      'business_name' =>'string',
       ]);  
 
       if($validator->fails()){
@@ -426,25 +418,38 @@ class UserController extends Controller
 
         //$user_id = $request->user_id;
         $user_id = Auth::user()->id;
-        $profile = array(
-          'email' => $request->input('email'), 
-          'business_name'   => $request->input('business_name'),
-          'address' => $request['address'],
-          'location' => $request['location'],
-          'bank_name' => $request->input('bank_name'),
-          'account_name' => $request->input('account_name'), 
-          'account_number'  => $request->input('account_number'),
-          'profile_update_at' => date('Y-m-d h:i:s')
-        );
 
-      $profile  = UserProfile::where('user_id', $user_id)
-      ->update($profile);
+
+      $profile  = UserProfile::where('user_id', $user_id)->update([
+          'user_id' =>  $user_id,
+          'email' => $request->email,
+          'business_name'   => $request->business_name,
+          'address' => $request->address,
+          'location' => $request->location,
+          'bank_name' => $request->bank_name,
+          'account_name' => $request->account_name, 
+          'account_number'  => $request->account_number,
+          'profile_update_at' => date('Y-m-d h:i:s')
+      ]);
+      if($profile)
+      {
+
       $status = true;
       $message ="Profile successfully updated";
       $error = "";
       $data = "";
       $code = 200;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+      else{
+        $status = false;
+        $message ="No user with this profile";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }
+  
     }
   }
 

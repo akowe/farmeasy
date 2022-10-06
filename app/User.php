@@ -23,6 +23,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'reg_code', 'status', 'password'
     ];
 
+//        public function ServiceProvider()
+// {
+//     return $this->hasOne('App\ServiceType', 'id');
+// }
+
     /**
      * The attributes excluded from the model's JSON form.
      *

@@ -48,6 +48,12 @@ class PriceSeeder extends Seeder
                 'price'              => '20000'
             ]);
 
+                  Price::create([
+                'service_type_id'   => '8',
+                'price'              => '90000'
+            ]);
+
+
 
     }
 }

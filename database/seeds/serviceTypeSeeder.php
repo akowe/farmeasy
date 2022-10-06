@@ -14,38 +14,35 @@ class serviceTypeSeeder extends Seeder
     {
         //
          ServiceType::create([
-                'id'          => '1',
                 'service'     => 'Tractor'
             ]);
 
          ServiceType::create([
-                'id'          => '2',
                 'service'     => 'Plower'
             ]);
 
          ServiceType::create([
-                'id'          => '3',
                 'service'     => 'Planter'
             ]);
 
          ServiceType::create([
-                'id'          => '4',
                 'service'     => 'Seed'
             ]);
 
          ServiceType::create([
-                'id'          => '5',
                 'service'     => 'Pesticide'
             ]);
 
          ServiceType::create([
-                'id'          => '6',
                 'service'     => 'Fertilizer'
             ]);
 
          ServiceType::create([
-                'id'          => '7',
                 'service'     => 'Processor'
+            ]);
+
+          ServiceType::create([
+                'service'     => 'Harvester'
             ]);
     }
 }
