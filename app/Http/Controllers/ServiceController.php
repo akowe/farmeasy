@@ -45,7 +45,7 @@ class ServiceController extends Controller
       //   $user->save();
       //}      
 
-  
+   
   }
     public function createService(Request $request){
 
