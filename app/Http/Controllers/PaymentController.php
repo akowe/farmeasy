@@ -49,28 +49,62 @@ class PaymentController extends Controller
     curl_close($crl);
 
     $better_response = json_decode($response);
+
     // get agent details that make payment
-    $agent_email = $better_response->data->customer->email;
-    $agent_phone = $better_response->data->metadata->phone;
-    $amount = $better_response->data->amount;
-    $paid_date = $better_response->data->created_at;
-    $pay_status = $better_response->data->gateway_response;
-    $gateway_ref = $better_response->data->reference;
+    $agent_email  = $better_response->data->customer->email;
+    $agent_phone  = $better_response->data->metadata->phone;
+    $amount       = $better_response->data->amount;
+    $paid_date    = $better_response->data->created_at;
+    $pay_status   = $better_response->data->gateway_response;
+    $gateway_ref  = $better_response->data->reference;
+
+//insert payment details to table
+   $pay =  new Payment();
+   $pay->request_id     = $request_id;
+   $pay->agent_email    = $agent_email;
+   $pay->agent_phone    = $agent_phone;
+   $pay->ref            = $reference;
+   $pay->pay_status     = $pay_status;
+   $pay->gateway_ref    = $gateway_ref;
+   $pay->pay_date       = $paid_date;
+   $pay->amount         = $amount;
+
+   $pay->save();
 
     //update request status to PAID
-    if($pay_status == 'successfully'){
+    if($pay_status == 'success'){
       OrderRequest::where('id',$request_id)
             ->update([
              'pay_status' => 'Paid'
             ]);
     }
 
-    if($pay_status != 'successfully'){
+    if($pay_status != 'success'){
        OrderRequest::where('id',$request_id)
             ->update([
              'pay_status' => 'Unpaid'
             ]);
     }
+
+    if($pay){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $better_response;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+    else{
+       $status = false;
+    $message ="Opps! Something went wrong.";
+    $error = "";
+    $data = "";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+
+
+  }
 
 
 
