@@ -285,7 +285,7 @@ public function HireTractor(Request $request){
           $orderRequest->save();
 
           $status = true;
-          $message =Ucwords($username).", You have requested for the ".$tractor."  Service. You will be contacted shortly.";
+          $message =Ucwords($username).", you have successfully requested for the ".$tractor."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                
@@ -332,7 +332,7 @@ public function HirePlower(Request $request){
           $orderRequest->save();
 
           $status = true;
-           $message =Ucwords($username).", You have requested for the ".$plower."  Service. You will be contacted shortly.";
+           $message =Ucwords($username).", you have successfully requested for the ".$plower."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                
@@ -375,7 +375,7 @@ public function HirePlanter(Request $request){
           $orderRequest->save();
 
           $status = true;
-          $message =Ucwords($username).", You have requested for the ".$planter."  Service. You will be contacted shortly.";
+          $message =Ucwords($username).", you have successfully requested for the ".$planter."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                
@@ -419,7 +419,7 @@ public function HireSeed(Request $request){
         $orderRequest->save();
 
         $status = true;
-        $message =Ucwords($username).", You have requested for the ".$seed."  Service. You will be contacted shortly.";
+        $message =Ucwords($username).", you have successfullly requested for the ".$seed."  service. You will be contacted shortly.";
         $error = "";
         $data = "";
         $code = 200;                
@@ -463,7 +463,7 @@ public function HirePesticide(Request $request){
           $orderRequest->save();
 
           $status = true;
-            $message =Ucwords($username).", You have requested for the ".$pesticide."  Service. You will be contacted shortly.";
+            $message =Ucwords($username).", you have successfully requested for the ".$pesticide."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                
@@ -506,7 +506,7 @@ public function HireFertilizer(Request $request){
           $orderRequest->save();
 
           $status = true;
-          $message =Ucwords($username).", You have requested for the ".$fertilizer."  Service. You will be contacted shortly.";
+          $message =Ucwords($username).", you have successfully requested for the ".$fertilizer."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                
@@ -550,7 +550,7 @@ public function HireFertilizer(Request $request){
           $orderRequest->save();
 
           $status = true;
-           $message =Ucwords($username).", You have requested for the ".$processor."  Service. You will be contacted shortly.";
+           $message =Ucwords($username).", you have successfully requested for the ".$processor."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                
@@ -595,7 +595,7 @@ public function HireFertilizer(Request $request){
           $orderRequest->save();
 
           $status = true;
-           $message =Ucwords($username).", You have requested for the ".$harvester."  Service. You will be contacted shortly.";
+           $message =Ucwords($username).", you successfully have requested for the ".$harvester."  service. You will be contacted shortly.";
           $error = "";
           $data = "";
           $code = 200;                

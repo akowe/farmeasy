@@ -13,7 +13,6 @@ use App\User;
 use App\FeedBack;
 use App\Otp;
 use App\OrderRequest;
-use App\Price;
 use Carbon\Carbon;
 use App\UserProfile;
 use Carbon\Profile;
@@ -131,7 +130,7 @@ class AgentController extends Controller
 
 }
 
-//farmer click to request Tractor service
+//agent click to request Tractor service
 public function HireTractor(Request $request){
 
       $username   =  Auth::user()->name;
@@ -176,7 +175,7 @@ public function HireTractor(Request $request){
 
 
 
-//farmer click to request Plower service
+//agent click to request Plower service
 public function HirePlower(Request $request){
 
       $username = Auth::user()->name;
@@ -221,7 +220,7 @@ public function HirePlower(Request $request){
        }   
 
 
-  //farmer click to request Planter service
+  //agent click to request Planter service
 public function HirePlanter(Request $request){
 
       $username = Auth::user()->name;
@@ -265,7 +264,7 @@ public function HirePlanter(Request $request){
 }
 
 
-//farmer click to request Seed service
+//agent click to request Seed service
 public function HireSeed(Request $request){
 
     $username = Auth::user()->name;
@@ -309,7 +308,7 @@ public function HireSeed(Request $request){
 }
 
 
-//farmer click to request Pesticide service
+//agent click to request Pesticide service
 public function HirePesticide(Request $request){
 
       $username = Auth::user()->name;
@@ -352,7 +351,7 @@ public function HirePesticide(Request $request){
 }
 
 
-  //farmer click to request Fertilizer service
+  //agent click to request Fertilizer service
 public function HireFertilizer(Request $request){
 
       $username = Auth::user()->name;
@@ -396,7 +395,7 @@ public function HireFertilizer(Request $request){
 }
 
 
-          //farmer click to request Processor service
+  //agent click to request Processor service
   public function HireProcessor(Request $request){
 
       $username = Auth::user()->name;
@@ -439,7 +438,7 @@ public function HireFertilizer(Request $request){
       } 
 
 
-        //farmer click to request Harvester service
+  //agent click to request Harvester service
   public function HireHarvester(Request $request){
 
       $username = Auth::user()->name;
