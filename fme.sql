@@ -1,14 +1,19 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 4.6.6
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
+<<<<<<< HEAD
 -- Generation Time: Sep 17, 2022 at 10:21 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
+=======
+-- Generation Time: Sep 07, 2022 at 01:48 AM
+-- Server version: 5.7.23
+-- PHP Version: 7.3.8
+>>>>>>> main
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -171,6 +176,7 @@ CREATE TABLE `otp` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 --
 -- Dumping data for table `otp`
 --
@@ -179,6 +185,8 @@ INSERT INTO `otp` (`id`, `code`, `created_at`, `updated_at`) VALUES
 (1, '200818', '2022-09-15 11:39:49', '2022-09-15 11:39:49'),
 (2, '293251', '2022-09-15 11:41:28', '2022-09-15 11:41:28');
 
+=======
+>>>>>>> main
 -- --------------------------------------------------------
 
 --
@@ -225,6 +233,7 @@ CREATE TABLE `profile` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 --
 -- Dumping data for table `profile`
 --
@@ -232,6 +241,8 @@ CREATE TABLE `profile` (
 INSERT INTO `profile` (`id`, `user_id`, `email`, `business_name`, `address`, `location`, `bank_name`, `account_name`, `account_number`, `created_at`, `updated_at`) VALUES
 (1, '2', 'methyl2007@yahoo.com', 'roft', 'lane right', 'lagos', 'gtbank', 'Adepoju Muitu', '0035419731', '2022-09-16 03:34:54', '2022-09-16 04:05:50');
 
+=======
+>>>>>>> main
 -- --------------------------------------------------------
 
 --
@@ -332,6 +343,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `users`
 --
 
@@ -340,6 +352,8 @@ INSERT INTO `users` (`id`, `ip`, `country`, `user_type`, `name`, `farm_type`, `s
 (2, '2:3:567:89', 'nigeria', '4', 'mutiu', 'rice', NULL, '+234', 'UDExbXlwU2JoTGZUdlM3aTFseFZWSzZTUmRoUTEzU3NON2dvZlVFTA==', '09085930936', '$2y$10$lkMPitPkc2mgp92Xd3o8mu8upj9XMA9LlU.5RUzd78aqEVFD0hEfO', '293251', 'verified', NULL, '2022-09-15 11:41:28', '2022-09-16 03:34:54');
 
 --
+=======
+>>>>>>> main
 -- Indexes for dumped tables
 --
 
@@ -434,13 +448,11 @@ ALTER TABLE `users`
 --
 ALTER TABLE `country`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT for table `farm_type`
 --
 ALTER TABLE `farm_type`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `feedback`
 --
@@ -452,62 +464,72 @@ ALTER TABLE `feedback`
 --
 ALTER TABLE `location`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
-
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `otp`
 --
 ALTER TABLE `otp`
+<<<<<<< HEAD
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
+=======
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+>>>>>>> main
 --
 -- AUTO_INCREMENT for table `product_service`
 --
 ALTER TABLE `product_service`
+<<<<<<< HEAD
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
+=======
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+>>>>>>> main
 --
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
+<<<<<<< HEAD
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
+=======
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+>>>>>>> main
 --
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
 --
 -- AUTO_INCREMENT for table `service_type`
 --
 ALTER TABLE `service_type`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
+<<<<<<< HEAD
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
+=======
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+>>>>>>> main
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

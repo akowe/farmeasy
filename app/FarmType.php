@@ -11,5 +11,4 @@ class FarmType extends Model
     //
     
     protected $table ='farm_type';
-    
 }
