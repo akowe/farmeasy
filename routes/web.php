@@ -89,29 +89,15 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
      // AGENT ACCOUNT
      $router->post('farmer_request', ['uses' => 'AgentController@requestService']);
 
-     $router->post('tractor', ['uses' => 'AgentController@HireTractor']);
- 
-     $router->post('plower', ['uses' => 'AgentController@HirePlower']);
- 
-     $router->post('planter', ['uses' => 'AgentController@HirePlanter']);
- 
-     $router->post('seed', ['uses' => 'AgentController@HireSeed']);
- 
-     $router->post('pesticide', ['uses' => 'AgentController@HirePesticide']);
- 
-     $router->post('fertilizer', ['uses' => 'AgentController@HireFertilizer']);
- 
-     $router->post('processor', ['uses' => 'AgentController@HireProcessor']);
-
-    $router->post('harvester', ['uses' => 'FarmerController@HireHarvester']);
-
      $router->get('get_service_type_by_request', ['uses' => 'AgentController@getServiceTypeByRequest']); 
 
      $router->put('update_request_with_service_provider/{request_id}', ['uses' => 'AgentController@updateRequestWithServiceProvider']);
      
      $router->put('update_request_measurement/{request_id}', ['uses' => 'AgentController@updateRequestMeasurement']);
-     
-    
+
+     $router->get('notifications', ['uses' => 'NotificationController@getNotifications']);   
+
+     $router->get('notification', ['uses' => 'NotificationController@getNotification']); 
 
      //ALL REQUEST IN AGENT LOCATION
 
