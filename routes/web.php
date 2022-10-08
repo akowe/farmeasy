@@ -101,6 +101,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
  
      $router->post('processor', ['uses' => 'AgentController@HireProcessor']);
 
+    $router->post('harvester', ['uses' => 'FarmerController@HireHarvester']);
+
      $router->get('get_service_type_by_request', ['uses' => 'AgentController@getServiceTypeByRequest']); 
 
      $router->put('update_request_with_service_provider/{request_id}', ['uses' => 'AgentController@updateRequestWithServiceProvider']);
