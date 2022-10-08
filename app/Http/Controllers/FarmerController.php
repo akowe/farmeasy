@@ -288,8 +288,8 @@ public function HireTractor(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        //$location = $location ->location;
-         $orderRequest = new OrderRequest();
+          //$location = $location ->location;
+          $orderRequest = new OrderRequest();
           $orderRequest->user_id  = $user_id;
           $orderRequest->name     = $username;
           $orderRequest->phone    = $user_phone;
@@ -299,66 +299,73 @@ public function HireTractor(Request $request){
           $orderRequest->status   = "pending";
           $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-        if($agents){
-          
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($tractor);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description = "You have a new ".strtolower($tractor)." hire request";
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($tractor)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            } 
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($tractor);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description = "You have a new ".strtolower($tractor)." hire request";
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($tractor)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            }
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
           }
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        }
       }    
   }
 
@@ -397,66 +404,74 @@ public function HirePlower(Request $request){
           $orderRequest->status = "pending";
           $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
-        if($agents){
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($plower);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($plower)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description =  "You have a new ".strtolower($plower)." hire request";
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($plower)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
+
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            }  
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($plower);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($plower)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description =  "You have a new ".strtolower($plower)." hire request";
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($plower)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            } 
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
-          } 
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        }
-
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
+          }
       }
     }   
 
@@ -494,65 +509,75 @@ public function HirePlanter(Request $request){
           $orderRequest->status = "pending";
           $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
-        if($agents){
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($planter);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($planter)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description =  "You have a new ".strtolower($planter)." hire request";
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($planter)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
+
+          }
+
+          if(count($agentEmails) !=0){
+
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            } 
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($planter);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($planter)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description =  "You have a new ".strtolower($planter)." hire request";
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($planter)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            }
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
           } 
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        } 
       }
 
 }
@@ -591,66 +616,76 @@ public function HireSeed(Request $request){
         $orderRequest->status = "pending";
         $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
-        if($agents){
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($seed);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($seed)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description =  "You have a new ".strtolower($seed)." hire request";;
-            $notification->notice_status = "delivered"; 
-            $notification->save(); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
 
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($seed)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            } 
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($seed);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($seed)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description =  "You have a new ".strtolower($seed)." hire request";;
+              $notification->notice_status = "delivered"; 
+              $notification->save(); 
+  
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($seed)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            } 
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
-          } 
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        }  
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
+          }
+       
       }
 
 }
@@ -689,66 +724,76 @@ public function HirePesticide(Request $request){
           $orderRequest->status = "pending";
           $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
-        if($agents){
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($pesticide);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($pesticide)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description =  "You have a new ".strtolower($pesticide)." hire request";
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
 
-            $message = Ucwords($username).", you have successfully requested for the ".strtolower($pesticide)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            } 
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($pesticide);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($pesticide)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description =  "You have a new ".strtolower($pesticide)." hire request";
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+  
+              $message = Ucwords($username).", you have successfully requested for the ".strtolower($pesticide)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            }
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
           } 
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        }  
+       
       }
 }
 
@@ -786,65 +831,75 @@ public function HireFertilizer(Request $request){
           $orderRequest->status = "pending";
           $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
-        if($agents){
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($fertilizer);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($fertilizer)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description =  "You have a new ".strtolower($fertilizer)." hire request";;
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($fertilizer)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
+
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            }  
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($fertilizer);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($fertilizer)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description =  "You have a new ".strtolower($fertilizer)." hire request";;
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($fertilizer)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            } 
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
-          } 
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        }  
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
+          }
+       
        }   
 
 }
@@ -883,66 +938,75 @@ public function HireFertilizer(Request $request){
           $orderRequest->status = "pending";
           $orderRequest->save();
 
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-        if($agents){
-
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($processor);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($processor)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description = "You have a new ".strtolower($processor)." hire request";
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($processor)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
+
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            } 
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($processor);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($processor)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description = "You have a new ".strtolower($processor)." hire request";
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($processor)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            }
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
           }
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        } 
+       
         }    
       } 
 
@@ -982,65 +1046,76 @@ public function HireFertilizer(Request $request){
           $orderRequest->status = "pending";
           $orderRequest->save();
           
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
-        if($agents){
+          //notification
+          //get agents in the same location with the farmer
+          $agentEmails = array();
+          $agents = User::where('user_type','3')->get();
 
-          require 'PHPMailer/src/Exception.php';
-          require 'PHPMailer/src/PHPMailer.php';
-          require 'PHPMailer/src/SMTP.php';
-    
-          $mail = new PHPMailer(true);
-
-          //Server settings
-          $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
-          $mail->isSMTP();                                            
-          $mail->SMTPDebug = 0; 
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'ssl'; //'ssl';
-          $mail->Host = "smtp.gmail.com";                                                   
-          $mail->Username = "methyl2007@gmail.com";
-          $mail->Password = "ontvlykbrmgwxedu";                              
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
-          $mail->Port       = 465; //465;                                   
-          //Recipients
-          $mail->setFrom("methyl2007@gmail.com");
           foreach($agents as $agent){
-            $mail->addAddress($agent->email);                
-          } 
-          $mail->isHTML(true);                                 
-          $mail->Subject = "Order request for a ".strtolower($harvester);
-          $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($harvester)."</p>"); 
-          if($mail->send()){
-            $notification= new Notification();
-            $notification->request_id  =$orderRequest->id;
-            $notification->type    = "request";
-            $notification->description =  "You have a new ".strtolower($harvester)." hire request";
-            $notification->notice_status = "delivered"; 
-            $notification->save();       
-            $status = true;
-            $message =Ucwords($username).", you have successfully requested for the ".strtolower($harvester)."  service. You will be contacted shortly.";
-            $error = "";
-            $data = "";
-            $code = 200;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            $profile= UserProfile::where('user_id',$agent->id)->first();
+            if($location ==$profile->location){
+              $agentEmails[]=   $profile->email;          
+            }
+
+          }
+
+          if(count($agentEmails) !=0){
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+      
+            $mail = new PHPMailer(true);
+  
+            //Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                     
+            $mail->isSMTP();                                            
+            $mail->SMTPDebug = 0; 
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl'; //'ssl';
+            $mail->Host = "smtp.gmail.com";                                                   
+            $mail->Username = "methyl2007@gmail.com";
+            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
+            $mail->Port       = 465; //465;                                   
+            //Recipients
+            $mail->setFrom("methyl2007@gmail.com");
+            foreach($agentEmails as $email){
+              $mail->addAddress($email);                
+            } 
+            $mail->isHTML(true);                                 
+            $mail->Subject = "Order request for a ".strtolower($harvester);
+            $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($harvester)."</p>"); 
+            if($mail->send()){
+              $notification= new Notification();
+              $notification->request_id  =$orderRequest->id;
+              $notification->type    = "request";
+              $notification->description =  "You have a new ".strtolower($harvester)." hire request";
+              $notification->notice_status = "delivered"; 
+              $notification->save();       
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($harvester)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }else{
+              $status = false;
+              $message ="Message did not sent to  ".ucfirst($username);
+              $error = "";
+              $data = "";
+              $code = 401;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            }
           }else{
             $status = false;
-            $message ="Message did not sent to  ".ucfirst($username);
+            $message ="No agent currently availabble";
             $error = "";
             $data = "";
             $code = 401;                
-            return ResponseBuilder::result($status, $message, $error, $data, $code);                   
+            return ResponseBuilder::result($status, $message, $error, $data, $code);             
           }
-        }else{
-          $status = false;
-          $message ="No Agent is found in your ".$location." location";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);             
-        } 
+
+       
       }    
     } 
 
