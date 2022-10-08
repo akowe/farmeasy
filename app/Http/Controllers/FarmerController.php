@@ -90,7 +90,12 @@ class FarmerController extends Controller
                 $user->status      = 'pending';
                 
                 $user->save();            
+                
                 // upon successful registration create profile for user so user can edit their profile later
+                  $profile            = new UserProfile();
+                  $profile->user_id   = $user->id;
+                  $profile->save();
+
                 if($user){
                   $profile = new UserProfile();
                   $profile->user_id = $user->id;
@@ -270,7 +275,7 @@ public function HireTractor(Request $request){
       $farm_type  = Auth::user()->farm_type;
 
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Tractor service type from table
       $tractor = ServiceType::where('id', '1')->first()->service;
@@ -283,16 +288,16 @@ public function HireTractor(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id  = $user_id;
-        $orderRequest->name     = $username;
-        $orderRequest->phone    = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type = $tractor;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status   = "pending";
-        $orderRequest->save();
+        //$location = $location ->location;
+         $orderRequest = new OrderRequest();
+          $orderRequest->user_id  = $user_id;
+          $orderRequest->name     = $username;
+          $orderRequest->phone    = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type = $tractor;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status   = "pending";
+          $orderRequest->save();
 
         //notification
         //get agents in the same location with the farmer
@@ -368,29 +373,31 @@ public function HirePlower(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Plower service type from table
       $plower = ServiceType::where('id', '2')->first()->service;
 
-      if (!$location){
-        $status = false;
-        $message ="Kindly update your profile before requesting a service";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$plower;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
+        if (!$location){
+      $status = false;
+      $message ="Kindly update your profile before requesting a service";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      }
+
+      else{
+        //$location = $location ->location;
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$plower;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
 
         //notification
         //get agents in the same location with the farmer
@@ -465,7 +472,7 @@ public function HirePlanter(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+     $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Planter service type from table
       $planter = ServiceType::where('id', '3')->first()->service;
@@ -478,16 +485,16 @@ public function HirePlanter(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$planter;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
+        //$location = $location ->location;
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$planter;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
 
         //notification
         //get agents in the same location with the farmer
@@ -562,7 +569,7 @@ public function HireSeed(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+     $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Seed service type from table
       $seed = ServiceType::where('id', '4')->first()->service;
@@ -575,7 +582,7 @@ public function HireSeed(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
+        //$location = $location ->location;
         $orderRequest = new OrderRequest();
         $orderRequest->user_id =$user_id;
         $orderRequest->name = $username;
@@ -660,7 +667,7 @@ public function HirePesticide(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Pesticide service type from table
       $pesticide = ServiceType::where('id', '5')->first()->service;
@@ -673,16 +680,16 @@ public function HirePesticide(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$pesticide;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
+          //$location = $location ->location;
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$pesticide;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
 
         //notification
         //get agents in the same location with the farmer
@@ -757,7 +764,7 @@ public function HireFertilizer(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+     $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Fertilizer service type from table
       $fertilizer = ServiceType::where('id', '6')->first()->service;
@@ -770,16 +777,16 @@ public function HireFertilizer(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$fertilizer;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
+          //$location = $location ->location;
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$fertilizer;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
 
         //notification
         //get agents in the same location with the farmer
@@ -854,7 +861,7 @@ public function HireFertilizer(Request $request){
        $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+     $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Processor service type from table
       $processor = ServiceType::where('id', '7')->first()->service;
@@ -867,16 +874,16 @@ public function HireFertilizer(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$processor;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
+          //$location = $location ->location;
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$processor;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
 
         //notification
         //get agents in the same location with the farmer
@@ -953,7 +960,7 @@ public function HireFertilizer(Request $request){
        $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+     $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Harvester service type from table
       $harvester = ServiceType::where('id', '8')->first()->service;
@@ -966,19 +973,16 @@ public function HireFertilizer(Request $request){
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
-        $orderRequest = new OrderRequest();
-        $orderRequest->user_id =$user_id;
-        $orderRequest->name = $username;
-        $orderRequest->phone = $user_phone;
-        $orderRequest->location = $location;
-        $orderRequest->service_type =$harvester;
-        $orderRequest->farm_type = $farm_type;
-        $orderRequest->status = "pending";
-        $orderRequest->save();
-        //notification
-        //get agents in the same location with the farmer
-        $agents = BecomeAgent::where('location', $location)->get();
+          //$location = $location ->location;
+          $orderRequest = new OrderRequest();
+          $orderRequest->user_id =$user_id;
+          $orderRequest->name = $username;
+          $orderRequest->phone = $user_phone;
+          $orderRequest->location = $location;
+          $orderRequest->service_type =$harvester;
+          $orderRequest->farm_type = $farm_type;
+          $orderRequest->status = "pending";
+          $orderRequest->save();
 
         if($agents){
 

@@ -7,3 +7,5 @@ cd /to-your-lumen-project root, then enter the below:
 Then register this package in your bootstrap/app.php file as under Register Container Binding
 
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
+Superadmin: 123456

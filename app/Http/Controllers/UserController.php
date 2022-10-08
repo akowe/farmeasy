@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -87,12 +89,14 @@ class UserController extends Controller
        $user->status      = 'pending';
        
        $user->save();            
+       
        // upon successful registration create profile for user so user can edit their profile later
-        $profile = new UserProfile();
-        $profile->user_id = $user->id;
+         $profile            = new UserProfile();
+         $profile->user_id   = $user->id;
+         $profile->save();
         
         
-       if($profile->save()){
+       if($user){
 
          //implemented sms
          $country_code = $country->get_country_code($request['country']);
@@ -160,9 +164,9 @@ class UserController extends Controller
            return ResponseBuilder::result($status, $message, $error, $data, $code);
          }else if($response){
            $status = true;
-           $message ="message sent successfully";
+           $message ="Agent created, message sent successfully";
            $error = "";
-           $data = $create_profile;
+           $data = "";
            $code = 200;                
            return ResponseBuilder::result($status, $message, $error, $data, $code);
          }

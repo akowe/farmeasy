@@ -17,7 +17,6 @@ use Carbon\Carbon;
 use App\UserProfile;
 use Carbon\Profile;
 use App\ServiceType;
-use App\Price;
 use App\Payment;
 
 use Illuminate\Auth\Authenticatable;
@@ -139,7 +138,7 @@ public function HireTractor(Request $request){
       $farm_type  = Auth::user()->farm_type;
 
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Tractor service type from table
       $tractor = ServiceType::where('id', '1')->first()->service;
@@ -152,7 +151,7 @@ public function HireTractor(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
+        //$location = $location ->location;
          $orderRequest = new OrderRequest();
           $orderRequest->user_id  = $user_id;
           $orderRequest->name     = $username;
@@ -184,7 +183,7 @@ public function HirePlower(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Plower service type from table
       $plower = ServiceType::where('id', '2')->first()->service;
@@ -199,7 +198,7 @@ public function HirePlower(Request $request){
       }
 
       else{
-        $location = $location ->location;
+        //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
           $orderRequest->name = $username;
@@ -229,7 +228,7 @@ public function HirePlanter(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Planter service type from table
       $planter = ServiceType::where('id', '3')->first()->service;
@@ -242,7 +241,7 @@ public function HirePlanter(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-        $location = $location ->location;
+        //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
           $orderRequest->name = $username;
@@ -273,7 +272,7 @@ public function HireSeed(Request $request){
     $farm_type  = Auth::user()->farm_type;
  
     //get login user location from profile table
-    $location = UserProfile::where('user_id', $user_id)->first();
+   $location = UserProfile::where('user_id', $user_id)->first()->location;
 
     //get Seed service type from table
     $seed = ServiceType::where('id', '4')->first()->service;
@@ -286,7 +285,7 @@ public function HireSeed(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
     }else{
-      $location = $location ->location;
+      //$location = $location ->location;
       $orderRequest = new OrderRequest();
       $orderRequest->user_id =$user_id;
       $orderRequest->name = $username;
@@ -317,7 +316,7 @@ public function HirePesticide(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Pesticide service type from table
       $pesticide = ServiceType::where('id', '5')->first()->service;
@@ -330,7 +329,7 @@ public function HirePesticide(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-          $location = $location ->location;
+          //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
           $orderRequest->name = $username;
@@ -360,7 +359,7 @@ public function HireFertilizer(Request $request){
       $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+      $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Fertilizer service type from table
       $fertilizer = ServiceType::where('id', '6')->first()->service;
@@ -373,7 +372,7 @@ public function HireFertilizer(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-          $location = $location ->location;
+          //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
           $orderRequest->name = $username;
@@ -404,7 +403,7 @@ public function HireFertilizer(Request $request){
        $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+    $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Processor service type from table
       $processor = ServiceType::where('id', '7')->first()->service;
@@ -417,7 +416,7 @@ public function HireFertilizer(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-          $location = $location ->location;
+          //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
           $orderRequest->name = $username;
@@ -447,7 +446,7 @@ public function HireFertilizer(Request $request){
        $farm_type  = Auth::user()->farm_type;
  
       //get login user location from profile table
-      $location = UserProfile::where('user_id', $user_id)->first();
+     $location = UserProfile::where('user_id', $user_id)->first()->location;
 
       //get Harvester service type from table
       $harvester = ServiceType::where('id', '8')->first()->service;
@@ -460,7 +459,7 @@ public function HireFertilizer(Request $request){
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
       }else{
-          $location = $location ->location;
+          //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
           $orderRequest->name = $username;
