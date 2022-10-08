@@ -385,9 +385,7 @@ public function HirePlower(Request $request){
       $data = "";
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      }
-
-      else{
+      }else{
         //$location = $location ->location;
           $orderRequest = new OrderRequest();
           $orderRequest->user_id =$user_id;
@@ -983,7 +981,10 @@ public function HireFertilizer(Request $request){
           $orderRequest->farm_type = $farm_type;
           $orderRequest->status = "pending";
           $orderRequest->save();
-
+          
+        //notification
+        //get agents in the same location with the farmer
+        $agents = BecomeAgent::where('location', $location)->get();
         if($agents){
 
           require 'PHPMailer/src/Exception.php';
