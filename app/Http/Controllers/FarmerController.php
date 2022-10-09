@@ -325,12 +325,12 @@ public function HireTractor(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             } 
@@ -431,12 +431,12 @@ public function HirePlower(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                             
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             }  
@@ -537,12 +537,12 @@ public function HirePlanter(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                               
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             } 
@@ -643,12 +643,12 @@ public function HireSeed(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             } 
@@ -751,12 +751,12 @@ public function HirePesticide(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             } 
@@ -858,12 +858,12 @@ public function HireFertilizer(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             }  
@@ -965,12 +965,12 @@ public function HireFertilizer(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             } 
@@ -1073,12 +1073,12 @@ public function HireFertilizer(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "methyl2007@gmail.com";
-            $mail->Password = "ontvlykbrmgwxedu";                              
+            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
-            $mail->setFrom("methyl2007@gmail.com");
+            $mail->setFrom("noreply@fme.com", 'FARM EASY');
             foreach($agentEmails as $email){
               $mail->addAddress($email);                
             } 
