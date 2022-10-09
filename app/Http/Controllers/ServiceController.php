@@ -18,33 +18,17 @@ use App\Country;
 use App\ServiceType;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\Payment;
+use App\AgentNotification;
+use App\FarmerNotification;
+use App\ServiceNotification;
+
 class ServiceController extends Controller
 {
 
   public function __construct()
   {
-      //create superadmin  
-
-      // $user = User::where("phone","08188373898")->first();
-      // if($user){
-      //   $status = false;
-      //   $message ="Phone number already taken";
-      //   $error = "";
-      //   $data = "";
-      //   $code = 401;                
-      //   return ResponseBuilder::result($status, $message, $error, $data, $code); 
-      // }else{
-      //   $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      //   $user->name ="superadmin";
-      //   $user->phone ="08188373898";
-      //   $user->country      = 'Nigeria';
-      //   $user->country_code ='+234';
-      //   $user->user_type   =  '1'; // can select from role table
-      //   $user->password    = Hash::make('password');
-      //   $user->status      = 'verified';
-      //   $user->save();
-      //}      
-
+    
    
   }
     public function createService(Request $request){
@@ -617,7 +601,7 @@ class ServiceController extends Controller
   }  
 
   //fetch all product
-  public function allProducts(){
+  public function allProducts(Request $request){
     $all_products  = ServiceProduct::all();
     $status = true;
     $message ="";
@@ -628,4 +612,261 @@ class ServiceController extends Controller
 
   }   
 
+
+
+
+  public function getFarmRequest(Request $request){
+    $user_id = Auth::user()->id;
+
+    $all_request = OrderRequest::where('sp_id', $user_id)->get();
+
+     if($all_request){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="No farm request available";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+
+  }
+
+
+  public function getAgentPayment(Request $request){
+      $user_id = Auth::user()->id;
+
+    $payment = OrderRequest::Join('users', 'users.id', '=', 'request.sp_id')
+                  ->Join('payment', 'payment.request_id', '=', 'request.id')
+                  ->get(['payment.*', 'request.*']);
+
+     if($payment){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $payment;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="No payment available";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+
+  }
+
+
+
+
+  public function acceptRequest(Request $request){
+
+      // validation
+    $validator =Validator ::make($request->all(), [
+      'request_id' => 'required'
+  ]);      
+  if($validator->fails()){
+  $status = false;
+  $message ="";
+  $error = $validator->errors()->first();
+  $data = "";
+  $code = 401;                
+  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+  }else{
+    $user_id = Auth::user()->id;
+
+    $request_id = $request->input('request_id');
+
+    $requestResult  = OrderRequest::where('id',$request_id)->first();
+    if($requestResult){
+
+      
+
+      $requestResult  = OrderRequest::where('id',$request_id)
+                         ->where('sp_id', $user_id)
+                        ->update([
+
+                      'status' => 'Service Provider Accepted'
+
+                    ]);
+
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $requestResult;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="Something went wrong";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+  }
+
 }
+
+
+
+  public function rejectRequest(Request $request){
+
+      // validation
+    $validator =Validator ::make($request->all(), [
+      'request_id' => 'required'
+  ]);      
+  if($validator->fails()){
+  $status = false;
+  $message ="";
+  $error = $validator->errors()->first();
+  $data = "";
+  $code = 401;                
+  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+  }else{
+    $user_id = Auth::user()->id;
+
+    $request_id = $request->input('request_id');
+
+    $requestResult  = OrderRequest::where('id',$request_id)->first();
+    if($requestResult){
+
+      
+
+      $requestResult  = OrderRequest::where('id',$request_id)
+                         ->where('sp_id', $user_id)
+                        ->update([
+
+                      'status' => 'Service Provider Declined'
+
+                    ]);
+
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $requestResult;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="Something went wrong";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+  }
+
+}
+
+
+
+  public function startService(Request $request){
+
+      // validation
+    $validator =Validator ::make($request->all(), [
+      'request_id' => 'required'
+  ]);      
+  if($validator->fails()){
+  $status = false;
+  $message ="";
+  $error = $validator->errors()->first();
+  $data = "";
+  $code = 401;                
+  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+  }else{
+    $user_id = Auth::user()->id;
+
+    $request_id = $request->input('request_id');
+
+    $requestResult  = OrderRequest::where('id',$request_id)->first();
+    if($requestResult){
+
+      
+
+      $requestResult  = OrderRequest::where('id',$request_id)
+                         ->where('sp_id', $user_id)
+                        ->update([
+
+                      'status' => 'Service in progress'
+
+                    ]);
+
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = 'Service in progress';
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="Something went wrong";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+  }
+
+}
+
+
+  public function endService(Request $request){
+
+      // validation
+    $validator =Validator ::make($request->all(), [
+      'request_id' => 'required'
+  ]);      
+  if($validator->fails()){
+  $status = false;
+  $message ="";
+  $error = $validator->errors()->first();
+  $data = "";
+  $code = 401;                
+  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+  }else{
+    $user_id = Auth::user()->id;
+
+    $request_id = $request->input('request_id');
+
+    $requestResult  = OrderRequest::where('id',$request_id)->first();
+    if($requestResult){
+
+      
+
+      $requestResult  = OrderRequest::where('id',$request_id)
+                         ->where('sp_id', $user_id)
+                        ->update([
+
+                      'status' => 'Service Delivered'
+
+                    ]);
+
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = 'Delivered';
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }else{
+      $status = false;
+      $message ="Something went wrong";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    }
+  }
+
+}
+
+
+}//class

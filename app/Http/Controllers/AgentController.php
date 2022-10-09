@@ -18,6 +18,10 @@ use App\UserProfile;
 use Carbon\Profile;
 use App\ServiceType;
 use App\Payment;
+use App\Price;
+use App\AgentNotification;
+use App\FarmerNotification;
+use App\ServiceNotification;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -152,6 +156,7 @@ class AgentController extends Controller
     $requestResult  = OrderRequest::where('id',$request_id)->first();
     if($requestResult){
       $service_type = $requestResult->service_type;
+      $farmer_id = $requestResult->user_id;
       
       $priceResult = Price::where('service_type',$service_type)->first();
 
@@ -164,9 +169,31 @@ class AgentController extends Controller
       ->update([
 
         'sp_id' => $user->id,
-        'hectare_rate' => $priceResult->price
+        'hectare_rate' => $priceResult->price,
+        'agent_id' => Auth::user()->id,
+        'status' =>'approved'
 
       ]);
+
+      //SEND NOTIFICATION TO THE FARMER 
+      // OR WHOEVER CREATED THE REQUEST
+      $notification= new FarmerNotification();
+      $notification->request_id   = $request_id;
+      $notification->farmer_id      = $farmer_id;
+      $notification->type         = $service_type;
+      $notification->description  =  "Your " .strtolower($service_type)." request has been approved";
+      $notification->notice_status = "delivered"; 
+      $notification->save(); 
+
+
+      //SEND NOTIFICATION TO SERVICE PROVIDER
+      $notification= new ServiceNotification();
+      $notification->request_id   = $request_id;
+      $notification->sp_id        = $user->id;
+      $notification->type         = $service_type;
+      $notification->description  =  "You have a new " .strtolower($service_type)." request";
+      $notification->notice_status = "delivered"; 
+      $notification->save();     
   
       $status = true;
       $message ="Service provider and price successfully updated";
@@ -223,7 +250,9 @@ class AgentController extends Controller
       $requestResult  = OrderRequest::where('id',$request_id)
       ->update([
 
-        'farm_size' => $measurement
+        'farm_size' => $measurement,
+        'agent_id' => Auth::user()->id,
+        'status' =>'approved and measured'
 
       ]);
   
@@ -250,8 +279,7 @@ class AgentController extends Controller
       
        // validation
        $validator =Validator ::make($request->all(), [
-        'request_id' => 'required',
-        'agent_id' => 'required'
+        'request_id' => 'required'
         ]);      
         if($validator->fails()){
         $status = false;
@@ -265,7 +293,7 @@ class AgentController extends Controller
             $requestResult  = OrderRequest::where('id',$request->request_id)
             ->update([
              'agent_id' => Auth::user()->id,
-            'status' => "accepted"
+            'status' => "approved"
             ]);
             $status = true;
             $message ="Request successfully accepted";
@@ -696,12 +724,6 @@ class AgentController extends Controller
 
            $request_id = $request->request_id;
 
-            $requestResult  = OrderRequest::where('id',$request_id)
-            ->update([
-             'agent_id' => Auth::user()->id,
-            'status' => "accepted"
-            ]);
-
             $requestResult = OrderRequest::where('id',$request_id)->first();
 
             // amount = rate x farm_size
@@ -770,13 +792,21 @@ class AgentController extends Controller
               print_r('API returned error: ' . $tranx['message']);
             }
                        
-   
+            if($tranx){
+             $requestResult  = OrderRequest::where('id',$request_id)
+            
+            ->update([
+             'agent_id' => Auth::user()->id,
+            'pay_status' => "Payment pending"
+            ]);
+
             $status = true;
             $message ="Transaction successful";
             $error = "";
             $data = $data;
             $code = 200;                
             return ResponseBuilder::result($status, $message, $error, $data, $code); 
+          }
         }
     
 

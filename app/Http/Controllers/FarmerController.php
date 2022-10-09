@@ -21,7 +21,9 @@ use App\Otp;
 use App\Role;
 use App\Country;
 use App\FarmType;
-use App\Notification;
+use App\AgentNotification;
+use App\FarmerNotification;
+use App\ServiceNotification;
 use Carbon\Carbon;
 use Carbon\Profile;
 use App\OrderRequest;
@@ -307,7 +309,8 @@ public function HireTractor(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;
+              $agentLocation = $profile->location;          
             }
           }
 
@@ -338,9 +341,10 @@ public function HireTractor(Request $request){
             $mail->Subject = "Order request for a ".strtolower($tractor);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+              $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
-              $notification->type    = "request";
+              $notification->location    = $agentLocation;
+              $notification->type        = "request";
               $notification->description = "You have a new ".strtolower($tractor)." hire request";
               $notification->notice_status = "delivered"; 
               $notification->save();       
@@ -412,7 +416,8 @@ public function HirePlower(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;  
+              $agentLocation = $profile->location;          
             }
 
           }
@@ -444,8 +449,9 @@ public function HirePlower(Request $request){
             $mail->Subject = "Order request for a ".strtolower($plower);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($plower)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description =  "You have a new ".strtolower($plower)." hire request";
               $notification->notice_status = "delivered"; 
@@ -517,7 +523,8 @@ public function HirePlanter(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;   
+              $agentLocation = $profile->location;         
             }
 
           }
@@ -550,8 +557,9 @@ public function HirePlanter(Request $request){
             $mail->Subject = "Order request for a ".strtolower($planter);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($planter)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+              $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description =  "You have a new ".strtolower($planter)." hire request";
               $notification->notice_status = "delivered"; 
@@ -563,6 +571,7 @@ public function HirePlanter(Request $request){
               $code = 200;                
               return ResponseBuilder::result($status, $message, $error, $data, $code); 
             }else{
+               
               $status = false;
               $message ="Message did not sent to  ".ucfirst($username);
               $error = "";
@@ -624,7 +633,8 @@ public function HireSeed(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;  
+              $agentLocation = $profile->location;          
             }
 
           }
@@ -656,8 +666,9 @@ public function HireSeed(Request $request){
             $mail->Subject = "Order request for a ".strtolower($seed);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($seed)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+              $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description =  "You have a new ".strtolower($seed)." hire request";;
               $notification->notice_status = "delivered"; 
@@ -732,7 +743,8 @@ public function HirePesticide(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;   
+              $agentLocation = $profile->location;         
             }
 
           }
@@ -764,8 +776,9 @@ public function HirePesticide(Request $request){
             $mail->Subject = "Order request for a ".strtolower($pesticide);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($pesticide)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description =  "You have a new ".strtolower($pesticide)." hire request";
               $notification->notice_status = "delivered"; 
@@ -839,7 +852,8 @@ public function HireFertilizer(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;  
+              $agentLocation = $profile->location;          
             }
 
           }
@@ -871,8 +885,9 @@ public function HireFertilizer(Request $request){
             $mail->Subject = "Order request for a ".strtolower($fertilizer);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($fertilizer)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description =  "You have a new ".strtolower($fertilizer)." hire request";;
               $notification->notice_status = "delivered"; 
@@ -946,7 +961,8 @@ public function HireFertilizer(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email;  
+              $agentLocation = $profile->location;          
             }
 
           }
@@ -978,8 +994,9 @@ public function HireFertilizer(Request $request){
             $mail->Subject = "Order request for a ".strtolower($processor);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($processor)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+              $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description = "You have a new ".strtolower($processor)." hire request";
               $notification->notice_status = "delivered"; 
@@ -1054,7 +1071,8 @@ public function HireFertilizer(Request $request){
           foreach($agents as $agent){
             $profile= UserProfile::where('user_id',$agent->id)->first();
             if($location ==$profile->location){
-              $agentEmails[]=   $profile->email;          
+              $agentEmails[]=   $profile->email; 
+              $agentLocation = $profile->location;           
             }
 
           }
@@ -1086,8 +1104,9 @@ public function HireFertilizer(Request $request){
             $mail->Subject = "Order request for a ".strtolower($harvester);
             $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($harvester)."</p>"); 
             if($mail->send()){
-              $notification= new Notification();
+              $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
+              $notification->location    = $agentLocation;
               $notification->type    = "request";
               $notification->description =  "You have a new ".strtolower($harvester)." hire request";
               $notification->notice_status = "delivered"; 

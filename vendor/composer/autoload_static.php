@@ -494,6 +494,7 @@ class ComposerStaticInit75970421610e9ea9238a12de740c5fa6
         'App\\Policies\\ServiceTypePolicy' => __DIR__ . '/../..' . '/app/Policies/ServiceTypePolicy.php',
         'App\\Policies\\UserPolicy' => __DIR__ . '/../..' . '/app/Policies/UserPolicy.php',
         'App\\Price' => __DIR__ . '/../..' . '/app/Price.php',
+        'App\\Profile' => __DIR__ . '/../..' . '/app/Profile.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',

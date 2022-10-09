@@ -40,6 +40,7 @@ return array(
     'App\\Policies\\ServiceTypePolicy' => $baseDir . '/app/Policies/ServiceTypePolicy.php',
     'App\\Policies\\UserPolicy' => $baseDir . '/app/Policies/UserPolicy.php',
     'App\\Price' => $baseDir . '/app/Price.php',
+    'App\\Profile' => $baseDir . '/app/Profile.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',

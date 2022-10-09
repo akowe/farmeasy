@@ -85,6 +85,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('farm_history', ['uses' => 'FarmerController@FarmerRequestHistory']); 
 
+    $router->get('farmer_notifications', ['uses' => 'NotificationController@getFarmerNotifications']);   
+
+     $router->get('farmer_read_notification', ['uses' => 'NotificationController@getFarmerNotification']); 
+
 
      // AGENT ACCOUNT
      $router->post('farmer_request', ['uses' => 'AgentController@requestService']);
@@ -94,10 +98,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
      $router->put('update_request_with_service_provider/{request_id}', ['uses' => 'AgentController@updateRequestWithServiceProvider']);
      
      $router->put('update_request_measurement/{request_id}', ['uses' => 'AgentController@updateRequestMeasurement']);
+ 
+     $router->get('agent_notifications', ['uses' => 'NotificationController@getAgentNotifications']);   
 
-     $router->get('notifications', ['uses' => 'NotificationController@getNotifications']);   
-
-     $router->get('notification', ['uses' => 'NotificationController@getNotification']); 
+     $router->get('agent_read_notification', ['uses' => 'NotificationController@getAgentNotification']); 
 
      //ALL REQUEST IN AGENT LOCATION
 
@@ -160,10 +164,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('harvester_service_provider', ['uses' => 'ServiceController@getServiceProvidersByHarvester']);
 
-
     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
-
-
 
      $router->post('product', ['uses' => 'ServiceController@addProduct']);
 
@@ -173,8 +174,21 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('all_products_by_service_provider', ['uses' => 'ServiceController@allProductsByServiceProvider']);  
 
-      
-    
+    $router->get('service_notifications', ['uses' => 'NotificationController@getServiceNotifications']);   
+
+    $router->get('service_read_notification', ['uses' => 'NotificationController@getServiceNotification']); 
+
+    $router->get('get_farm_request', ['uses' => 'ServiceController@getFarmRequest']); 
+
+    $router->get('get_agent_payment', ['uses' => 'ServiceController@getAgentPayment']); 
+
+    $router->put('accept_request', ['uses' => 'ServiceController@acceptRequest']); 
+
+    $router->put('reject_request', ['uses' => 'ServiceController@rejectRequest']); 
+
+    $router->put('start_service', ['uses' => 'ServiceController@startService']); 
+
+    $router->put('end_service', ['uses' => 'ServiceController@endService']); 
 
     // ADMIN
     $router->get('users', ['uses' => 'UserController@index']);
