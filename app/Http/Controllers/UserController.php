@@ -941,7 +941,7 @@ public function rating(Request $request){
           return ResponseBuilder::result($status, $message, $error, $data, $code); 
       
         }
-    
 
+      }
 
-}
+}//class      
