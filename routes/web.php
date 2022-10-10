@@ -63,6 +63,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('feedbacks', ['uses' => 'UserController@getFeedBack']); 
 
+    $router->post('rating', ['uses' => 'UserController@rating']); 
+
+    $router->get('get_rating', ['uses' => 'UserController@getRating']); 
+
 
     //FARMER ACCOUNT
     $router->post('farmer_request', ['uses' => 'FarmerController@requestService']);

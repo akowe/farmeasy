@@ -17,6 +17,7 @@ use App\Otp;
 use App\Role;
 use App\Country;
 use App\FarmType;
+use App\Rating;
 use App\FeedBack;
 use App\ServiceType;
 use App\OrderRequest;
@@ -886,5 +887,61 @@ class UserController extends Controller
           }            
 }
  
+public function rating(Request $request){
+  // validation
+      $validator =Validator ::make($request->all(), [
+
+        'rating'        => 'required',
+         
+      ]);   
+         
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }else{
+          $agent = new Rating();
+          $agent->rating    = $request->rating;
+          $agent->user_id   = Auth::user()->id;
+          $agent->save();
+          
+          $status = true;
+          $message ="Thank you for rating us";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+    
+      }            
+}
+
+       // get rating
+       public function getRating(){
+        $user_id =  Auth::user()->id;
+        $rating = Rating::where("user_id", $user_id)->get();
+      
+        if($rating){
+       
+          $status = true;
+          $message ="";
+          $error = "";
+          $data = $rating;
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      
+        }else{
+          $status = false;
+          $message ="";
+          $error = "";
+          $data = "No rating found";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+      
+        }
+    
+
 
 }
