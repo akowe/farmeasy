@@ -136,21 +136,22 @@ class AgentController extends Controller
   //update request with service provider id. pass the request id in the route
   public function updateRequestWithServiceProvider($request_id, Request $request){
 
-      // validation
-   //    $validator =Validator ::make($request->all(), [
+     // validation
+      $validator =Validator ::make($request->all(), [
 
-   //      'id' => 'required'
+        'sp_id' => 'required',
+        'price' => 'required'
 
-   // ]);      
-   //  if($validator->fails()){
-   //   $status = false;
-   //   $message ="";
-   //   $error = $validator->errors()->first();
-   //   $data = "";
-   //   $code = 401;                
-   //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
-   //  }
-     // else{
+   ]);      
+    if($validator->fails()){
+     $status = false;
+     $message ="";
+     $error = $validator->errors()->first();
+     $data = "";
+     $code = 401;                
+     return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }
+     else{
 
       //get id of the request to update
     $requestResult  = OrderRequest::where('id',$request_id)->first();
@@ -158,18 +159,17 @@ class AgentController extends Controller
       $service_type = $requestResult->service_type;
       $farmer_id = $requestResult->user_id;
       
-      $priceResult = Price::where('service_type',$service_type)->first();
+      //$priceResult = Price::where('service_type',$service_type)->first();
 
       // get service provider id
-       $user = User::where('service_type', $service_type)->first();
+       //$user = User::where('service_type', $service_type)->first();
       
-     if ($user)  
-     {
+     
        $requestResult  = OrderRequest::where('id',$request_id)
       ->update([
 
-        'sp_id' => $user->id,
-        'hectare_rate' => $priceResult->price,
+        'sp_id' => $request->sp_id,
+        'hectare_rate' => $request->price,
         'agent_id' => Auth::user()->id,
         'status' =>'approved'
 
@@ -189,12 +189,14 @@ class AgentController extends Controller
       //SEND NOTIFICATION TO SERVICE PROVIDER
       $notification= new ServiceNotification();
       $notification->request_id   = $request_id;
-      $notification->sp_id        = $user->id;
+      $notification->sp_id        = $request->sp_id;
       $notification->type         = $service_type;
       $notification->description  =  "You have a new " .strtolower($service_type)." request";
       $notification->notice_status = "delivered"; 
       $notification->save();     
   
+  if ($notification)  
+     {
       $status = true;
       $message ="Service provider and price successfully updated";
       $error = "";
@@ -219,9 +221,9 @@ class AgentController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }
 
-  
-
 } 
+
+}
 
 
   //update request measurement

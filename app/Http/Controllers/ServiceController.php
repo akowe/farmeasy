@@ -18,7 +18,6 @@ use App\Country;
 use App\ServiceType;
 use Carbon\Carbon;
 use Carbon\Profile;
-use App\Payment;
 use App\AgentNotification;
 use App\FarmerNotification;
 use App\ServiceNotification;
