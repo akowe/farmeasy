@@ -107,7 +107,7 @@ class PaymentController extends Controller
   }
 
 
-  }
+  
 
   //fetch all payments
   public function allPayments(){
