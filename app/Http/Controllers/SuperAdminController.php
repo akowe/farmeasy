@@ -17,6 +17,7 @@ use App\OrderRequest;
 use Carbon\Carbon;
 use Carbon\Profile;
 use App\Country;
+use App\Price;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;

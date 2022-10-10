@@ -194,6 +194,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->put('end_service', ['uses' => 'ServiceController@endService']); 
 
+
+
+
     // ADMIN
     $router->get('users', ['uses' => 'UserController@index']);
 

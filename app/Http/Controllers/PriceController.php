@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Price;
+
 use Illuminate\Http\Request;
 use App\Http\Helper\ResponseBuilder;
 use App\Payment;
+use App\User;
+use App\Price;
 
 class PriceController extends Controller
 {
@@ -140,7 +142,7 @@ class PriceController extends Controller
   //fetch all price
   public function allPrice(){
 
-    $all_price  = Price::all();
+    $all_price = Price:: all();
     $status = true;
     $message ="";
     $error = "";
