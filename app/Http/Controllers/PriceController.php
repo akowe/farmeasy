@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Price;
 use Illuminate\Http\Request;
 use App\Http\Helper\ResponseBuilder;
+use App\Payment;
 
 class PriceController extends Controller
 {

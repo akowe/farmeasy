@@ -22,6 +22,8 @@ use App\Payment;
 use App\AgentNotification;
 use App\FarmerNotification;
 use App\ServiceNotification;
+use App\Payment;
+use App\Price;
 
 class ServiceController extends Controller
 {

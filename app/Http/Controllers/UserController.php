@@ -24,6 +24,8 @@ use App\OrderRequest;
 use App\BecomeAgent;
 use Carbon\Carbon;
 use Carbon\Profile;
+use App\Payment;
+use App\Price;
 
 
 use Illuminate\Auth\Authenticatable;

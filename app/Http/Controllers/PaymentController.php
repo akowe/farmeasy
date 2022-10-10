@@ -9,6 +9,8 @@ use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Redirect;
 use App\OrderRequest;
 use Paystack;
+use App\Payment;
+use App\Price;
 
 class PaymentController extends Controller
 {

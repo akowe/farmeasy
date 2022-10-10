@@ -29,6 +29,8 @@ use Carbon\Profile;
 use App\OrderRequest;
 use App\ServiceType;
 use App\BecomeAgent;
+use App\Payment;
+use App\Price;
 class FarmerController extends Controller
 {
   
