@@ -87,6 +87,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('harvester', ['uses' => 'FarmerController@HireHarvester']);
 
+    $router->post('extension_manager', ['uses' => 'FarmerController@HireFarmManager']);
+
     $router->get('farm_history', ['uses' => 'FarmerController@FarmerRequestHistory']); 
 
     $router->get('farmer_notifications', ['uses' => 'NotificationController@getFarmerNotifications']);   
@@ -126,6 +128,8 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->get('all_farmer_processor_request', ['uses' => 'AgentController@allFarmerProcessorRequest']);
 
     $router->get('all_farmer_harvester_request', ['uses' => 'AgentController@allFarmerHarvesterRequest']);
+
+    $router->get('all_farmer_extension_manager_request', ['uses' => 'AgentController@allFarmerExtensionManagerRequest']);
      //
 
     $router->put('approve_request', ['uses' => 'AgentController@approveRequest']);
@@ -167,6 +171,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->get('processor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByProcessor']);
 
     $router->get('harvester_service_provider', ['uses' => 'ServiceController@getServiceProvidersByHarvester']);
+
+    $router->get('extension_manager_service_provider', ['uses' => 'ServiceController@getServiceProvidersByExtensionManager']);
+
 
     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
 

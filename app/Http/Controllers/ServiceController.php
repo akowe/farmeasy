@@ -493,6 +493,35 @@ class ServiceController extends Controller
 
   } 
 
+
+    // fetch service provider by  Extension Manager service type
+  public function getServiceProvidersByExtensionManager(Request $request){
+    
+    //get Extension Manager service type from table
+     $service_type = ServiceType::where('id', '9')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
  
  // all farmer and agent request by location for his own only
  public function allFarmerAgentRequestByLocation(Request $request){

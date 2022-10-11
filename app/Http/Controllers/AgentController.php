@@ -709,6 +709,51 @@ class AgentController extends Controller
   }  
 
 
+  // all farmer Extention manager Request in his location
+  public function allFarmerExtensionManagerRequest(){
+    $user_id = Auth::user()->id;
+    $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+    $location = $profile->location;
+      
+      //get extension manager service type from table
+    $farm_manager = ServiceType::where('id', '9')->first()->service;
+
+    $all_request = OrderRequest::where("location", $location)
+                    ->where('service_type', $farm_manager)
+                    ->where('status','!=','remove')->get();
+    $all_farmer_request =array();
+    if($all_request){
+      foreach($all_request as $main_request){
+          $user_id = $main_request->user_id;
+          $user = User::where("id", $user_id)->first();
+          if($user->user_type =="4" && $user->user_type =="3" ){
+            $all_request = OrderRequest::where("user_id", $user->id)->get();
+            $all_farmer_request = $all_request;
+          }
+
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No request currently available";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
+
+
+
  public function Pay(Request $request){
       
        // validation
