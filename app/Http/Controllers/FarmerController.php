@@ -379,6 +379,13 @@ public function HireTractor(Request $request){
             
             }// get email
           }//end send email
+
+              $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($tractor)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);  
       }    
   }
 
@@ -495,7 +502,12 @@ public function HirePlower(Request $request){
             }// get email
           }//end send email
 
-          
+          $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($plower)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);  
       }
     }   
 
@@ -609,7 +621,12 @@ public function HirePlanter(Request $request){
             
             }// get email
           }//end send email
-          
+           $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($planter)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);  
       }
 }
 
@@ -723,7 +740,12 @@ public function HireSeed(Request $request){
             
             }// get email
           }//end send email
-       
+        $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($seed)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }
 }
 
@@ -837,7 +859,12 @@ public function HirePesticide(Request $request){
             
             }// get email
           }//end send email
-       
+        $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($pesticide)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }
 }
 
@@ -951,7 +978,12 @@ public function HireFertilizer(Request $request){
             
             }// get email
           }//end send email
-       
+       $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($fertilizer)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
     }   
 }
 
@@ -1065,7 +1097,12 @@ public function HireFertilizer(Request $request){
             
             }// get email
           }//end send email
-          
+           $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($processor)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);  
        
       }    
   } 
@@ -1183,7 +1220,12 @@ public function HireFertilizer(Request $request){
             
             }// get email
           }//end send email
-       
+        $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($harvester)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
      }    
   } 
 
@@ -1300,7 +1342,12 @@ public function HireFertilizer(Request $request){
             
             }// get email
           }//end send email
-       
+        $status = true;
+              $message =Ucwords($username).", you have successfully requested for the ".strtolower($farm_manager)."  service. You will be contacted shortly.";
+              $error = "";
+              $data = "Request successful";
+              $code = 200;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code);  
      }    
   } 
 
