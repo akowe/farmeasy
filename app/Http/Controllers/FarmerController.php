@@ -465,7 +465,7 @@ public function HirePlower(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($plower);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($plower)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -585,7 +585,7 @@ public function HirePlanter(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($planter);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($planter)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -704,7 +704,7 @@ public function HireSeed(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($seed);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($seed)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -823,7 +823,7 @@ public function HirePesticide(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($pesticide);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($pesticide)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -942,7 +942,7 @@ public function HireFertilizer(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($fertilizer);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($fertilizer)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -1061,7 +1061,7 @@ public function HireFertilizer(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($processor);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($processor)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -1184,7 +1184,7 @@ public function HireFertilizer(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($harvester);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($harvester)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
@@ -1306,7 +1306,7 @@ public function HireFertilizer(Request $request){
                 $mail->addAddress($email);  
                 $mail->isHTML(true);                                 
                 $mail->Subject = "Order request for a ".strtolower($farm_manager);
-                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($tractor)."</p>"); 
+                $mail->MsgHTML("<p>".ucfirst($username)." in your location just made a request for a ".strtolower($farm_manager)."</p>"); 
             if($mail->send()){
               $notification= new AgentNotification();
               $notification->request_id  =$orderRequest->id;
