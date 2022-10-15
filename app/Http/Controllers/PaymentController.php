@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Payment;
+
 use Illuminate\Http\Request;
 use App\Http\Helper\ResponseBuilder;
 use Illuminate\Support\Facades\Validator;
