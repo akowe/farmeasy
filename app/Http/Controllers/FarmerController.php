@@ -96,9 +96,9 @@ class FarmerController extends Controller
                 $user->save();            
                 
                 // upon successful registration create profile for user so user can edit their profile later
-                  $profile            = new UserProfile();
-                  $profile->user_id   = $user->id;
-                  $profile->save();
+                  // $profile            = new UserProfile();
+                  // $profile->user_id   = $user->id;
+                  // $profile->save();
 
                 if($user){
                   $profile = new UserProfile();
