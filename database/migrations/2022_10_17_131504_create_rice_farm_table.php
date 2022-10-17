@@ -15,6 +15,7 @@ class CreateRiceFarmTable extends Migration
     {
         Schema::create('rice_farm', function (Blueprint $table) {
             $table->increments('id');
+             $table->string('farm_type');
             $table->timestamps();
         });
     }

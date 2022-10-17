@@ -15,6 +15,7 @@ class CreateHarvesterServiceTable extends Migration
     {
         Schema::create('harvester_service', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('service');
             $table->timestamps();
         });
     }

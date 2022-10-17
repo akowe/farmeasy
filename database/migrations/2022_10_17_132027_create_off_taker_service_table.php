@@ -15,6 +15,7 @@ class CreateOffTakerServiceTable extends Migration
     {
         Schema::create('off_taker_service', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('service');
             $table->timestamps();
         });
     }

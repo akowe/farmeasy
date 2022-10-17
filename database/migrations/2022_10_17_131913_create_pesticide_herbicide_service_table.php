@@ -15,6 +15,7 @@ class CreatePesticideHerbicideServiceTable extends Migration
     {
         Schema::create('pesticide_herbicide_service', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('service');
             $table->timestamps();
         });
     }

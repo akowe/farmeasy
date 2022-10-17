@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Wheat_farm_type extends Model
+class Treasher extends Model
 {
     //
-protected $table = 'wheat_farm';
+    protected $table = 'treasher_service';
 }

@@ -15,6 +15,7 @@ class CreateTractorServiceTable extends Migration
     {
         Schema::create('tractor_service', function (Blueprint $table) {
             $table->increments('id');
+             $table->string('service');
             $table->timestamps();
         });
     }

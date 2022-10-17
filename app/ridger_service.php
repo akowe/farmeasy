@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ridger_service extends Model
+class Ridger_service extends Model
 {
     //
     protected $table = 'ridger_service';

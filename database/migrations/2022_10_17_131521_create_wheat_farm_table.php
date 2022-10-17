@@ -15,6 +15,7 @@ class CreateWheatFarmTable extends Migration
     {
         Schema::create('wheat_farm', function (Blueprint $table) {
             $table->increments('id');
+             $table->string('farm_type');
             $table->timestamps();
         });
     }

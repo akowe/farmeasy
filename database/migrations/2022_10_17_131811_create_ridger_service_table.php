@@ -15,6 +15,7 @@ class CreateRidgerServiceTable extends Migration
     {
         Schema::create('ridger_service', function (Blueprint $table) {
             $table->increments('id');
+             $table->string('service');
             $table->timestamps();
         });
     }

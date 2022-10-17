@@ -15,6 +15,7 @@ class CreateFertilizerServiceTable extends Migration
     {
         Schema::create('fertilizer_service', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('service');
             $table->timestamps();
         });
     }

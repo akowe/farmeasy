@@ -15,6 +15,7 @@ class CreateBoomSprayerServiceTable extends Migration
     {
         Schema::create('boom_sprayer_service', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('service');
             $table->timestamps();
         });
     }

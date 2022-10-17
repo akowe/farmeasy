@@ -15,6 +15,7 @@ class CreateMaizeFarmTable extends Migration
     {
         Schema::create('maize_farm', function (Blueprint $table) {
             $table->increments('id');
+             $table->string('farm_type');
             $table->timestamps();
         });
     }

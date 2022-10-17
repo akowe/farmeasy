@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('api_key')->nullable();
             $table->string('country');
             $table->string('user_type');
             $table->string('name');

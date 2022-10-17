@@ -18,7 +18,7 @@ class serviceTypeSeeder extends Seeder
             ]);
 
          ServiceType::create([
-                'service'     => 'Plower'
+                'service'     => 'Plough'
             ]);
 
          ServiceType::create([
@@ -30,7 +30,7 @@ class serviceTypeSeeder extends Seeder
             ]);
 
          ServiceType::create([
-                'service'     => 'Pesticide'
+                'service'     => 'Pesticide/Herbicide'
             ]);
 
          ServiceType::create([
@@ -38,11 +38,32 @@ class serviceTypeSeeder extends Seeder
             ]);
 
          ServiceType::create([
-                'service'     => 'Processor'
+                'service'     => 'Harrow'
             ]);
 
           ServiceType::create([
                 'service'     => 'Harvester'
+            ]);
+
+           ServiceType::create([
+                'service'     => 'Ridger'
+            ]);
+
+            ServiceType::create([
+                'service'     => 'Boom Sprayer'
+            ]);
+
+             ServiceType::create([
+                'service'     => 'Extension Service'
+            ]);
+
+              ServiceType::create([
+                'service'     => 'Off Taker'
+            ]);
+
+
+               ServiceType::create([
+                'service'     => 'Treasher'
             ]);
     }
 }

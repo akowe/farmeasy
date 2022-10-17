@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlanterServiceTable extends Migration
+class CreateTreasherServiceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreatePlanterServiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('planter_service', function (Blueprint $table) {
+        Schema::create('treasher_service', function (Blueprint $table) {
             $table->increments('id');
-             $table->string('service');
+            $table->string('service');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreatePlanterServiceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('planter_service');
+        Schema::dropIfExists('treasher_service');
     }
 }

@@ -15,6 +15,7 @@ class CreateSeedServiceTable extends Migration
     {
         Schema::create('seed_service', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('service');
             $table->timestamps();
         });
     }

@@ -16,14 +16,14 @@ class CountrySeeder extends Seeder
          Country::create([
                 'id'            => '1',
                 'country_code'  => '+234',
-                'country'       => 'Nigeria'
+                'country'       => 'NG'
                 
             ]);
 
          Country::create([
                 'id'            => '2',
                 'country_code'  => '+255',
-                'country'       => 'Tanzania'
+                'country'       => 'TZ'
                 
             ]);
     }

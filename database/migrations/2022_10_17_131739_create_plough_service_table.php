@@ -15,6 +15,7 @@ class CreatePloughServiceTable extends Migration
     {
         Schema::create('plough_service', function (Blueprint $table) {
             $table->increments('id');
+             $table->string('service');
             $table->timestamps();
         });
     }
