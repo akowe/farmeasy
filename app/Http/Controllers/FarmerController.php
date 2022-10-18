@@ -114,17 +114,16 @@ class FarmerController extends Controller
                 $user->password    = Hash::make($request['password']);
                 $user->status      = 'pending';
                 
-                $user->save();            
-                
-                // upon successful registration create profile for user so user can edit their profile later
-                  // $profile            = new UserProfile();
-                  // $profile->user_id   = $user->id;
-                  // $profile->save();
+                $user->save();    
 
                 if($user){
+                   // upon successful registration create profile for user so user can edit their profile later
+                 
+                 
                   $profile = new UserProfile();
                   $profile->user_id = $user->id;
                   $profile->save();
+
                   //implemented sms
                   $country_code = $country->get_country_code($request['country']);
       
