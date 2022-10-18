@@ -1742,7 +1742,7 @@ public function HireHarrow(Request $request){
               $notification->notice_status = "delivered"; 
               $notification->save();       
               $status = true;
-              $message =Ucwords($username).", you have successfully requested for the ".strtolower($offtaker)."  service. You will be contacted shortly.";
+              $message =Ucwords($username).", you have successfully informed the ".strtolower($offtaker)." . You will be contacted shortly.";
               $error = "";
               $data = "Request successful";
               $code = 200;                
@@ -1759,7 +1759,7 @@ public function HireHarrow(Request $request){
               $notification->notice_status = "delivered"; 
               $notification->save();       
               $status = true;
-              $message =Ucwords($username).", you have successfully requested for the ".strtolower($offtaker)."  service. You will be contacted shortly.";
+              $message =Ucwords($username).", you have successfully informed  the ".strtolower($offtaker)." . You will be contacted shortly.";
               $error = "";
               $data = "Request successful";
               $code = 200;                
@@ -1769,7 +1769,7 @@ public function HireHarrow(Request $request){
             }// get email
           }//end send email
         $status = true;
-              $message =Ucwords($username).", you have successfully requested for the ".strtolower($offtaker)."  service. You will be contacted shortly.";
+              $message =Ucwords($username).", you have successfully informed the ".strtolower($offtaker)." . You will be contacted shortly.";
               $error = "";
               $data = "Request successful";
               $code = 200;                
