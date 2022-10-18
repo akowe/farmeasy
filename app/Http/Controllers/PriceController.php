@@ -8,6 +8,24 @@ use App\Payment;
 use App\User;
 use App\Price;
 
+use App\Rice_farm_type;
+use App\Wheat_farm_type;
+use App\Maize_farm_type;
+
+use App\Boom_sprayer_service;
+use App\Extension_service;
+use App\Fertilizer_service;
+use App\Harrow_service;
+use App\Harvester_service;
+use App\Off_taker_service;
+use App\Pesticide_herbicide_service;
+use App\Planter_service;
+use App\Plough_service;
+use App\Ridger_service;
+use App\Seeds_service;
+use App\Tractor_service;
+use App\Treasher;
+
 class PriceController extends Controller
 {
 

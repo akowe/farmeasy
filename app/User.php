@@ -21,8 +21,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'service_type', 'country_code', 'phone', 'password',
         'reg_code', 'status', 'password'
     ];
+   
 
-//protected $casts = ['farm_type' => 'array' , 'service_type' => 'array'];
+protected $casts = ['farm_type' => 'array' , 'service_type' => 'array'];
 
 
 //        public function ServiceProvider()

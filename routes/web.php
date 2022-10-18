@@ -165,7 +165,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('all_farmer_request', ['uses' => 'AgentController@allFarmerRequestByLocation']);
 
-    $router->get('all_farmer_plower_request', ['uses' => 'AgentController@allFarmerPlowerRequest']);
+    $router->get('all_farmer_plough_request', ['uses' => 'AgentController@allFarmerPlowerRequest']);
     
     $router->get('all_farmer_tractor_request', ['uses' => 'AgentController@allFarmerTractorRequest']);
 
@@ -217,7 +217,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     //SERVICE PROVIDER
     $router->get('tractor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTractor']);
 
-    $router->get('plower_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlower']);
+    $router->get('plough_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlower']);
 
     $router->get('planter_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlanter']);
     

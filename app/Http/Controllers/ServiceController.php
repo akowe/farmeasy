@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helper\ResponseBuilder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\User;
 use App\UserProfile;
 use App\Otp;
@@ -41,6 +42,8 @@ use App\Ridger_service;
 use App\Seeds_service;
 use App\Tractor_service;
 use App\Treasher;
+
+use Illuminate\Support\Arr;
 
 
 class ServiceController extends Controller
@@ -276,8 +279,10 @@ class ServiceController extends Controller
     
     //get Tractor service type from table
      $service_type = ServiceType::where('id', '1')->first()->service;
-   
-    $users = User::where("service_type", $service_type )->get();
+  
+
+    $users =  User::where('service_type', 'like', '%tractor%')->get();    
+
 
     if (!$users){
       $status = false;
@@ -308,7 +313,7 @@ class ServiceController extends Controller
     //get Plower service type from table
      $service_type = ServiceType::where('id', '2')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+       $users =  User::where('service_type', 'like', '%plough%')->get();    
 
     if (!$users){
       $status = false;
@@ -339,7 +344,7 @@ class ServiceController extends Controller
     //get Planter service type from table
      $service_type = ServiceType::where('id', '3')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+    $users =  User::where('service_type', 'like', '%planter%')->get();  
 
     if (!$users){
       $status = false;
@@ -370,7 +375,7 @@ class ServiceController extends Controller
     //get Seed service type from table
      $service_type = ServiceType::where('id', '4')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+   $users =  User::where('service_type', 'like', '%seed%')->get();  
 
     if (!$users){
       $status = false;
@@ -400,7 +405,7 @@ class ServiceController extends Controller
     //get Pesticide service type from table
      $service_type = ServiceType::where('id', '5')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+    $users =  User::where('service_type', 'like', '%pesticide%')->get();  
 
     if (!$users){
       $status = false;
@@ -429,8 +434,8 @@ class ServiceController extends Controller
     
     //get Fertilizer service type from table
      $service_type = ServiceType::where('id', '6')->first()->service;
-   
-    $users = User::where("service_type", $service_type )->get();
+
+    $users =  User::where('service_type', 'like', '%fertilizer%')->get();  
 
     if (!$users){
       $status = false;
@@ -460,7 +465,7 @@ class ServiceController extends Controller
     //get Harrow service type from table
      $service_type = ServiceType::where('id', '7')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+     $users =  User::where('service_type', 'like', '%harrow%')->get();  
 
     if (!$users){
       $status = false;
@@ -490,7 +495,7 @@ class ServiceController extends Controller
     //get Harvester service type from table
      $service_type = ServiceType::where('id', '8')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+    $users =  User::where('service_type', 'like', '%harvester%')->get();  
 
     if (!$users){
       $status = false;
@@ -519,7 +524,7 @@ class ServiceController extends Controller
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '9')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+    $users =  User::where('service_type', 'like', '%ridger%')->get();  
 
     if (!$users){
       $status = false;
@@ -549,7 +554,7 @@ class ServiceController extends Controller
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '10')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+   $users =  User::where('service_type', 'like', '%boom%')->get();  
 
     if (!$users){
       $status = false;
@@ -578,7 +583,7 @@ class ServiceController extends Controller
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '11')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+     $users =  User::where('service_type', 'like', '%extension%')->get();  
 
     if (!$users){
       $status = false;
@@ -607,7 +612,7 @@ class ServiceController extends Controller
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '12')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+     $users =  User::where('service_type', 'like', '%offtaker%')->get();  
 
     if (!$users){
       $status = false;
@@ -638,7 +643,7 @@ class ServiceController extends Controller
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '13')->first()->service;
    
-    $users = User::where("service_type", $service_type )->get();
+    $users =  User::where('service_type', 'like', '%treasher%')->get();  
 
     if (!$users){
       $status = false;
