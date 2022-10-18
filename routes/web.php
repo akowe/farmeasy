@@ -129,13 +129,13 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('ridger', ['uses' => 'FarmerController@HireRidger']);
 
-    $router->post('boom_sprayer', ['uses' => 'FarmerController@HireBoom']);
+    $router->post('boom', ['uses' => 'FarmerController@HireBoom']);
 
      $router->post('treasher', ['uses' => 'FarmerController@HireTreasher']);
 
-    $router->post('extension_service', ['uses' => 'FarmerController@HireExtension']);
+    $router->post('extension', ['uses' => 'FarmerController@HireExtension']);
 
-    $router->post('off_taker', ['uses' => 'FarmerController@HireOfftaker']);
+    $router->post('offtaker', ['uses' => 'FarmerController@HireOfftaker']);
 
 
 
