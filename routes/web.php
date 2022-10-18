@@ -217,7 +217,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     //SERVICE PROVIDER
     $router->get('tractor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTractor']);
 
-
     $router->get('plower_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlower']);
 
     $router->get('planter_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlanter']);
@@ -226,14 +225,22 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('pesticide_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPesticide']);
 
-
     $router->get('fertilizer_service_provider', ['uses' => 'ServiceController@getServiceProvidersByFertilizer']);
 
-    $router->get('processor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByProcessor']);
+    $router->get('harrow_service_provider', ['uses' => 'ServiceController@getServiceProvidersByHarrow']);
 
     $router->get('harvester_service_provider', ['uses' => 'ServiceController@getServiceProvidersByHarvester']);
 
-    $router->get('extension_manager_service_provider', ['uses' => 'ServiceController@getServiceProvidersByExtensionManager']);
+    $router->get('ridger_service_provider', ['uses' => 'ServiceController@getServiceProvidersByridger']);
+    
+    $router->get('boom_service_provider', ['uses' => 'ServiceController@getServiceProvidersByboom']);
+
+    $router->get('extension_service_provider', ['uses' => 'ServiceController@getServiceProvidersByExtension']);
+
+    $router->get('offtaker_service_provider', ['uses' => 'ServiceController@  getServiceProvidersByOfftaker']);
+
+     $router->get('treasher_service_provider', ['uses' => 'ServiceController@  getServiceProvidersByTreasher']);
+
 
 
     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);

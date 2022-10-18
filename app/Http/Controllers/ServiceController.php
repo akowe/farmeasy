@@ -454,10 +454,10 @@ class ServiceController extends Controller
 
 
 
-    // fetch service provider by  Processor service type
-  public function getServiceProvidersByProcessor(Request $request){
+    // fetch service provider by  Harrow service type
+  public function getServiceProvidersByHarrow(Request $request){
     
-    //get Processor service type from table
+    //get Harrow service type from table
      $service_type = ServiceType::where('id', '7')->first()->service;
    
     $users = User::where("service_type", $service_type )->get();
@@ -513,8 +513,8 @@ class ServiceController extends Controller
   } 
 
 
-    // fetch service provider by  Extension Manager service type
-  public function getServiceProvidersByExtensionManager(Request $request){
+  // fetch service provider by  ridger  service type
+  public function getServiceProvidersByridger(Request $request){
     
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '9')->first()->service;
@@ -540,6 +540,126 @@ class ServiceController extends Controller
      }
 
   } 
+
+
+
+  // fetch service provider by  Boom  service type
+  public function getServiceProvidersByboom(Request $request){
+    
+    //get Extension Manager service type from table
+     $service_type = ServiceType::where('id', '10')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+    // fetch service provider by  Extension Manager service type
+  public function getServiceProvidersByExtension(Request $request){
+    
+    //get Extension Manager service type from table
+     $service_type = ServiceType::where('id', '11')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+  // fetch service provider by  Extension Manager service type
+  public function getServiceProvidersByOfftaker(Request $request){
+    
+    //get Extension Manager service type from table
+     $service_type = ServiceType::where('id', '12')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
+
+
+
+  // fetch service provider by  Extension Manager service type
+  public function getServiceProvidersByTreasher(Request $request){
+    
+    //get Extension Manager service type from table
+     $service_type = ServiceType::where('id', '13')->first()->service;
+   
+    $users = User::where("service_type", $service_type )->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }
+
+  } 
+
 
  
  // all farmer and agent request by location for his own only
