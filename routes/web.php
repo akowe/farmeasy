@@ -23,11 +23,51 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('farmer', ['uses' => 'FarmerController@createFarmer']);
 
-    $router->get('all_farm_types', ['uses' => 'FarmerController@allFarmTypes']);   
+    $router->get('all_farm_types', ['uses' => 'FarmerController@allFarmTypes']); 
+
+    // select each Farm / Crop Type
+
+    $router->get('rice_farm', ['uses' => 'FarmerController@RiceFarm']); 
+
+    $router->get('wheat_farm', ['uses' => 'FarmerController@WheatFarm']); 
+
+    $router->get('maize_farm', ['uses' => 'FarmerController@MaizeFarm']);   
+
 
     $router->post('service', ['uses' => 'ServiceController@createService']);
 
+
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
+
+    // select each service type
+   $router->get('tractor_service', ['uses' => 'ServiceController@TractorService']);
+
+    $router->get('plough_service', ['uses' => 'ServiceController@PloughService']);
+
+    $router->get('harrow_service', ['uses' => 'ServiceController@HarrowService']);
+
+    $router->get('ridger_service', ['uses' => 'ServiceController@RidgerService']);
+
+    $router->get('planter_service', ['uses' => 'ServiceController@PlanterService']);
+
+    $router->get('boom_service', ['uses' => 'ServiceController@BoomService']);
+
+    $router->get('pesticide_service', ['uses' => 'ServiceController@PesticideService']);
+
+    $router->get('fertilizer_service', ['uses' => 'ServiceController@FertilizerService']);
+
+    $router->get('seed_service', ['uses' => 'ServiceController@SeedService']);
+
+    $router->get('extension_service', ['uses' => 'ServiceController@ExtensionService']);
+
+    $router->get('offtaker_service', ['uses' => 'ServiceController@OffTakerService']);
+
+    $router->get('harvester_service', ['uses' => 'ServiceController@HarvesterService']);
+
+    $router->get('treasher_service', ['uses' => 'ServiceController@TreasherService']);
+
+    //end services
+
 
     $router->get('logout', ['uses' => 'UserController@logout']);
 
@@ -73,7 +113,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('tractor', ['uses' => 'FarmerController@HireTractor']);
 
-    $router->post('plower', ['uses' => 'FarmerController@HirePlower']);
+    $router->post('plough', ['uses' => 'FarmerController@HirePlough']);
 
     $router->post('planter', ['uses' => 'FarmerController@HirePlanter']);
 
@@ -83,11 +123,23 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('fertilizer', ['uses' => 'FarmerController@HireFertilizer']);
 
-    $router->post('processor', ['uses' => 'FarmerController@HireProcessor']);
+    $router->post('harrow', ['uses' => 'FarmerController@HireHarrow']);
 
     $router->post('harvester', ['uses' => 'FarmerController@HireHarvester']);
 
-    $router->post('extension_manager', ['uses' => 'FarmerController@HireFarmManager']);
+    $router->post('ridger', ['uses' => 'FarmerController@HireRidger']);
+
+    $router->post('boom_sprayer', ['uses' => 'FarmerController@HireBoom']);
+
+     $router->post('treasher', ['uses' => 'FarmerController@HireTreasher']);
+
+    $router->post('extension_service', ['uses' => 'FarmerController@HireExtension']);
+
+    $router->post('off_taker', ['uses' => 'FarmerController@HireOfftaker']);
+
+
+
+    //end request for service
 
     $router->get('farm_history', ['uses' => 'FarmerController@FarmerRequestHistory']); 
 

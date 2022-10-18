@@ -24,6 +24,25 @@ use App\ServiceNotification;
 use App\Payment;
 use App\Price;
 
+use App\Rice_farm_type;
+use App\Wheat_farm_type;
+use App\Maize_farm_type;
+
+use App\Boom_sprayer_service;
+use App\Extension_service;
+use App\Fertilizer_service;
+use App\Harrow_service;
+use App\Harvester_service;
+use App\Off_taker_service;
+use App\Pesticide_herbicide_service;
+use App\Planter_service;
+use App\Plough_service;
+use App\Ridger_service;
+use App\Seeds_service;
+use App\Tractor_service;
+use App\Treasher;
+
+
 class ServiceController extends Controller
 {
 
@@ -562,8 +581,184 @@ class ServiceController extends Controller
     $code = 200;                
     return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
+  } 
+
+
+
+   public function TractorService(){
+ 
+    $all_farm_types  = Tractor_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
   } 
+
+
+    public function PloughService(){
+ 
+    $all_farm_types  = Plough_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+    public function HarrowService(){
+ 
+    $all_farm_types  = Harrow_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+      public function RidgerService(){
+ 
+    $all_farm_types  = Ridger_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+
+    public function PlanterService(){
+ 
+    $all_farm_types  = Planter_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+
+    public function BoomService(){
+ 
+    $all_farm_types  = Boom_sprayer_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+      public function PesticideService(){
+ 
+    $all_farm_types  = Pesticide_herbicide_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+
+      public function FertilizerService(){
+ 
+    $all_farm_types  = Fertilizer_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+
+
+ public function SeedService(){
+ 
+    $all_farm_types  = Seeds_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+
+ public function ExtensionService(){
+ 
+    $all_farm_types  = Extension_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+   public function OffTakerService(){
+ 
+    $all_farm_types  = Off_taker_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+    public function HarvesterService(){
+ 
+    $all_farm_types  = Harvester_service::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
+
+    public function TreasherService(){
+ 
+    $all_farm_types  = Treasher::all();
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $all_farm_types;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  } 
+
 
 
   //add new product

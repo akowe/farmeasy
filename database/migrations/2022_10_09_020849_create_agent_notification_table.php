@@ -18,6 +18,7 @@ class CreateAgentNotificationTable extends Migration
             $table->string('request_id');
             $table->string('type');
             $table->string('agent_id');
+            $table->string('location');
             $table->text('description');
             $table->string('notice_status');
 
