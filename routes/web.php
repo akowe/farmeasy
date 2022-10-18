@@ -177,11 +177,20 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('all_farmer_fertilizer_request', ['uses' => 'AgentController@allFarmerFertilizerRequest']);
     
-    $router->get('all_farmer_processor_request', ['uses' => 'AgentController@allFarmerProcessorRequest']);
+    $router->get('all_farmer_harrow_request', ['uses' => 'AgentController@allFarmerHarrowRequest']);
 
     $router->get('all_farmer_harvester_request', ['uses' => 'AgentController@allFarmerHarvesterRequest']);
 
-    $router->get('all_farmer_extension_manager_request', ['uses' => 'AgentController@allFarmerExtensionManagerRequest']);
+    $router->get('all_farmer_ridger_request', ['uses' => 'AgentController@allFarmerRidger']);
+
+     $router->get('all_farmer_boom_request', ['uses' => 'AgentController@allFarmerBoom']);
+
+    $router->get('all_farmer_extension_request', ['uses' => 'AgentController@allFarmerExtension']);
+
+    $router->get('all_farmer_offtaker_request', ['uses' => 'AgentController@allFarmerOfftaker']);
+
+
+    $router->get('all_farmer_treasher_request', ['uses' => 'AgentController@allFarmerTreasher']);
      //
 
     $router->put('approve_request', ['uses' => 'AgentController@approveRequest']);

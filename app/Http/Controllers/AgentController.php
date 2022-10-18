@@ -23,6 +23,25 @@ use App\AgentNotification;
 use App\FarmerNotification;
 use App\ServiceNotification;
 
+use App\Rice_farm_type;
+use App\Wheat_farm_type;
+use App\Maize_farm_type;
+
+use App\Boom_sprayer_service;
+use App\Extension_service;
+use App\Fertilizer_service;
+use App\Harrow_service;
+use App\Harvester_service;
+use App\Off_taker_service;
+use App\Pesticide_herbicide_service;
+use App\Planter_service;
+use App\Plough_service;
+use App\Ridger_service;
+use App\Seeds_service;
+use App\Tractor_service;
+use App\Treasher;
+
+
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -620,14 +639,14 @@ class AgentController extends Controller
 
 
 
-  // all farmer Processor Request in his location
-  public function allFarmerProcessorRequest(){
+  // all farmer Harrow Request in his location
+  public function allFarmerHarrowRequest(){
     $user_id = Auth::user()->id;
     $profile = UserProfile::where(['user_id' => $user_id])->first();
 
     $location = $profile->location;
       
-      //get Processor service type from table
+      //get Harrow service type from table
     $Processor = ServiceType::where('id', '7')->first()->service;
 
     $all_request = OrderRequest::where("location", $location)
@@ -710,7 +729,7 @@ class AgentController extends Controller
 
 
   // all farmer Extention manager Request in his location
-  public function allFarmerExtensionManagerRequest(){
+  public function allFarmerRidger(){
     $user_id = Auth::user()->id;
     $profile = UserProfile::where(['user_id' => $user_id])->first();
 
@@ -751,6 +770,187 @@ class AgentController extends Controller
     }
 
   }  
+
+
+
+  // all farmer Boom Sprayer  Request in his location
+  public function allFarmerBoom(){
+    $user_id = Auth::user()->id;
+    $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+    $location = $profile->location;
+      
+      //get Boom Sprayer service type from table
+    $farm_manager = ServiceType::where('id', '10')->first()->service;
+
+    $all_request = OrderRequest::where("location", $location)
+                    ->where('service_type', $farm_manager)
+                    ->where('status','!=','remove')->get();
+    $all_farmer_request =array();
+    if($all_request){
+      foreach($all_request as $main_request){
+          $user_id = $main_request->user_id;
+          $user = User::where("id", $user_id)->first();
+          if($user->user_type =="4" && $user->user_type =="3" ){
+            $all_request = OrderRequest::where("user_id", $user->id)->get();
+            $all_farmer_request = $all_request;
+          }
+
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No request currently available";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
+
+
+
+  // all farmer Boom Sprayer  Request in his location
+  public function allFarmerExtension(){
+    $user_id = Auth::user()->id;
+    $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+    $location = $profile->location;
+      
+      //get Boom Sprayer service type from table
+    $farm_manager = ServiceType::where('id', '11')->first()->service;
+
+    $all_request = OrderRequest::where("location", $location)
+                    ->where('service_type', $farm_manager)
+                    ->where('status','!=','remove')->get();
+    $all_farmer_request =array();
+    if($all_request){
+      foreach($all_request as $main_request){
+          $user_id = $main_request->user_id;
+          $user = User::where("id", $user_id)->first();
+          if($user->user_type =="4" && $user->user_type =="3" ){
+            $all_request = OrderRequest::where("user_id", $user->id)->get();
+            $all_farmer_request = $all_request;
+          }
+
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No request currently available";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
+
+
+
+    // all farmer Boom Sprayer  Request in his location
+  public function allFarmerOfftaker(){
+    $user_id = Auth::user()->id;
+    $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+    $location = $profile->location;
+      
+      //get Boom Sprayer service type from table
+    $farm_manager = ServiceType::where('id', '12')->first()->service;
+
+    $all_request = OrderRequest::where("location", $location)
+                    ->where('service_type', $farm_manager)
+                    ->where('status','!=','remove')->get();
+    $all_farmer_request =array();
+    if($all_request){
+      foreach($all_request as $main_request){
+          $user_id = $main_request->user_id;
+          $user = User::where("id", $user_id)->first();
+          if($user->user_type =="4" && $user->user_type =="3" ){
+            $all_request = OrderRequest::where("user_id", $user->id)->get();
+            $all_farmer_request = $all_request;
+          }
+
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No request currently available";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
+
+
+
+    // all farmer Boom Sprayer  Request in his location
+  public function allFarmerTreasher(){
+    $user_id = Auth::user()->id;
+    $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+    $location = $profile->location;
+      
+      //get Boom Sprayer service type from table
+    $farm_manager = ServiceType::where('id', '12')->first()->service;
+
+    $all_request = OrderRequest::where("location", $location)
+                    ->where('service_type', $farm_manager)
+                    ->where('status','!=','remove')->get();
+    $all_farmer_request =array();
+    if($all_request){
+      foreach($all_request as $main_request){
+          $user_id = $main_request->user_id;
+          $user = User::where("id", $user_id)->first();
+          if($user->user_type =="4" && $user->user_type =="3" ){
+            $all_request = OrderRequest::where("user_id", $user->id)->get();
+            $all_farmer_request = $all_request;
+          }
+
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $all_request;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No request currently available";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
+
 
 
 
