@@ -411,8 +411,8 @@ class UserController extends Controller
       'account_number' => 'string',
       'email'         => 'string',
       'business_name' =>'string',
-      'farm_type'     =>'string',
-      'service_type' => 'string',
+      // 'farm_type'     =>'array|min:1',
+      // 'service_type' => 'array|min:1',
       ]);  
 
       if($validator->fails()){
@@ -428,8 +428,12 @@ class UserController extends Controller
         //$user_id = $request->user_id;
         $user_id = Auth::user()->id;
 
+        $farm_type = $request['farm_type'];
 
-      $profile  = UserProfile::where('user_id', $user_id)->update([
+        $service_type = $request['service_type'];
+
+        
+          $profile  = UserProfile::where('user_id', $user_id)->update([
           'user_id' =>  $user_id,
           'email' => $request->email,
           'business_name'   => $request->business_name,
@@ -438,11 +442,12 @@ class UserController extends Controller
           'bank_name' => $request->bank_name,
           'account_name' => $request->account_name, 
           'account_number'  => $request->account_number,
-          'farm_type'     => $request->farm_type,
-          'service_type' => $request->service_type,
+          'farm_type'     => $farm_type,
+          'service_type' => $service_type,
           'profile_update_at' => date('Y-m-d h:i:s')
       ]);
-      if($profile)
+
+          if($profile)
       {
 
       $status = true;
@@ -460,6 +465,10 @@ class UserController extends Controller
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }
+    
+
+    
+      
   
     }
   }
