@@ -670,6 +670,316 @@ class ServiceController extends Controller
   } 
 
 
+// count all users service provider by service type
+  public function countTractorServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%tractor%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+// count all users service provider by service type
+  public function countPloughServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%plough%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+  // count all users service provider by service type
+  public function countPlanterServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%planter%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+// count all users service provider by service type
+  public function countSeedServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%seed%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+  // count all users service provider by service type
+  public function countPesticideServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%pesticide%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+  // count all users service provider by service type
+  public function countFertilizerServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%fertilizer%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+  // count all users service provider by service type
+  public function countHarrowServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%harrow%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+// count all users service provider by service type
+  public function countHarvesterServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%harvester%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+// count all users service provider by service type
+  public function countRidgerServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%ridger%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+  // count all users service provider by service type
+  public function countBoomServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%boom%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+// count all users service provider by service type
+  public function countExtensionServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%extension%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
+
+// count all users service provider by service type
+  public function countOfftakerServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%offtaker%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+  // count all users service provider by service type
+  public function countTreasherServiceProviders(Request $request){
+          $users = User::where('service_type', 'like', '%treasher%')->count(); 
+      if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }            
+  }
+
+
+
  
  // all farmer and agent request by location for his own only
  public function allFarmerAgentRequestByLocation(Request $request){

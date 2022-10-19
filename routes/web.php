@@ -87,6 +87,21 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //request to become an agent
     $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
 
+      //count service providers by service type
+     $router->get('tractor_vendor', ['uses' => 'ServiceController@countTractorServiceProviders']);
+     $router->get('plough_vendor', ['uses' => 'ServiceController@countPloughServiceProviders']);
+     $router->get('planter_vendor', ['uses' => 'ServiceController@countPlanterServiceProviders']);
+     $router->get('seed_vendor', ['uses' => 'ServiceController@countSeedServiceProviders']);
+     $router->get('pesticide_vendor', ['uses' => 'ServiceController@countPesticideServiceProviders']);
+     $router->get('fertilizer_vendor', ['uses' => 'ServiceController@countFertilizerServiceProviders']);
+     $router->get('harrow_vendor', ['uses' => 'ServiceController@countHarrowServiceProviders']);
+     $router->get('harvester_vendor', ['uses' => 'ServiceController@countHarvesterServiceProviders']);
+     $router->get('ridger_vendor', ['uses' => 'ServiceController@countRidgerServiceProviders']);
+     $router->get('boom_vendor', ['uses' => 'ServiceController@countBoomServiceProviders']);
+     $router->get('extension_vendor', ['uses' => 'ServiceController@countExtentionServiceProviders']);
+     $router->get('offtaker_vendor', ['uses' => 'ServiceController@countOfftakerServiceProviders']);
+     $router->get('Treasher_vendor', ['uses' => 'ServiceController@countTreasherServiceProviders']);
+
 });
 
 
@@ -268,8 +283,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->put('start_service', ['uses' => 'ServiceController@startService']); 
 
     $router->put('end_service', ['uses' => 'ServiceController@endService']); 
-
-
 
 
     // ADMIN
