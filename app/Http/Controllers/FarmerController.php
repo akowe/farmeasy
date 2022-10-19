@@ -122,6 +122,7 @@ class FarmerController extends Controller
                  
                   $profile = new UserProfile();
                   $profile->user_id = $user->id;
+                  $profile->farm_type = $user->farm_type;
                   $profile->save();
 
                   //implemented sms

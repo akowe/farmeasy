@@ -19,4 +19,5 @@ class UserProfile extends Model
         'user_id'
    ];
     protected $table ='profile';
+    protected $casts = ['farm_type' => 'array' , 'service_type' => 'array'];
 }

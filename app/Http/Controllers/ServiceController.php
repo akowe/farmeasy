@@ -117,6 +117,7 @@ class ServiceController extends Controller
 
                   $profile            = new UserProfile();
                   $profile->user_id   = $user->id;
+                  $profile->service_type = $user->service_type;
                   $profile->save();
 
                   //implemented sms

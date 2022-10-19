@@ -411,6 +411,8 @@ class UserController extends Controller
       'account_number' => 'string',
       'email'         => 'string',
       'business_name' =>'string',
+      'farm_type'     =>'string',
+      'service_type' => 'string',
       ]);  
 
       if($validator->fails()){
@@ -436,6 +438,8 @@ class UserController extends Controller
           'bank_name' => $request->bank_name,
           'account_name' => $request->account_name, 
           'account_number'  => $request->account_number,
+          'farm_type'     => $request->farm_type,
+          'service_type' => $request->service_type,
           'profile_update_at' => date('Y-m-d h:i:s')
       ]);
       if($profile)
