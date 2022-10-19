@@ -422,10 +422,8 @@ class UserController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{ 
 
-
-        //$user_id = $request->user_id;
-        $user_id = Auth::user()->id;
-
+      // get array farm and service type
+        
         // $farm_type = array(
         // 'farm_type' => $request->farm_type,
       
@@ -434,7 +432,8 @@ class UserController extends Controller
         //  $service_type = array(
         //  'service_type' => $request->service_type,
         // );
-        
+          $user_id = Auth::user()->id;
+
           $profile  = UserProfile::where('user_id', $user_id)->update([
           'user_id' =>  $user_id,
           'email' => $request->email,
