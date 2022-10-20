@@ -990,20 +990,20 @@ class AgentController extends Controller
             $phone = Auth::user()->phone;
             $profileResult = UserProfile::where('user_id',$user_id)->first();
             $email = $profileResult->email;
-            $ref = random_int(100000, 999999);
+            // $ref = random_int(100000, 999999);
 
             //UPDATE THE REFERENCE CODE TO REQUEST TABLE
-            $post_ref = OrderRequest::where('id',$request_id)
-            ->update([
-             'reference' => $ref
-            ]);
+            // $post_ref = OrderRequest::where('id',$request_id)
+            // ->update([
+            //  'reference' => $ref
+            // ]);
 
               // url to go to after payment
             $callback_url = 'http://localhost:8000/api/payment';  
 
             $data = array(
               'callback_url' => $callback_url,
-             'reference'=> $ref,
+             
               'email'=>$email,
               "amount" => $amount,
               'metadata' =>array('phone' => $phone)

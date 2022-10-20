@@ -223,7 +223,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     //PAYSTACK API
     $router->post('/pay', ['uses' => 'AgentController@pay']); 
 
-    $router->get('payment/{requset_id}', ['uses' => 'PaymentController@payment']); 
+    $router->put('payment', ['uses' => 'PaymentController@payment']); 
 
     $router->get('all_payments', ['uses' => 'PaymentController@allPayment']); 
 

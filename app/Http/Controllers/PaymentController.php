@@ -3,39 +3,51 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Helper\ResponseBuilder;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Helper\ResponseBuilder;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Support\Facades\Redirect;
+use App\User;
+use App\FeedBack;
+use App\Otp;
 use App\OrderRequest;
-use Paystack;
+use Carbon\Carbon;
+use App\UserProfile;
+use Carbon\Profile;
+use App\ServiceType;
 use App\Payment;
 use App\Price;
+use App\AgentNotification;
+use App\FarmerNotification;
+use App\ServiceNotification;
+
+use App\Rice_farm_type;
+use App\Wheat_farm_type;
+use App\Maize_farm_type;
+
+use App\Boom_sprayer_service;
+use App\Extension_service;
+use App\Fertilizer_service;
+use App\Harrow_service;
+use App\Harvester_service;
+use App\Off_taker_service;
+use App\Pesticide_herbicide_service;
+use App\Planter_service;
+use App\Plough_service;
+use App\Ridger_service;
+use App\Seeds_service;
+use App\Tractor_service;
+use App\Treasher;
 
 class PaymentController extends Controller
 {
   
-  public function payment($request_id){
-      // validation
-      //  $validator =Validator ::make($request->all(), [
-      //   'request_id' => 'required'
-      //   ]);      
-      //   if($validator->fails()){
-      //   $status = false;
-      //   $message ="";
-      //   $error = $validator->errors()->first();
-      //   $data = "";
-      //   $code = 401;                
-      //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
-      //   }
-      // else{ 
-      //$request_id = $request->request_id;
+  public function payment(Request $request){
 
-      //get reference from request table
-      $requestRef = OrderRequest::where('id',$request_id)->first();
-      $requestRef->reference;
-    
-      $reference = $requestRef->reference;
+      $request_id = $request['request_id'];
+       $reference = $request['reference'];
 
       $crl = curl_init('https://api.paystack.co/transaction/verify/'.$reference);
         curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
@@ -52,9 +64,7 @@ class PaymentController extends Controller
 
     $better_response = json_decode($response);
 
-    // get agent details that make payment
-    $agent_email  = $better_response->data->customer->email;
-    $agent_phone  = $better_response->data->metadata->phone;
+    // get payment details
     $amount       = $better_response->data->amount;
     $paid_date    = $better_response->data->created_at;
     $pay_status   = $better_response->data->gateway_response;
@@ -63,8 +73,6 @@ class PaymentController extends Controller
 //insert payment details to table
    $pay =  new Payment();
    $pay->request_id     = $request_id;
-   $pay->agent_email    = $agent_email;
-   $pay->agent_phone    = $agent_phone;
    $pay->ref            = $reference;
    $pay->pay_status     = $pay_status;
    $pay->gateway_ref    = $gateway_ref;
@@ -74,16 +82,18 @@ class PaymentController extends Controller
    $pay->save();
 
     //update request status to PAID
-    if($pay_status == 'success'){
+    if($pay_status == 'Successful'){
       OrderRequest::where('id',$request_id)
             ->update([
+              'agent_id' => Auth::user()->id,
              'pay_status' => 'Paid'
             ]);
     }
 
-    if($pay_status != 'success'){
+    if($pay_status != 'Successful'){
        OrderRequest::where('id',$request_id)
             ->update([
+            'agent_id' => Auth::user()->id,
              'pay_status' => 'Unpaid'
             ]);
     }
@@ -106,7 +116,8 @@ class PaymentController extends Controller
     }
 
 
-  }
+  
+}
 
 
   
