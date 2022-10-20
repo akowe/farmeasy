@@ -448,8 +448,14 @@ class UserController extends Controller
           'profile_update_at' => date('Y-m-d h:i:s')
       ]);
 
-          if($profile)
+      if($profile)
+
       {
+        // also udpate the user farm type or service ttype in user table
+        User::where('id', Auth::user()->id)->update([
+        'farm_type'     => json_encode($request['farm_type']),
+        'service_type' => json_encode($request['service_type']),
+      ]);
 
       $status = true;
       $message ="Profile successfully updated";
