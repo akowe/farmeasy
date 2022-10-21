@@ -248,7 +248,7 @@ class ServiceController extends Controller
   
 
   // fetch service provider by service type
-  public function getServiceProvidersByServiceType(Request $request){
+  public function service_providers_by_service_type(Request $request){
     $service_type = $request->service_type;
     $users = User::where("service_type", $service_type )->get();
 
@@ -670,7 +670,6 @@ class ServiceController extends Controller
   } 
 
 
-// %{$countTractor}%
 
  //count all vendors by service types
   public function countVendorsBYServiceTypes(){
@@ -841,6 +840,176 @@ class ServiceController extends Controller
   } 
 
 
+
+
+
+ //fetch all sevrvice provider by service types
+  public function FetchAllServiceProvider(){
+ 
+    $tractor  = ServiceType::where('id', '1')->first()->service;
+    $countTractor = User::where('service_type', 'like', '%tractor%')->get(); 
+
+     //count plough
+    $plough  = ServiceType::where('id', '2')->first()->service;
+    $countPlough = User::where('service_type', 'like', '%plough%')->get(); 
+
+
+    //count planter
+    $planter  = ServiceType::where('id', '3')->first()->service;
+    $countPlanter = User::where('service_type', 'like', '%planter%')->get(); 
+
+
+      //count seed
+    $seed  = ServiceType::where('id', '4')->first()->service;
+    $countSeed = User::where('service_type', 'like', '%seed%')->get(); 
+
+
+     //count pesticide
+    $pesticide  = ServiceType::where('id', '5')->first()->service;
+    $countPesticide = User::where('service_type', 'like', '%pesticide%')->get(); 
+
+
+    //count Fertilizer
+     $fertilizer  = ServiceType::where('id', '6')->first()->service;
+    $countFertilizer = User::where('service_type', 'like', '%fertilizer%')->get(); 
+
+
+    // count Harrow
+    $harrow  = ServiceType::where('id', '7')->first()->service;
+    $countHarrow = User::where('service_type', 'like', '%harrow%')->get(); 
+
+
+    // count harvester
+    $harvester  = ServiceType::where('id', '8')->first()->service;
+    $countHarvester = User::where('service_type', 'like', '%harvester%')->get(); 
+
+
+    //count ridger
+     $ridger  = ServiceType::where('id', '9')->first()->service;
+    $countRidger = User::where('service_type', 'like', '%ridger%')->get(); 
+
+
+     //count Boom
+     $boom  = ServiceType::where('id', '10')->first()->service;
+    $countBoom = User::where('service_type', 'like', '%boom%')->get(); 
+
+
+     //count Extension
+     $extension  = ServiceType::where('id', '11')->first()->service;
+    $countExtension = User::where('service_type', 'like', '%extension%')->get(); 
+
+
+     //count Off taker
+     $offtaker  = ServiceType::where('id', '12')->first()->service;
+    $countOfftaker = User::where('service_type', 'like', '%off taker%')->get(); 
+
+
+       //count treasher
+     $treasher  = ServiceType::where('id', '13')->first()->service;
+    $countTreasher = User::where('service_type', 'like', '%treasher%')->get(); 
+
+
+     $data = array(
+               'tractor' => array(
+              'service_type' => $tractor,
+              'user'=>$countTractor
+              ),
+
+
+              'plough' => array(
+              'service_type' => $plough,
+              'user'=>$countPlough
+            ),
+
+
+              'planter' => array(
+              'service_type' => $planter,
+              'user'=>$countPlanter
+            ),
+
+
+              'seed' => array(
+              'service_type' => $seed,
+              'user'=>$countSeed
+            ),
+
+
+              'pesticide' => array(
+              'service_type' => $pesticide,
+              'user'=>$countPesticide
+            ),
+
+
+              'fertilizer' => array(
+              'service_type' => $fertilizer,
+              'user'=>$countFertilizer
+            ),
+              
+
+
+              'harrow' => array(
+              'service_type' => $harrow,
+              'user'=>$countHarrow
+            ),
+            
+
+              'harvester' => array(
+              'service_type' => $harvester,
+              'user'=>$countHarvester
+            ),
+  
+            
+              'ridger' => array(
+              'service_type' => $ridger,
+              'user'=>$countRidger
+            ),
+
+
+              'boom' => array(
+              'service_type' => $boom,
+              'user'=>$countBoom
+            ),
+
+
+              'extension' => array(
+              'service_type' => $extension,
+              'user'=>$countExtension
+            ),
+
+
+              'offtaker' => array(
+              'service_type' => $offtaker,
+              'user'=>$countOfftaker
+            ),
+
+
+              'treasher' => array(
+              'service_type' => $treasher,
+              'user'=>$countTreasher
+            ),
+
+
+            );
+
+    if($data){
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $data;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }else{
+    $status = false;
+    $message ="";
+    $error = "";
+    $data = "Something went wrong!";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }
+
+  } 
 
 
  

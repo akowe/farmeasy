@@ -220,6 +220,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
 
     //SERVICE PROVIDER
+    //get all service provider details
+    $router->get('serviceprovider', ['uses' => 'ServiceController@FetchAllServiceProvider']);
+
     $router->get('tractor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTractor']);
 
     $router->get('plough_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlower']);
