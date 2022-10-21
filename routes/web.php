@@ -36,7 +36,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('service', ['uses' => 'ServiceController@createService']);
 
-
+ 
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
     // select each service type
@@ -87,20 +87,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //request to become an agent
     $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
 
-      //count service providers by service type
-     $router->get('tractor_vendor', ['uses' => 'ServiceController@countTractorServiceProviders']);
-     $router->get('plough_vendor', ['uses' => 'ServiceController@countPloughServiceProviders']);
-     $router->get('planter_vendor', ['uses' => 'ServiceController@countPlanterServiceProviders']);
-     $router->get('seed_vendor', ['uses' => 'ServiceController@countSeedServiceProviders']);
-     $router->get('pesticide_vendor', ['uses' => 'ServiceController@countPesticideServiceProviders']);
-     $router->get('fertilizer_vendor', ['uses' => 'ServiceController@countFertilizerServiceProviders']);
-     $router->get('harrow_vendor', ['uses' => 'ServiceController@countHarrowServiceProviders']);
-     $router->get('harvester_vendor', ['uses' => 'ServiceController@countHarvesterServiceProviders']);
-     $router->get('ridger_vendor', ['uses' => 'ServiceController@countRidgerServiceProviders']);
-     $router->get('boom_vendor', ['uses' => 'ServiceController@countBoomServiceProviders']);
-     $router->get('extension_vendor', ['uses' => 'ServiceController@countExtentionServiceProviders']);
-     $router->get('offtaker_vendor', ['uses' => 'ServiceController@countOfftakerServiceProviders']);
-     $router->get('Treasher_vendor', ['uses' => 'ServiceController@countTreasherServiceProviders']);
+      //count service providers as vendor by service type
+     $router->get('vendor', ['uses' => 'ServiceController@countVendorsBYServiceTypes']);
+
+
 
 });
 
@@ -252,9 +242,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('extension_service_provider', ['uses' => 'ServiceController@getServiceProvidersByExtension']);
 
-    $router->get('offtaker_service_provider', ['uses' => 'ServiceController@  getServiceProvidersByOfftaker']);
+    $router->get('offtaker_service_provider', ['uses' => 'ServiceController@getServiceProvidersByOfftaker']);
 
-     $router->get('treasher_service_provider', ['uses' => 'ServiceController@  getServiceProvidersByTreasher']);
+     $router->get('treasher_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTreasher']);
 
 
 
