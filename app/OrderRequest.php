@@ -11,6 +11,7 @@ class OrderRequest extends Model
     ///use HasFactory;
 
     protected $table = 'request';
+    protected $casts = ['farm_type' => 'array' ];
 
  
 }
