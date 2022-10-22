@@ -1340,6 +1340,7 @@ class ServiceController extends Controller
 
     $payment = OrderRequest::Join('users', 'users.id', '=', 'request.sp_id')
                   ->Join('payment', 'payment.request_id', '=', 'request.id')
+                  ->where('request.sp_id', $user_id)
                   ->get(['payment.*', 'request.*']);
 
      if($payment){
