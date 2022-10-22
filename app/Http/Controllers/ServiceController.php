@@ -179,14 +179,14 @@ class ServiceController extends Controller
                   }
                   if($err){
                     $status = false;
-                    $message ="message is not sent";
-                    $error = $err;
+                    $message ="sms is not sent";
+                    $error = '';
                     $data ="";
                     $code = 400;
                     return ResponseBuilder::result($status, $message, $error, $data, $code);
                   }else if($response){
                     $status = true;
-                    $message ="message sent successfully";
+                    $message ="sms sent successfully";
                     $error = "";
                     $data = "";
                     $code = 200;                
