@@ -101,63 +101,69 @@ class UserController extends Controller
         
        if($user){
 
-         //implemented sms
-         $country_code = $country->get_country_code($request['country']);
+            //implemented sms
+                  $country_code = $country->get_country_code($request['country']);
+      
+                  $json_url = "http://api.ebulksms.com:8080/sendsms.json";
+                  $username = 'admin@livestock247.com';
+                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
+      
+                  $sendername = 'FarmEasy';
+                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEasy App';
+      
+                  
+                  $gsm = array();
 
-         $json_url = "http://api.ebulksms.com:8080/sendsms.json";
-         $username = 'admin@livestock247.com';
-         $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
+                  // remove the + sign from countrycode. ebulksms requiment for sending
+                  $country_code = trim($country_code->country_code, "+");  
 
-         $sendername = 'FME';
-         $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
+                  //remove first "0" from phone number             
+                  $arr_recipient = explode(',', trim($request['phone'], "0"));
+                  $phone =implode(',',$arr_recipient);
 
-                         $gsm = array();
-         $country_code = $country_code;
-         $arr_recipient = explode(',', ltrim($request['phone'], "0"));
-
-         $generated_id = uniqid('int_', false);
-         $generated_id = substr($generated_id, 0, 30);
-         $gsm['gsm'][] = array('msidn' => $arr_recipient, 'msgid' => $generated_id);
-
-         $mss = array(
-         'sender' => $sendername,
-         'messagetext' => $messagetext,
-     
-         );
-         $request = array('SMS' => array(
-         'auth' => array(
-         'username' => $username,
-         'apikey' => $apikey
-         ),
-         'message' => $mss,
-         'recipients' => $gsm
-         ));
-
-         $json_data = json_encode($request);
-         if($json_data) {
-
-           $curl = curl_init();
-           curl_setopt_array($curl, array(
-           CURLOPT_URL => $json_url,
-           CURLOPT_RETURNTRANSFER => true,
-           CURLOPT_ENCODING => '',
-           CURLOPT_MAXREDIRS => 10,
-           CURLOPT_TIMEOUT => 0,
-           //CURLOPT_FOLLOWLOCATION => true,
-           CURLOPT_SSL_VERIFYPEER => false,
-           //CURLOPT_CAINFO, "C:/xampp/cacert.pem",
-           //CURLOPT_CAPATH, "C:/xampp/cacert.pem",
-           CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-           CURLOPT_CUSTOMREQUEST => 'POST',
-           CURLOPT_POSTFIELDS =>$json_data,
-             CURLOPT_HTTPHEADER => array(
-               'Content-Type: application/json'
-             )
-           ));
-           $response = curl_exec($curl);
-           $err = curl_error($curl);
-           $res = json_decode($response, true);
-         }
+                  $generated_id = uniqid('int_', false);
+                  $generated_id = substr($generated_id, 0, 30);
+                  $gsm['gsm'][] = array('msidn' => $country_code.$phone, 'msgid' => $generated_id);
+      
+                  $mss = array(
+                  'sender' => $sendername,
+                  'messagetext' => $messagetext,
+              
+                  );
+                  $request = array('SMS' => array(
+                  'auth' => array(
+                  'username' => $username,
+                  'apikey' => $apikey
+                  ),
+                  'message' => $mss,
+                  'recipients' => $gsm
+                  ));
+      
+                  $json_data = json_encode($request);
+                  if($json_data) {
+      
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => $json_url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    //CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    //CURLOPT_CAINFO, "C:/xampp/cacert.pem",
+                    //CURLOPT_CAPATH, "C:/xampp/cacert.pem",
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>$json_data,
+                      CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/json'
+                      )
+                    ));
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    $res = json_decode($response, true);
+                  }
          if($err){
            $status = false;
            $message ="sms is not sent";
