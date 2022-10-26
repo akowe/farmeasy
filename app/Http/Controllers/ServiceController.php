@@ -1338,10 +1338,15 @@ class ServiceController extends Controller
   public function getAgentPayment(Request $request){
       $user_id = Auth::user()->id;
 
-    $payment = OrderRequest::Join('users', 'users.id', '=', 'request.sp_id')
+    $payment = OrderRequest::Join('users', 'users.id', '=', 'request.agent_id')
                   ->Join('payment', 'payment.request_id', '=', 'request.id')
                   ->where('request.sp_id', $user_id)
-                  ->get(['payment.*', 'request.*']);
+                  ->where('request.pay_status', 'Paid')
+                  ->orderBy('pay_date', 'desc')
+                  ->get(['payment.request_id', 'payment.id', 'payment.ref', 'payment.pay_date', 'payment.amount',  'payment.gateway_ref', 'payment.created_at',  
+                    'request.pay_status', 'request.agent_id', 'request.hectare_rate', 'request.location', 'request.service_type', 'request.farm_type', 'request.name', 'users.name', 'users.phone' ]);
+
+
 
      if($payment){
       $status = true;
