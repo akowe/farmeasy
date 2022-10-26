@@ -1338,13 +1338,14 @@ class ServiceController extends Controller
   public function getAgentPayment(Request $request){
       $user_id = Auth::user()->id;
 
+      // the user name and phone is that of the agent so the service provider can contact agent
     $payment = OrderRequest::Join('users', 'users.id', '=', 'request.agent_id')
                   ->Join('payment', 'payment.request_id', '=', 'request.id')
                   ->where('request.sp_id', $user_id)
                   ->where('request.pay_status', 'Paid')
                   ->orderBy('pay_date', 'desc')
                   ->get(['payment.request_id', 'payment.id', 'payment.ref', 'payment.pay_date', 'payment.amount',  'payment.gateway_ref', 'payment.created_at',  
-                    'request.pay_status', 'request.agent_id', 'request.hectare_rate', 'request.location', 'request.service_type', 'request.farm_type', 'request.name', 'users.name', 'users.phone' ]);
+                    'request.pay_status', 'request.agent_id', 'request.hectare_rate', 'request.farm_size','request.location', 'request.service_type', 'request.name', 'users.name', 'users.phone' ]);
 
 
 
