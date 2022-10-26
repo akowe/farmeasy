@@ -1345,7 +1345,7 @@ class ServiceController extends Controller
                   ->where('request.pay_status', 'Paid')
                   ->orderBy('pay_date', 'desc')
                   ->get(['payment.request_id', 'payment.id', 'payment.ref', 'payment.pay_date', 'payment.amount',  'payment.gateway_ref', 'payment.created_at',  
-                    'request.pay_status', 'request.agent_id', 'request.hectare_rate', 'request.farm_size','request.location', 'request.service_type', 'request.name', 'users.name', 'users.phone' ]);
+                    'request.pay_status', 'request.status', 'request.agent_id', 'request.hectare_rate', 'request.farm_size','request.location', 'request.service_type', 'request.name', 'users.name', 'users.phone' ]);
 
 
 
