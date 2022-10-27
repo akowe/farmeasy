@@ -314,7 +314,8 @@ class AgentController extends Controller
             $requestResult  = OrderRequest::where('id',$request->request_id)
             ->update([
              'agent_id' => Auth::user()->id,
-            'status' => "approved"
+            'status' => "approved and measured",
+            'pay_status' => "Paid"
             ]);
             $status = true;
             $message ="Request successfully accepted";
@@ -339,12 +340,22 @@ class AgentController extends Controller
     $all_farmer_request =array();
     if($all_request){
       foreach($all_request as $main_request){
-          $user_id = $main_request->user_id;
-          $user = User::where("id", $user_id)->first();
-          if($user->user_type =="4" && $user->user_type =="3" ){
-            //$all_request = OrderRequest::where("user_id", $user->id)->get();
+          // $user_id = $main_request->user_id;
+          // $user = User::where("id", $user_id)->first();
+          // if($user->user_type =="4" && $user->user_type =="3" ){
+          //   $all_request = OrderRequest::where("user_id", $user->id)->get();
+          //   $all_farmer_request = $all_request;
+          // }
+
+            $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+            $location = $profile->location;
+        
+         
+            $all_request = OrderRequest::where("location", $location)->get();
             $all_farmer_request = $all_request;
-          }
+          
+
 
       }
       $status = true;
@@ -990,20 +1001,20 @@ class AgentController extends Controller
             $phone = Auth::user()->phone;
             $profileResult = UserProfile::where('user_id',$user_id)->first();
             $email = $profileResult->email;
-            $ref = random_int(100000, 999999);
+            // $ref = random_int(100000, 999999);
 
             //UPDATE THE REFERENCE CODE TO REQUEST TABLE
-            $post_ref = OrderRequest::where('id',$request_id)
-            ->update([
-             'reference' => $ref
-            ]);
+            // $post_ref = OrderRequest::where('id',$request_id)
+            // ->update([
+            //  'reference' => $ref
+            // ]);
 
               // url to go to after payment
             $callback_url = 'http://localhost:8000/api/payment';  
 
             $data = array(
               'callback_url' => $callback_url,
-             'reference'=> $ref,
+             
               'email'=>$email,
               "amount" => $amount,
               'metadata' =>array('phone' => $phone)

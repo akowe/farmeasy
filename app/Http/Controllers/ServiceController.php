@@ -117,25 +117,33 @@ class ServiceController extends Controller
 
                   $profile            = new UserProfile();
                   $profile->user_id   = $user->id;
+                  $profile->service_type = $user->service_type;
                   $profile->save();
 
-                  //implemented sms
+             //implemented sms
                   $country_code = $country->get_country_code($request['country']);
-      
-                  $json_url = "http://api.ebulksms.com:8080/sendsms.json";
+                 // https://api.ebulksms.com:4433/sendsms.json
+                  //http://api.ebulksms.com:8080/sendsms.json
+                  $json_url = "https://api.ebulksms.com:4433/sendsms.json";
                   $username = 'admin@livestock247.com';
-                  $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
+                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
       
-                  $sendername = 'FME';
-                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
+                  $sendername = 'FarmEASY';
+                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
       
-                                  $gsm = array();
-                  $country_code = $country_code;
-                  $arr_recipient = explode(',', ltrim($request['phone'], "0"));
-      
+                  
+                  $gsm = array();
+
+                  // remove the + sign from countrycode. ebulksms requiment for sending
+                  $country_code = trim($country_code->country_code, "+");  
+
+                  //remove first "0" from phone number             
+                  $arr_recipient = explode(',', trim($request['phone'], "0"));
+                  $phone =implode(',',$arr_recipient);
+
                   $generated_id = uniqid('int_', false);
                   $generated_id = substr($generated_id, 0, 30);
-                  $gsm['gsm'][] = array('msidn' => $arr_recipient, 'msgid' => $generated_id);
+                  $gsm['gsm'][] = array('msidn' => $country_code.$phone, 'msgid' => $generated_id);
       
                   $mss = array(
                   'sender' => $sendername,
@@ -178,14 +186,14 @@ class ServiceController extends Controller
                   }
                   if($err){
                     $status = false;
-                    $message ="message is not sent";
-                    $error = $err;
+                    $message ="sms is not sent";
+                    $error = '';
                     $data ="";
                     $code = 400;
                     return ResponseBuilder::result($status, $message, $error, $data, $code);
                   }else if($response){
                     $status = true;
-                    $message ="message sent successfully";
+                    $message ="sms sent successfully";
                     $error = "";
                     $data = "";
                     $code = 200;                
@@ -218,6 +226,7 @@ class ServiceController extends Controller
             }    
  
   }
+  
 
   // get service type by request id
   public function getServiceTypeByRequest(Request $request){
@@ -247,7 +256,7 @@ class ServiceController extends Controller
   
 
   // fetch service provider by service type
-  public function getServiceProvidersByServiceType(Request $request){
+  public function service_providers_by_service_type(Request $request){
     $service_type = $request->service_type;
     $users = User::where("service_type", $service_type )->get();
 
@@ -615,7 +624,7 @@ class ServiceController extends Controller
     //get Extension Manager service type from table
      $service_type = ServiceType::where('id', '12')->first()->service;
    
-     $users =  User::where('service_type', 'like', '%offtaker%')->get();  
+     $users =  User::where('service_type', 'like', '%off taker%')->get();  
 
     if (!$users){
       $status = false;
@@ -665,6 +674,348 @@ class ServiceController extends Controller
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);    
      }
+
+  } 
+
+
+
+ //count all vendors by service types
+  public function countVendorsBYServiceTypes(){
+ 
+    $tractor  = ServiceType::where('id', '1')->first()->service;
+    $countTractor = User::where('service_type', 'like', '%tractor%')->count(); 
+
+     //count plough
+    $plough  = ServiceType::where('id', '2')->first()->service;
+    $countPlough = User::where('service_type', 'like', '%plough%')->count(); 
+
+
+    //count planter
+    $planter  = ServiceType::where('id', '3')->first()->service;
+    $countPlanter = User::where('service_type', 'like', '%planter%')->count(); 
+
+
+      //count seed
+    $seed  = ServiceType::where('id', '4')->first()->service;
+    $countSeed = User::where('service_type', 'like', '%seed%')->count(); 
+
+
+     //count pesticide
+    $pesticide  = ServiceType::where('id', '5')->first()->service;
+    $countPesticide = User::where('service_type', 'like', '%pesticide%')->count(); 
+
+
+    //count Fertilizer
+     $fertilizer  = ServiceType::where('id', '6')->first()->service;
+    $countFertilizer = User::where('service_type', 'like', '%fertilizer%')->count(); 
+
+
+    // count Harrow
+    $harrow  = ServiceType::where('id', '7')->first()->service;
+    $countHarrow = User::where('service_type', 'like', '%harrow%')->count(); 
+
+
+    // count harvester
+    $harvester  = ServiceType::where('id', '8')->first()->service;
+    $countHarvester = User::where('service_type', 'like', '%harvester%')->count(); 
+
+
+    //count ridger
+     $ridger  = ServiceType::where('id', '9')->first()->service;
+    $countRidger = User::where('service_type', 'like', '%ridger%')->count(); 
+
+
+     //count Boom
+     $boom  = ServiceType::where('id', '10')->first()->service;
+    $countBoom = User::where('service_type', 'like', '%boom%')->count(); 
+
+
+     //count Extension
+     $extension  = ServiceType::where('id', '11')->first()->service;
+    $countExtension = User::where('service_type', 'like', '%extension%')->count(); 
+
+
+     //count Off taker
+     $offtaker  = ServiceType::where('id', '12')->first()->service;
+    $countOfftaker = User::where('service_type', 'like', '%off taker%')->count(); 
+
+
+       //count treasher
+     $treasher  = ServiceType::where('id', '13')->first()->service;
+    $countTreasher = User::where('service_type', 'like', '%treasher%')->count(); 
+
+
+     $data = array(
+               'tractor' => array(
+              'service_type' => $tractor,
+              'vendors'=>$countTractor
+              ),
+
+
+              'plough' => array(
+              'service_type' => $plough,
+              'vendors'=>$countPlough
+            ),
+
+
+              'planter' => array(
+              'service_type' => $planter,
+              'vendors'=>$countPlanter
+            ),
+
+
+              'seed' => array(
+              'service_type' => $seed,
+              'vendors'=>$countSeed
+            ),
+
+
+              'pesticide' => array(
+              'service_type' => $pesticide,
+              'vendors'=>$countPesticide
+            ),
+
+
+              'fertilizer' => array(
+              'service_type' => $fertilizer,
+              'vendors'=>$countFertilizer
+            ),
+              
+
+
+              'harrow' => array(
+              'service_type' => $harrow,
+              'vendors'=>$countHarrow
+            ),
+            
+
+              'harvester' => array(
+              'service_type' => $harvester,
+              'vendors'=>$countHarvester
+            ),
+  
+            
+              'ridger' => array(
+              'service_type' => $ridger,
+              'vendors'=>$countRidger
+            ),
+
+
+              'boom' => array(
+              'service_type' => $boom,
+              'vendors'=>$countBoom
+            ),
+
+
+              'extension' => array(
+              'service_type' => $extension,
+              'vendors'=>$countExtension
+            ),
+
+
+              'offtaker' => array(
+              'service_type' => $offtaker,
+              'vendors'=>$countOfftaker
+            ),
+
+
+              'treasher' => array(
+              'service_type' => $treasher,
+              'vendors'=>$countTreasher
+            ),
+
+
+            );
+
+    if($data){
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $data;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }else{
+    $status = false;
+    $message ="";
+    $error = "";
+    $data = "Something went wrong!";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }
+
+  } 
+
+
+
+
+
+ //fetch all sevrvice provider by service types
+  public function FetchAllServiceProvider(){
+ 
+    $tractor  = ServiceType::where('id', '1')->first()->service;
+    $countTractor = User::where('service_type', 'like', '%tractor%')->get(); 
+
+     //count plough
+    $plough  = ServiceType::where('id', '2')->first()->service;
+    $countPlough = User::where('service_type', 'like', '%plough%')->get(); 
+
+
+    //count planter
+    $planter  = ServiceType::where('id', '3')->first()->service;
+    $countPlanter = User::where('service_type', 'like', '%planter%')->get(); 
+
+
+      //count seed
+    $seed  = ServiceType::where('id', '4')->first()->service;
+    $countSeed = User::where('service_type', 'like', '%seed%')->get(); 
+
+
+     //count pesticide
+    $pesticide  = ServiceType::where('id', '5')->first()->service;
+    $countPesticide = User::where('service_type', 'like', '%pesticide%')->get(); 
+
+
+    //count Fertilizer
+     $fertilizer  = ServiceType::where('id', '6')->first()->service;
+    $countFertilizer = User::where('service_type', 'like', '%fertilizer%')->get(); 
+
+
+    // count Harrow
+    $harrow  = ServiceType::where('id', '7')->first()->service;
+    $countHarrow = User::where('service_type', 'like', '%harrow%')->get(); 
+
+
+    // count harvester
+    $harvester  = ServiceType::where('id', '8')->first()->service;
+    $countHarvester = User::where('service_type', 'like', '%harvester%')->get(); 
+
+
+    //count ridger
+     $ridger  = ServiceType::where('id', '9')->first()->service;
+    $countRidger = User::where('service_type', 'like', '%ridger%')->get(); 
+
+
+     //count Boom
+     $boom  = ServiceType::where('id', '10')->first()->service;
+    $countBoom = User::where('service_type', 'like', '%boom%')->get(); 
+
+
+     //count Extension
+     $extension  = ServiceType::where('id', '11')->first()->service;
+    $countExtension = User::where('service_type', 'like', '%extension%')->get(); 
+
+
+     //count Off taker
+     $offtaker  = ServiceType::where('id', '12')->first()->service;
+    $countOfftaker = User::where('service_type', 'like', '%off taker%')->get(); 
+
+
+       //count treasher
+     $treasher  = ServiceType::where('id', '13')->first()->service;
+    $countTreasher = User::where('service_type', 'like', '%treasher%')->get(); 
+
+
+     $data = array(
+               'tractor' => array(
+              'service_type' => $tractor,
+              'user'=>$countTractor
+              ),
+
+
+              'plough' => array(
+              'service_type' => $plough,
+              'user'=>$countPlough
+            ),
+
+
+              'planter' => array(
+              'service_type' => $planter,
+              'user'=>$countPlanter
+            ),
+
+
+              'seed' => array(
+              'service_type' => $seed,
+              'user'=>$countSeed
+            ),
+
+
+              'pesticide' => array(
+              'service_type' => $pesticide,
+              'user'=>$countPesticide
+            ),
+
+
+              'fertilizer' => array(
+              'service_type' => $fertilizer,
+              'user'=>$countFertilizer
+            ),
+              
+
+
+              'harrow' => array(
+              'service_type' => $harrow,
+              'user'=>$countHarrow
+            ),
+            
+
+              'harvester' => array(
+              'service_type' => $harvester,
+              'user'=>$countHarvester
+            ),
+  
+            
+              'ridger' => array(
+              'service_type' => $ridger,
+              'user'=>$countRidger
+            ),
+
+
+              'boom' => array(
+              'service_type' => $boom,
+              'user'=>$countBoom
+            ),
+
+
+              'extension' => array(
+              'service_type' => $extension,
+              'user'=>$countExtension
+            ),
+
+
+              'offtaker' => array(
+              'service_type' => $offtaker,
+              'user'=>$countOfftaker
+            ),
+
+
+              'treasher' => array(
+              'service_type' => $treasher,
+              'user'=>$countTreasher
+            ),
+
+
+            );
+
+    if($data){
+    $status = true;
+    $message ="";
+    $error = "";
+    $data = $data;
+    $code = 200;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }else{
+    $status = false;
+    $message ="";
+    $error = "";
+    $data = "Something went wrong!";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+  }
 
   } 
 
@@ -995,9 +1346,16 @@ class ServiceController extends Controller
   public function getAgentPayment(Request $request){
       $user_id = Auth::user()->id;
 
-    $payment = OrderRequest::Join('users', 'users.id', '=', 'request.sp_id')
+      // the user name and phone is that of the agent so the service provider can contact agent
+    $payment = OrderRequest::Join('users', 'users.id', '=', 'request.agent_id')
                   ->Join('payment', 'payment.request_id', '=', 'request.id')
-                  ->get(['payment.*', 'request.*']);
+                  ->where('request.sp_id', $user_id)
+                  ->where('request.pay_status', 'Paid')
+                  ->orderBy('pay_date', 'desc')
+                  ->get(['payment.request_id', 'payment.id', 'payment.ref', 'payment.pay_date', 'payment.amount',  'payment.gateway_ref', 'payment.created_at',  
+                    'request.pay_status', 'request.status', 'request.agent_id', 'request.hectare_rate', 'request.farm_size','request.location', 'request.service_type', 'request.name', 'users.name', 'users.phone' ]);
+
+
 
      if($payment){
       $status = true;

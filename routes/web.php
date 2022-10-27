@@ -36,7 +36,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('service', ['uses' => 'ServiceController@createService']);
 
-
+ 
     $router->get('all_service_types', ['uses' => 'ServiceController@allServiceTypes']);
 
     // select each service type
@@ -86,6 +86,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     //request to become an agent
     $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
+
+      //count service providers as vendor by service type
+     $router->get('vendor', ['uses' => 'ServiceController@countVendorsBYServiceTypes']);
+
+
 
 });
 
@@ -208,13 +213,16 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     //PAYSTACK API
     $router->post('/pay', ['uses' => 'AgentController@pay']); 
 
-    $router->get('payment/{requset_id}', ['uses' => 'PaymentController@payment']); 
+    $router->put('payment', ['uses' => 'PaymentController@payment']); 
 
     $router->get('all_payments', ['uses' => 'PaymentController@allPayments']); 
 
 
 
     //SERVICE PROVIDER
+    //get all service provider details
+    $router->get('serviceprovider', ['uses' => 'ServiceController@FetchAllServiceProvider']);
+
     $router->get('tractor_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTractor']);
 
     $router->get('plough_service_provider', ['uses' => 'ServiceController@getServiceProvidersByPlower']);
@@ -269,8 +277,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->put('start_service', ['uses' => 'ServiceController@startService']); 
 
     $router->put('end_service', ['uses' => 'ServiceController@endService']); 
-
-
 
 
     // ADMIN
