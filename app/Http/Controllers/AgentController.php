@@ -340,12 +340,22 @@ class AgentController extends Controller
     $all_farmer_request =array();
     if($all_request){
       foreach($all_request as $main_request){
-          $user_id = $main_request->user_id;
-          $user = User::where("id", $user_id)->first();
-          if($user->user_type =="4" && $user->user_type =="3" ){
-            $all_request = OrderRequest::where("user_id", $user->id)->get();
+          // $user_id = $main_request->user_id;
+          // $user = User::where("id", $user_id)->first();
+          // if($user->user_type =="4" && $user->user_type =="3" ){
+          //   $all_request = OrderRequest::where("user_id", $user->id)->get();
+          //   $all_farmer_request = $all_request;
+          // }
+
+            $profile = UserProfile::where(['user_id' => $user_id])->first();
+
+            $location = $profile->location;
+        
+         
+            $all_request = OrderRequest::where("location", $location)->get();
             $all_farmer_request = $all_request;
-          }
+          
+
 
       }
       $status = true;
