@@ -486,7 +486,7 @@ class UserController extends Controller
 // this should be for admin only
   public function index(){
 
-    if( Auth::user()->user_type == '2'){
+    if(in_array(Auth::user()->user_type,array('1','2'))  ){
  
       $users  = User::all();
       $status = true;

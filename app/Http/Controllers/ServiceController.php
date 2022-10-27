@@ -1221,5 +1221,27 @@ class ServiceController extends Controller
 
 }
 
+public function getServiceProviders(){
+    //get service providers
+    $users = User::where('user_type', '5')->get();
+
+    if (!$users){
+      $status = false;
+      $message ="No service provider currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $users;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }  
+}
 
 }//class

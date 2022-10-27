@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\User;
 use App\ServiceType;
+use App\FarmType;
 use App\Otp;
 use App\Role;
 use App\OrderRequest;
@@ -63,7 +64,7 @@ class SuperAdminController extends Controller
     public function createAdmin(Request $request){
       
         // validation
-        $validator =Validator ::make($request->all(), [
+        $validator =Validator::make($request->all(), [
         
          'name' => 'required',
          'country' => 'required',
@@ -170,8 +171,9 @@ class SuperAdminController extends Controller
 
   // fetch all request 
   public function allRequest(){
- 
+
     $all_orders = OrderRequest::all();
+    
     $status = true;
     $message ="";
     $error = "";
@@ -229,9 +231,10 @@ class SuperAdminController extends Controller
 
   //add service type
   public function addServiceType(Request $request, User $user){
+
     if(Gate::allows('create', $user)){
       // validation
-      $validator =Validator ::make($request->all(), [
+      $validator =Validator::make($request->all(), [
         'service' => 'required'
       ]);      
       if($validator->fails()){
@@ -242,7 +245,7 @@ class SuperAdminController extends Controller
       $code = 401;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);   
       }else{
-          $serviceType = ServiceType::firstOrNew(['service' => $request->service]);
+          $serviceType = new ServiceType();
           $serviceType->service = $request->service;
           $serviceType->save();
 
@@ -263,6 +266,45 @@ class SuperAdminController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code);
     }      
   }
+
+
+ //add farm type
+ public function addFarmType(Request $request, User $user){
+
+  if(Gate::allows('create', $user)){
+    // validation
+    $validator =Validator::make($request->all(), [
+      'farm' => 'required'
+    ]);      
+    if($validator->fails()){
+    $status = false;
+    $message ="";
+    $error = $validator->errors()->first();
+    $data = "";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }else{
+        $farmType = new FarmType();
+        $farmType->farm = $request->farm;
+        $farmType->save();
+
+        $status = true;
+        $message ="You have successfully created ".$request->farm." as a farm type";
+        $error = "";
+        $data = "";
+        $code = 200;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+
+    } 
+  }else{
+    $status = false;
+    $message ="Not Authorized to add new farm type";
+    $error = "";
+    $data = "";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);
+  }      
+}  
   // edit service type
   public function editServiceType(Request $request, User $user){
     if(Gate::allows('edit', $user)){
@@ -308,12 +350,59 @@ class SuperAdminController extends Controller
      
   }  
    
+ // edit farm type
+ public function editFarmType(Request $request, User $user){
+  if(Gate::allows('edit', $user)){
+    // validation
+    $validator =Validator::make($request->all(), [
+    'farm_type_id' => 'required'
+    ]);        
+    if($validator->fails()){
+    $status = false;
+    $message ="";
+    $error = $validator->errors()->first();
+    $data = "";
+    $code = 400;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    } 
+    $farm_type_id = $request->farm_type_id;
+    $farmTypeResult  = FarmType::where('id', $farm_type_id )->first();  
+    if($farmTypeResult){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $farmTypeResult;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+    }else{
+        $status = false;
+        $message ="Farm type not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+  }else{
+    $status = false;
+    $message ="Not Authorized to edit the farm type";
+    $error = "";
+    $data = "";
+    $code = 401;                
+    return ResponseBuilder::result($status, $message, $error, $data, $code);
+  }    
+   
+}  
+
   //update service type
   public function updateServiceType(Request $request, User $user){
+
     if(Gate::allows('update', $user)){
       // validation
       $validator =Validator::make($request->all(), [
-      'service_type_id' => 'required',
+      'service' => 'required',
+      'service_type_id' => 'required'
 
       ]);        
       if($validator->fails()){
@@ -324,13 +413,14 @@ class SuperAdminController extends Controller
       $code = 400;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);   
       } 
-      $service_type = $request->service_type_id;
+      $service_type = $request->service;
+      $service_type_id = $request->service_type_id;
       $serviceTypeResult  = ServiceType::where('id', $service_type_id)->first();  
       if($serviceTypeResult){
 
         $serviceTypeResult = ServiceType::where('id', $service_type_id)
           ->update([
-          'price' =>$service_type 
+          'service' =>$service_type 
           ]);
           $status = true;
           $message ="You have successfully updated the service type";
@@ -357,7 +447,61 @@ class SuperAdminController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code);
     }    
      
-  }   
+  } 
+  
+   //update farm type
+   public function updateFarmType(Request $request, User $user){
+
+    if(Gate::allows('update', $user)){
+      // validation
+      $validator =Validator::make($request->all(), [
+      'farm' => 'required',
+      'farm_type_id' => 'required'
+
+      ]);        
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+      $farm_type = $request->farm;
+      $farm_type_id = $request->farm_type_id;
+      $farmTypeResult  = FarmType::where('id', $farm_type_id)->first();  
+      if($farmTypeResult){
+
+        $farmTypeResult = FarmType::where('id', $farm_type_id)
+          ->update([
+          'farm' =>$farm_type 
+          ]);
+          $status = true;
+          $message ="You have successfully updated the farm type";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+      }else{
+          $status = false;
+          $message ="Farm type not found";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+    }else{
+      $status = false;
+      $message ="Not Authorized to update farm type";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }    
+     
+  }  
   
   // delete service type
   public function deleteServiceType(Request $request,  User $user){
@@ -403,6 +547,74 @@ class SuperAdminController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code);
     }
    
+  }
+
+
+   // delete farm type
+   public function deleteFarmType(Request $request,  User $user){
+    $farm_type_id = $request->id;
+    $farmType  = FarmType::where('id', $farm_type_id)->first();
+    if(Gate::allows('destroy', $user)){
+      if($farmType ){
+        if($farmType->status =="remove"){
+          $status = false;
+          $message ="Farm type has already been deleted";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code); 
+        }else{
+          $farmType   = FarmType::where('id', $farm_type_id)
+          ->update([
+            'status' =>'remove'
+          ]);
+          $status = true;
+          $message ="You have successfully deleted the farm type";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+        }
+
+      }else{
+        $status = false;
+        $message =" Farm type not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+
+    }else{
+      $status = false;
+      $message ="Not Authorized to delete this farm type";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+   
+  }
+ 
+
+  public function allServiceType(User $user){
+    if(Gate::allows('view', $user)){
+      $serviceTypes  = ServiceType::where("status", NULL)->get();
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $serviceTypes;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);
+    }
+    else{
+      $status = false;
+        $message ="You don't have permission to view service types";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    }
   }
  
 

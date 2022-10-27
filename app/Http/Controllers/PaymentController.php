@@ -7,9 +7,11 @@ use App\Http\Helper\ResponseBuilder;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Gate;
 use App\OrderRequest;
 use Paystack;
 use App\Payment;
+use App\User;
 use App\Price;
 
 class PaymentController extends Controller
@@ -112,8 +114,7 @@ class PaymentController extends Controller
   
 
   //fetch all payments
-  public function allPayments(){
-    
+  public function allPayments(User $user){
     if(Gate::allows('view', $user)){
       $all_payments = Payment::all();
       $status = true;

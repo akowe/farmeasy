@@ -227,7 +227,7 @@ class FarmerController extends Controller
   // fetch all farm types
   public function allFarmTypes(){
  
-    $all_farm_types  = FarmType::all();
+    $all_farm_types  = FarmType::where("status","=", NULL)->get();
     $status = true;
     $message ="";
     $error = "";

@@ -210,7 +210,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('payment/{requset_id}', ['uses' => 'PaymentController@payment']); 
 
-    $router->get('all_payments', ['uses' => 'PaymentController@allPayment']); 
+    $router->get('all_payments', ['uses' => 'PaymentController@allPayments']); 
 
 
 
@@ -237,10 +237,11 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->get('extension_service_provider', ['uses' => 'ServiceController@getServiceProvidersByExtension']);
 
-    $router->get('offtaker_service_provider', ['uses' => 'ServiceController@  getServiceProvidersByOfftaker']);
+    $router->get('offtaker_service_provider', ['uses' => 'ServiceController@getServiceProvidersByOfftaker']);
 
-     $router->get('treasher_service_provider', ['uses' => 'ServiceController@  getServiceProvidersByTreasher']);
+     $router->get('treasher_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTreasher']);
 
+     $router->get('service_providers', ['uses' => 'ServiceController@getServiceProviders']);
 
 
     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
@@ -292,11 +293,21 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('add_service_type', ['uses' => 'SuperAdminController@addServiceType']); 
 
+    $router->post('add_farm_type', ['uses' => 'SuperAdminController@addFarmType']);
+
     $router->get('edit_service_type', ['uses' => 'SuperAdminController@editServiceType']);
+
+    $router->get('edit_farm_type', ['uses' => 'SuperAdminController@editFarmType']);
+
+    $router->get('services', ['uses' => 'SuperAdminController@allServiceType']);
 
     $router->put('update_service_type', ['uses' => 'SuperAdminController@updateServiceType']);
 
-    $router->put('delete_service_type', ['uses' => 'SuperAdminController@deleteServiceType']);
+    $router->put('update_farm_type', ['uses' => 'SuperAdminController@updateFarmType']);
+
+    $router->delete('delete_farm_type', ['uses' => 'SuperAdminController@deleteFarmType']);
+
+    $router->delete('delete_service_type', ['uses' => 'SuperAdminController@deleteServiceType']);
 
     $router->get('get_price_by_service_type', ['uses' => 'PriceController@getPriceByServiceType']);
 
