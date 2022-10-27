@@ -596,7 +596,11 @@ class UserController extends Controller
 
       
          //implemented sms
-                  $country_code = $country->get_country_code($request['country']);
+
+                  // $code = $country->get_country_code(json_decode($request['country'], true));
+                  // $get_code = explode(',', $code);
+                  // $country_code =implode(',',$get_code);
+
                  // https://api.ebulksms.com:4433/sendsms.json
                   //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
@@ -610,7 +614,8 @@ class UserController extends Controller
                   $gsm = array();
 
                   // remove the + sign from countrycode. ebulksms requiment for sending
-                  $country_code = trim($country_code->country_code, "+");  
+               
+                  //$country_code = trim($country_code->country_code, "+");  
 
                   //remove first "0" from phone number             
                   $arr_recipient = explode(',', trim($request['phone'], "0"));
@@ -618,7 +623,7 @@ class UserController extends Controller
 
                   $generated_id = uniqid('int_', false);
                   $generated_id = substr($generated_id, 0, 30);
-                  $gsm['gsm'][] = array('msidn' => $country_code.$phone, 'msgid' => $generated_id);
+                  $gsm['gsm'][] = array('msidn' => $phone, 'msgid' => $generated_id);
       
                   $mss = array(
                   'sender' => $sendername,
