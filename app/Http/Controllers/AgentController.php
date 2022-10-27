@@ -314,7 +314,8 @@ class AgentController extends Controller
             $requestResult  = OrderRequest::where('id',$request->request_id)
             ->update([
              'agent_id' => Auth::user()->id,
-            'status' => "approved"
+            'status' => "approved and measured",
+            'pay_status' => "Paid"
             ]);
             $status = true;
             $message ="Request successfully accepted";
