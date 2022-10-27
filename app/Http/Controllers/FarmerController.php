@@ -127,8 +127,9 @@ class FarmerController extends Controller
 
                   //implemented sms
                   $country_code = $country->get_country_code($request['country']);
-      
-                  $json_url = "http://api.ebulksms.com:8080/sendsms.json";
+                 // https://api.ebulksms.com:4433/sendsms.json
+                  //http://api.ebulksms.com:8080/sendsms.json
+                  $json_url = "https://api.ebulksms.com:4433/sendsms.json";
                   $username = 'admin@livestock247.com';
                   $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
       

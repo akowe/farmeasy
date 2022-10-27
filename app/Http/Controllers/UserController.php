@@ -101,10 +101,11 @@ class UserController extends Controller
         
        if($user){
 
-            //implemented sms
+             //implemented sms
                   $country_code = $country->get_country_code($request['country']);
-      
-                  $json_url = "http://api.ebulksms.com:8080/sendsms.json";
+                 // https://api.ebulksms.com:4433/sendsms.json
+                  //http://api.ebulksms.com:8080/sendsms.json
+                  $json_url = "https://api.ebulksms.com:4433/sendsms.json";
                   $username = 'admin@livestock247.com';
                   $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
       
@@ -164,48 +165,49 @@ class UserController extends Controller
                     $err = curl_error($curl);
                     $res = json_decode($response, true);
                   }
-         if($err){
-           $status = false;
-           $message ="sms is not sent";
-           $error = '';
-           $data ="";
-           $code = 400;
-           return ResponseBuilder::result($status, $message, $error, $data, $code);
-         }else if($response){
-           $status = true;
-           $message ="Agent created, sms sent successfully";
-           $error = "";
-           $data = "";
-           $code = 200;                
-           return ResponseBuilder::result($status, $message, $error, $data, $code);
-         }
-         else {
-           $status = false;
-           $message ="your phone number can not be determined";
-           $error = "";
-           $data = "";
-           $code = 400;                
-           return ResponseBuilder::result($status, $message, $error, $data, $code); 
-         }              
-     
-       }else{
-         $status = false;
-         $message ="user not save";
-         $error = "";
-         $data = "";
-         $code = 400;                
-         return ResponseBuilder::result($status, $message, $error, $data, $code);          
-       }
-   }else{
-     $status = false;
-     $message ="otp not generated and saved";
-     $error = "";
-     $data = "";
-     $code = 400;                
-     return ResponseBuilder::result($status, $message, $error, $data, $code); 
-   }    
-
-  }    
+                  if($err){
+                    $status = false;
+                    $message ="sms is not sent";
+                    $error = '';
+                    $data ="";
+                    $code = 400;
+                    return ResponseBuilder::result($status, $message, $error, $data, $code);
+                  }else if($response){
+                    $status = true;
+                    $message ="sms sent successfully";
+                    $error = "";
+                    $data = "";
+                    $code = 200;                
+                    return ResponseBuilder::result($status, $message, $error, $data, $code);
+                  }
+                  else {
+                    $status = false;
+                    $message ="your phone number can not be determined";
+                    $error = "";
+                    $data = "";
+                    $code = 400;                
+                    return ResponseBuilder::result($status, $message, $error, $data, $code); 
+                  }              
+              
+                }else{
+                  $status = false;
+                  $message ="user not save";
+                  $error = "";
+                  $data = "";
+                  $code = 400;                
+                  return ResponseBuilder::result($status, $message, $error, $data, $code);          
+                }
+            }else{
+              $status = false;
+              $message ="otp not generated and saved";
+              $error = "";
+              $data = "";
+              $code = 400;                
+              return ResponseBuilder::result($status, $message, $error, $data, $code); 
+            }    
+ 
+  }
+  
 
   public function verifyAgent(Request $request){
 

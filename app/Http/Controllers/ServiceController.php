@@ -120,23 +120,30 @@ class ServiceController extends Controller
                   $profile->service_type = $user->service_type;
                   $profile->save();
 
-                  //implemented sms
+             //implemented sms
                   $country_code = $country->get_country_code($request['country']);
-      
-                  $json_url = "http://api.ebulksms.com:8080/sendsms.json";
+                 // https://api.ebulksms.com:4433/sendsms.json
+                  //http://api.ebulksms.com:8080/sendsms.json
+                  $json_url = "https://api.ebulksms.com:4433/sendsms.json";
                   $username = 'admin@livestock247.com';
-                  $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
+                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
       
-                  $sendername = 'FME';
-                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FME App';
+                  $sendername = 'FarmEasy';
+                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEasy App';
       
-                                  $gsm = array();
-                  $country_code = $country_code;
-                  $arr_recipient = explode(',', ltrim($request['phone'], "0"));
-      
+                  
+                  $gsm = array();
+
+                  // remove the + sign from countrycode. ebulksms requiment for sending
+                  $country_code = trim($country_code->country_code, "+");  
+
+                  //remove first "0" from phone number             
+                  $arr_recipient = explode(',', trim($request['phone'], "0"));
+                  $phone =implode(',',$arr_recipient);
+
                   $generated_id = uniqid('int_', false);
                   $generated_id = substr($generated_id, 0, 30);
-                  $gsm['gsm'][] = array('msidn' => $arr_recipient, 'msgid' => $generated_id);
+                  $gsm['gsm'][] = array('msidn' => $country_code.$phone, 'msgid' => $generated_id);
       
                   $mss = array(
                   'sender' => $sendername,
@@ -219,6 +226,7 @@ class ServiceController extends Controller
             }    
  
   }
+  
 
   // get service type by request id
   public function getServiceTypeByRequest(Request $request){
