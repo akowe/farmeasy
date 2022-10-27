@@ -109,8 +109,8 @@ class UserController extends Controller
                   $username = 'admin@livestock247.com';
                   $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
       
-                  $sendername = 'FarmEasy';
-                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEasy App';
+                  $sendername = 'FarmEASY';
+                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
       
                   
                   $gsm = array();
@@ -595,66 +595,85 @@ class UserController extends Controller
         $otp->save();
 
       
-        $country_code = $country->get_country_code($request->country);
-        $sms_api_key = 'TLLXf8lLQZpsvuFouxWoN89YzoxL23RyXDUtDKAgNcniDpgGdpMUkgqxilO0tW';
-        $sms_message = 'Kindly use this '.$password_reset_code.' code to reset your password.'. "\r\n";
-        //$country_code = $country->get_country_code($query_country);
-        $payload = array(   
-          'to'=>$country_code.ltrim($request['phone'], '0'),
-          'from'=>'fastbeep',
-          'sms'=>$sms_message,
-          'channel'=> 'generic',
-          'type'=>'plain',
-          'api_key'=>$sms_api_key, 
-        );
-        $post_data = json_encode($payload);   
-            
-        if (isset($request['phone']) && !empty($request['phone'])) {
-          $curl = curl_init();
-          curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://api.ng.termii.com/api/sms/send',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          //CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_SSL_VERIFYPEER => false,
-          //CURLOPT_CAINFO, "C:/xampp/cacert.pem",
-          //CURLOPT_CAPATH, "C:/xampp/cacert.pem",
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS =>$post_data,
-          CURLOPT_HTTPHEADER => array(
-            'Content-Type: application/json'
-          ),
-          ));
-          $response = curl_exec($curl);
-          $err = curl_error($curl);
-          $res = json_decode($response, true);
-          
-          if($err){
-            return response()->json(["error"=>$err, "message"=>"Message is not sent"]);
-          }else{
-            if($response){
-              $status = true;
-              $message ="Message successfully sent";
-              $error = "";
-              $data = "";
-              $code = 200;                
-              return ResponseBuilder::result($status, $message, $error, $data, $code);   
-             
-            }else{
-              $status = true;
-              $message ="Message is not sent";
-              $error = "";
-              $data = "";
-              $code = 400;                
-              return ResponseBuilder::result($status, $message, $error, $data, $code);   
-                    
-            }
-          }
-                        
-        } else{
+         //implemented sms
+                  $country_code = $country->get_country_code($request['country']);
+                 // https://api.ebulksms.com:4433/sendsms.json
+                  //http://api.ebulksms.com:8080/sendsms.json
+                  $json_url = "https://api.ebulksms.com:4433/sendsms.json";
+                  $username = 'admin@livestock247.com';
+                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
+      
+                  $sendername = 'FarmEASY';
+                  $messagetext = 'Kindly use this '.$password_reset_code.' code to verify your account on FarmEASY App';
+      
+                  
+                  $gsm = array();
+
+                  // remove the + sign from countrycode. ebulksms requiment for sending
+                  $country_code = trim($country_code->country_code, "+");  
+
+                  //remove first "0" from phone number             
+                  $arr_recipient = explode(',', trim($request['phone'], "0"));
+                  $phone =implode(',',$arr_recipient);
+
+                  $generated_id = uniqid('int_', false);
+                  $generated_id = substr($generated_id, 0, 30);
+                  $gsm['gsm'][] = array('msidn' => $country_code.$phone, 'msgid' => $generated_id);
+      
+                  $mss = array(
+                  'sender' => $sendername,
+                  'messagetext' => $messagetext,
+              
+                  );
+                  $request = array('SMS' => array(
+                  'auth' => array(
+                  'username' => $username,
+                  'apikey' => $apikey
+                  ),
+                  'message' => $mss,
+                  'recipients' => $gsm
+                  ));
+      
+                  $json_data = json_encode($request);
+                  if($json_data) {
+      
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                    CURLOPT_URL => $json_url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    //CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    //CURLOPT_CAINFO, "C:/xampp/cacert.pem",
+                    //CURLOPT_CAPATH, "C:/xampp/cacert.pem",
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS =>$json_data,
+                      CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/json'
+                      )
+                    ));
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+                    $res = json_decode($response, true);
+                  }
+                  if($err){
+                    $status = false;
+                    $message ="sms is not sent";
+                    $error = '';
+                    $data ="";
+                    $code = 400;
+                    return ResponseBuilder::result($status, $message, $error, $data, $code);
+                  }else if($response){
+                    $status = true;
+                    $message ="sms sent successfully";
+                    $error = "";
+                    $data = "";
+                    $code = 200;                
+                    return ResponseBuilder::result($status, $message, $error, $data, $code);
+                  } else{
           $status = false;
           $message ="Phone number can not be determined";
           $error = "";
