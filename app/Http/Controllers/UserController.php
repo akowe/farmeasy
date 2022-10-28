@@ -106,8 +106,8 @@ class UserController extends Controller
                  // https://api.ebulksms.com:4433/sendsms.json
                   //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
-                  $username = 'admin@livestock247.com';
-                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
+                  $username = 'admin@riceafrika.com';
+                  $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
@@ -600,8 +600,8 @@ class UserController extends Controller
                  // https://api.ebulksms.com:4433/sendsms.json
                   //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
-                  $username = 'admin@livestock247.com';
-                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
+                  $username = 'admin@riceafrika.com';
+                  $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use this '.$password_reset_code.' code to reset your password on FarmEASY App';
