@@ -1073,6 +1073,7 @@ class AgentController extends Controller
 
 
 
+
 public function allAgentPayment (Request $request){
   $user_id = Auth::user()->id;
   $agent_phone = Auth::user()->phone;
@@ -1080,8 +1081,8 @@ public function allAgentPayment (Request $request){
   // fecth all payment transaction for the log in use
   
 $trans = Payment::Join('request', 'request.id', '=', 'payment.request_id')
-                ->leftjoin('users', 'users.id', '=', 'request.user_id') 
-                ->where('payment.agent_phone', $agent_phone)
+                ->leftjoin('users', 'users.id', '=', 'request.agent_id') 
+                ->where('users.id', $user_id)
                 ->get(['request.name', 'payment.amount', 'request.pay_status', 'request.service_type', 'request.farm_size']);
 
   if(!$trans)
