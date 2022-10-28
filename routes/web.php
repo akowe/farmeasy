@@ -331,9 +331,9 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->delete('delete_order_request', ['uses' => 'SuperAdminController@deleteOrderRequest']);
 
-    $router->delete('user', ['uses' => 'UserController@deleteUser']);
+    $router->delete('delete', ['uses' => 'UserController@deleteUser']);
 
-
+ 
   
 });
 

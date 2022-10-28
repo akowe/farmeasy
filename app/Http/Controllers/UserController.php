@@ -329,27 +329,28 @@ class UserController extends Controller
 
   public function deleteUser(Request $request){
 
-     // validation
+    //  // validation
      $validator =Validator::make($request->all(), [
       'id' => 'required'
     ]);      
 
-      if($validator->fails()){
-      $status = false;
-      $message ="";
-      $error = $validator->errors()->first();
-      $data = "";
-      $code = 400;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
-      } 
+    //   if($validator->fails()){
+    //   $status = false;
+    //   $message ="";
+    //   $error = $validator->errors()->first();
+    //   $data = "";
+    //   $code = 400;                
+    //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    //   } 
 
-      $id = $request->id;
+      //$id = $request->id;
+      $id = Auth::user()->id;
       $user  = User::where('id', $id)->first();
-     if(Gate::allows('destroy', $user)){
-        // validation
-        $validator =Validator ::make($request->all(), [
-          'id' => 'required'
-        ]);  
+     // if(Gate::allows('destroy', $user)){
+     //    // validation
+     //    $validator =Validator ::make($request->all(), [
+     //      'id' => 'required'
+     //    ]);  
         if($validator->fails()){
           $status = false;
           $message ="";
@@ -395,14 +396,14 @@ class UserController extends Controller
            }
         }
 
-     }else{
-      $status = false;
-      $message ="Not Authorized to delete a user";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-     }
+     // }else{
+     //  $status = false;
+     //  $message ="Not Authorized to delete a user";
+     //  $error = "";
+     //  $data = "";
+     //  $code = 401;                
+     //  return ResponseBuilder::result($status, $message, $error, $data, $code);
+     // }
      
   }
   
