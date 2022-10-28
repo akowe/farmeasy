@@ -295,8 +295,11 @@ class UserController extends Controller
       $getCode = $request->input('code');
 
       //check if exist
+       $user  = User::where('reg_code', $getCode)->first();
+
         $otp =  Otp::where('code', $getCode)->exists();
-        if($otp){
+        if($otp && $user->status =="pending"){
+
           $user  = User::where('reg_code', $getCode)
           ->update([
             'status' =>'verified'
@@ -314,10 +317,28 @@ class UserController extends Controller
           $data = "";
           $code = 200;                
           return ResponseBuilder::result($status, $message, $error, $data, $code); 
-       }else{
+       }elseif($otp && $user->status =="verified"){
         
         $status = false;
-        $message ="kindly put your right verification code";
+        $message ="Your account is verified, kindly proceed to login.";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+       }
+       elseif($otp && $user->status =="remove"){
+        
+        $status = false;
+        $message ="Your account was deleted. Kindly contact admin for re-activation.";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+       }
+
+       else{
+        $status = false;
+        $message ="Kindly put your right verification code";
         $error = "";
         $data = "";
         $code = 401;                
@@ -331,7 +352,7 @@ class UserController extends Controller
 
     //  // validation
      $validator =Validator::make($request->all(), [
-      'id' => 'required'
+      'id' => 'string'
     ]);      
 
     //   if($validator->fails()){
