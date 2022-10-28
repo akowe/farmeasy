@@ -352,7 +352,7 @@ class UserController extends Controller
 
     //  // validation
      $validator =Validator::make($request->all(), [
-      'id' => 'string'
+      "password" =>'required'
     ]);      
 
     //   if($validator->fails()){
@@ -372,6 +372,7 @@ class UserController extends Controller
      //    $validator =Validator ::make($request->all(), [
      //      'id' => 'required'
      //    ]);  
+
         if($validator->fails()){
           $status = false;
           $message ="";
@@ -379,7 +380,11 @@ class UserController extends Controller
           $data = "";
           $code = 401;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);   
-        }else{ 
+        }
+
+        //user enter password for double confirmation before deleting user
+        elseif (Hash::check($request->input('password'),$user->password)){ 
+         
           if($user->user_type =="1"){
             $status = true;
             $message ="Oops Can't delete the admin";
@@ -387,7 +392,7 @@ class UserController extends Controller
             $data = "";
             $code = 200;                
             return ResponseBuilder::result($status, $message, $error, $data, $code);         
-           }else if($user !="1"){
+           }elseif($user->password && $user !="1"){
             if($user->status =="remove"){
               $status = false;
               $message ="This user has already been deleted";
@@ -401,21 +406,21 @@ class UserController extends Controller
                 'status' =>'remove'
               ]);
               $status = true;
-              $message ="You have successfully deleted a user";
+              $message ="Your account was successfully deleted";
               $error = "";
               $data = "";
               $code = 200;                
               return ResponseBuilder::result($status, $message, $error, $data, $code); 
             } 
-           }else{
+           }
+        }else{
              $status = false;
-             $message ="User not found";
+             $message ="Invalid password";
              $error = "";
              $data = "";
              $code = 401;                
              return ResponseBuilder::result($status, $message, $error, $data, $code);  
            }
-        }
 
      // }else{
      //  $status = false;
