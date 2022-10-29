@@ -608,14 +608,25 @@ class UserController extends Controller
       ]);
      $country = new Country();
         //check if exist
-      $user =  User::where('phone', $request->phone)->exists();
+      //$user =  User::where('phone', $request->phone)->exists();
+
+      //check user status
+      $user =  User::where('phone', $request->phone)->where('status','!=','remove')->exists();
+      
       if($user){
 
-        // bulk sms will be replaced here
+        // generate new otp
         $password_reset_code  =random_int(100000, 999999); //random_code(6);
         $otp            = new Otp();
         $otp->code      = $password_reset_code;
         $otp->save();
+
+        //update user with otp
+        User::where('phone', $request['phone'])
+              ->update([
+                'status'=>'pending',
+                'reg_code'=> $password_reset_code 
+              ]);
 
       
          //implemented sms
@@ -629,6 +640,8 @@ class UserController extends Controller
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
                   $username = 'admin@riceafrika.com';
                   $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
+                  // $username = 'admin@livestock247.com';
+                  // $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use this '.$password_reset_code.' code to reset your password on FarmEASY App';
@@ -694,7 +707,7 @@ class UserController extends Controller
                     $data ="";
                     $code = 400;
                     return ResponseBuilder::result($status, $message, $error, $data, $code);
-                  }else if($response){
+                  }elseif($response){
                     $status = true;
                     $message ="sms sent successfully";
                     $error = "";
@@ -702,18 +715,25 @@ class UserController extends Controller
                     $code = 200;                
                     return ResponseBuilder::result($status, $message, $error, $data, $code);
                   } else{
-          $status = false;
-          $message ="Phone number can not be determined";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);   
-         
-        }
+                  $status = false;
+                  $message ="Phone number can not be determined";
+                  $error = "";
+                  $data = "";
+                  $code = 401;                
+                  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+                }
+      }elseif($user['status']=='remove'){
+         $status = false;
+                  $message ="this user was deleted. contact admin";
+                  $error = "";
+                  $data = "";
+                  $code = 401;                
+                  return ResponseBuilder::result($status, $message, $error, $data, $code);
       }
 
 
    }
+ 
 
    //reset new passowrd
    public  function userResetPassword(Request $request){
@@ -722,7 +742,7 @@ class UserController extends Controller
     $validator =Validator ::make($request->all(), [
       'phone' => 'required|min:11|numeric',
       'new_password' => 'required',
-      'reset' => 'reuired'
+      'reset_code' => 'reuired'
     ]);      
    if($validator->fails()){
     $status = false;
