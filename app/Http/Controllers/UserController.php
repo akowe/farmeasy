@@ -608,11 +608,8 @@ class UserController extends Controller
       ]);
      $country = new Country();
         //check if exist
-      //$user =  User::where('phone', $request->phone)->exists();
+    $user =  User::where('phone', $request->phone)->exists();
 
-      //check user status
-      $user =  User::where('phone', $request->phone)->where('status','!=','remove')->exists();
-      
       if($user){
 
         // generate new otp
@@ -624,19 +621,12 @@ class UserController extends Controller
         //update user with otp
         User::where('phone', $request['phone'])
               ->update([
-                'status'=>'pending',
                 'reg_code'=> $password_reset_code 
               ]);
 
       
          //implemented sms
 
-                  // $code = $country->get_country_code(json_decode($request['country'], true));
-                  // $get_code = explode(',', $code);
-                  // $country_code =implode(',',$get_code);
-
-                 // https://api.ebulksms.com:4433/sendsms.json
-                  //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
                   $username = 'admin@riceafrika.com';
                   $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
@@ -648,10 +638,6 @@ class UserController extends Controller
       
                   
                   $gsm = array();
-
-                  // remove the + sign from countrycode. ebulksms requiment for sending
-               
-                  //$country_code = trim($country_code->country_code, "+");  
 
                   //remove first "0" from phone number             
                   $arr_recipient = explode(',', trim($request['phone'], "0"));
@@ -722,13 +708,6 @@ class UserController extends Controller
                   $code = 401;                
                   return ResponseBuilder::result($status, $message, $error, $data, $code);   
                 }
-      }elseif($user['status']=='remove'){
-         $status = false;
-                  $message ="this user was deleted. contact admin";
-                  $error = "";
-                  $data = "";
-                  $code = 401;                
-                  return ResponseBuilder::result($status, $message, $error, $data, $code);
       }
 
 
@@ -754,6 +733,7 @@ class UserController extends Controller
    } 
         //check if exist
       $user =  User::where('reg_code', $request->reset_code)->exists();
+      
       if($user){
 
         $user  = User::where('phone', $request->phone)
@@ -801,7 +781,15 @@ class UserController extends Controller
     $condition= array('phone'=>$request->phone);
     $user = User::where($condition)->first();
     if($user){
-      if($user->status =="verified"){
+      if($user->status =="remove"){
+         $status = false;
+          $message ="This account was deleted. Contact admin";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }
+      elseif($user->status =="verified"){
         if (Hash::check($request->input('password'),$user->password)) {
           $apikey = base64_encode(str_random(40));
           User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
