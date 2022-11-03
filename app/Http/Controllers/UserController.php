@@ -106,8 +106,8 @@ class UserController extends Controller
                  // https://api.ebulksms.com:4433/sendsms.json
                   //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
-                  $username = 'admin@livestock247.com';
-                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
+                  $username = 'admin@riceafrika.com';
+                  $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
@@ -295,8 +295,11 @@ class UserController extends Controller
       $getCode = $request->input('code');
 
       //check if exist
+       $user  = User::where('reg_code', $getCode)->first();
+
         $otp =  Otp::where('code', $getCode)->exists();
-        if($otp){
+        if($otp && $user->status =="pending"){
+
           $user  = User::where('reg_code', $getCode)
           ->update([
             'status' =>'verified'
@@ -314,10 +317,28 @@ class UserController extends Controller
           $data = "";
           $code = 200;                
           return ResponseBuilder::result($status, $message, $error, $data, $code); 
-       }else{
+       }elseif($otp && $user->status =="verified"){
         
         $status = false;
-        $message ="kindly put your right verification code";
+        $message ="Your account is verified, kindly proceed to login.";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+       }
+       elseif($otp && $user->status =="remove"){
+        
+        $status = false;
+        $message ="Your account was deleted. Kindly contact admin for re-activation.";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code); 
+       }
+
+       else{
+        $status = false;
+        $message ="Kindly put your right verification code";
         $error = "";
         $data = "";
         $code = 401;                
@@ -329,27 +350,29 @@ class UserController extends Controller
 
   public function deleteUser(Request $request){
 
-     // validation
+    //  // validation
      $validator =Validator::make($request->all(), [
-      'id' => 'required'
+      "password" =>'required'
     ]);      
 
-      if($validator->fails()){
-      $status = false;
-      $message ="";
-      $error = $validator->errors()->first();
-      $data = "";
-      $code = 400;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);   
-      } 
+    //   if($validator->fails()){
+    //   $status = false;
+    //   $message ="";
+    //   $error = $validator->errors()->first();
+    //   $data = "";
+    //   $code = 400;                
+    //   return ResponseBuilder::result($status, $message, $error, $data, $code);   
+    //   } 
 
-      $id = $request->id;
+      //$id = $request->id;
+      $id = Auth::user()->id;
       $user  = User::where('id', $id)->first();
-     if(Gate::allows('destroy', $user)){
-        // validation
-        $validator =Validator ::make($request->all(), [
-          'id' => 'required'
-        ]);  
+     // if(Gate::allows('destroy', $user)){
+     //    // validation
+     //    $validator =Validator ::make($request->all(), [
+     //      'id' => 'required'
+     //    ]);  
+
         if($validator->fails()){
           $status = false;
           $message ="";
@@ -357,7 +380,11 @@ class UserController extends Controller
           $data = "";
           $code = 401;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);   
-        }else{ 
+        }
+
+        //user enter password for double confirmation before deleting user
+        elseif (Hash::check($request->input('password'),$user->password)){ 
+         
           if($user->user_type =="1"){
             $status = true;
             $message ="Oops Can't delete the admin";
@@ -365,7 +392,7 @@ class UserController extends Controller
             $data = "";
             $code = 200;                
             return ResponseBuilder::result($status, $message, $error, $data, $code);         
-           }else if($user !="1"){
+           }elseif($user->password && $user !="1"){
             if($user->status =="remove"){
               $status = false;
               $message ="This user has already been deleted";
@@ -379,30 +406,30 @@ class UserController extends Controller
                 'status' =>'remove'
               ]);
               $status = true;
-              $message ="You have successfully deleted a user";
+              $message ="Your account was successfully deleted";
               $error = "";
               $data = "";
               $code = 200;                
               return ResponseBuilder::result($status, $message, $error, $data, $code); 
             } 
-           }else{
+           }
+        }else{
              $status = false;
-             $message ="User not found";
+             $message ="Invalid password";
              $error = "";
              $data = "";
              $code = 401;                
              return ResponseBuilder::result($status, $message, $error, $data, $code);  
            }
-        }
 
-     }else{
-      $status = false;
-      $message ="Not Authorized to delete a user";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-     }
+     // }else{
+     //  $status = false;
+     //  $message ="Not Authorized to delete a user";
+     //  $error = "";
+     //  $data = "";
+     //  $code = 401;                
+     //  return ResponseBuilder::result($status, $message, $error, $data, $code);
+     // }
      
   }
   
@@ -581,37 +608,36 @@ class UserController extends Controller
       ]);
      $country = new Country();
         //check if exist
-      $user =  User::where('phone', $request->phone)->exists();
+    $user =  User::where('phone', $request->phone)->exists();
+
       if($user){
 
-        // bulk sms will be replaced here
+        // generate new otp
         $password_reset_code  =random_int(100000, 999999); //random_code(6);
         $otp            = new Otp();
         $otp->code      = $password_reset_code;
         $otp->save();
 
+        //update user with otp
+        User::where('phone', $request['phone'])
+              ->update([
+                'reg_code'=> $password_reset_code 
+              ]);
+
       
          //implemented sms
 
-                  // $code = $country->get_country_code(json_decode($request['country'], true));
-                  // $get_code = explode(',', $code);
-                  // $country_code =implode(',',$get_code);
-
-                 // https://api.ebulksms.com:4433/sendsms.json
-                  //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
-                  $username = 'admin@livestock247.com';
-                  $apikey = '7e1586c5af7a9cd560636cb78d6d16381847e5ba';
+                  $username = 'admin@riceafrika.com';
+                  $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
+                  // $username = 'admin@livestock247.com';
+                  // $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use this '.$password_reset_code.' code to reset your password on FarmEASY App';
       
                   
                   $gsm = array();
-
-                  // remove the + sign from countrycode. ebulksms requiment for sending
-               
-                  //$country_code = trim($country_code->country_code, "+");  
 
                   //remove first "0" from phone number             
                   $arr_recipient = explode(',', trim($request['phone'], "0"));
@@ -667,7 +693,7 @@ class UserController extends Controller
                     $data ="";
                     $code = 400;
                     return ResponseBuilder::result($status, $message, $error, $data, $code);
-                  }else if($response){
+                  }elseif($response){
                     $status = true;
                     $message ="sms sent successfully";
                     $error = "";
@@ -675,18 +701,18 @@ class UserController extends Controller
                     $code = 200;                
                     return ResponseBuilder::result($status, $message, $error, $data, $code);
                   } else{
-          $status = false;
-          $message ="Phone number can not be determined";
-          $error = "";
-          $data = "";
-          $code = 401;                
-          return ResponseBuilder::result($status, $message, $error, $data, $code);   
-         
-        }
+                  $status = false;
+                  $message ="Phone number can not be determined";
+                  $error = "";
+                  $data = "";
+                  $code = 401;                
+                  return ResponseBuilder::result($status, $message, $error, $data, $code);   
+                }
       }
 
 
    }
+ 
 
    //reset new passowrd
    public  function userResetPassword(Request $request){
@@ -695,7 +721,7 @@ class UserController extends Controller
     $validator =Validator ::make($request->all(), [
       'phone' => 'required|min:11|numeric',
       'new_password' => 'required',
-      'reset' => 'reuired'
+      'reset_code' => 'reuired'
     ]);      
    if($validator->fails()){
     $status = false;
@@ -707,6 +733,7 @@ class UserController extends Controller
    } 
         //check if exist
       $user =  User::where('reg_code', $request->reset_code)->exists();
+      
       if($user){
 
         $user  = User::where('phone', $request->phone)
@@ -754,7 +781,15 @@ class UserController extends Controller
     $condition= array('phone'=>$request->phone);
     $user = User::where($condition)->first();
     if($user){
-      if($user->status =="verified"){
+      if($user->status =="remove"){
+         $status = false;
+          $message ="This account was deleted. Contact admin";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      }
+      elseif($user->status =="verified"){
         if (Hash::check($request->input('password'),$user->password)) {
           $apikey = base64_encode(str_random(40));
           User::where('phone', $request->input('phone'))->update(['api_key' => $apikey]);
