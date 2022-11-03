@@ -1934,7 +1934,9 @@ public function HireHarrow(Request $request){
 
   public function getFarmers(){
     //get all farmers 
-    $user_farmers = User::where('user_type', '4')->get();
+    $user_farmers =  User::Join('profile','profile.user_id', '=', 'users.id')
+                  ->where('users.user_type', '4')
+                  ->get(['users.*', 'profile.*']);
 
     if (!$user_farmers ){
       $status = false;

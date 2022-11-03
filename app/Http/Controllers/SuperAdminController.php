@@ -169,10 +169,14 @@ class SuperAdminController extends Controller
 } 
 
 
-  // fetch all request 
+  // fetch all request  with user details
   public function allRequest(){
 
     $all_orders = OrderRequest::all();
+    
+    // $all_orders = OrderRequest::Join('users','users.id', '=', 'request.agent_id')
+    //               ->where('users.user_type', '3')
+    //               ->get(['users.*', 'profile.*']);
     
     $status = true;
     $message ="";
@@ -232,7 +236,7 @@ class SuperAdminController extends Controller
   //add service type
   public function addServiceType(Request $request, User $user){
 
-    if(Gate::allows('create', $user)){
+    // if(Gate::allows('create', $user)){
       // validation
       $validator =Validator::make($request->all(), [
         'service' => 'required'
@@ -257,15 +261,16 @@ class SuperAdminController extends Controller
           return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
       } 
-    }else{
-      $status = false;
-      $message ="Not Authorized to add new service type";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-    }      
-  }
+    }
+    // else{
+    //   $status = false;
+    //   $message ="Not Authorized to add new service type";
+    //   $error = "";
+    //   $data = "";
+    //   $code = 401;                
+    //   return ResponseBuilder::result($status, $message, $error, $data, $code);
+    // }      
+  //}
 
 
  //add farm type
@@ -273,7 +278,8 @@ class SuperAdminController extends Controller
 
     // validation
     $validator =Validator::make($request->all(), [
-      'farm' => 'required'
+      'farm' => 'required',
+      'status'=> 'string'
     ]);      
     if($validator->fails()){
     $status = false;
@@ -285,6 +291,7 @@ class SuperAdminController extends Controller
     }else{
         $farmType = new FarmType();
         $farmType->farm = $request->farm;
+        $farmType->status = $request->status;
         $farmType->save();
 
         $status = true;
@@ -411,6 +418,7 @@ class SuperAdminController extends Controller
       // validation
       $validator =Validator::make($request->all(), [
       'farm' => 'required',
+      'status' => 'string',
       'farm_type_id' => 'required'
 
       ]);        
@@ -423,13 +431,15 @@ class SuperAdminController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code);   
       } 
       $farm_type = $request->farm;
+      $status =   $request->status;
       $farm_type_id = $request->farm_type_id;
       $farmTypeResult  = FarmType::where('id', $farm_type_id)->first();  
       if($farmTypeResult){
 
         $farmTypeResult = FarmType::where('id', $farm_type_id)
           ->update([
-          'farm' =>$farm_type 
+          'farm' =>$farm_type,
+          'status' =>$status  
           ]);
           $status = true;
           $message ="You have successfully updated the farm type";

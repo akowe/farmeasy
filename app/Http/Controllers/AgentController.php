@@ -1106,7 +1106,9 @@ class AgentController extends Controller
 
    public function getAgents(){
     //get all agents 
-    $user_agents = BecomeAgent::all();
+   $user_agents = User::Join('profile','profile.user_id', '=', 'users.id')
+                  ->where('users.user_type', '3')
+                  ->get(['users.*', 'profile.*']);
 
     if (!$user_agents ){
       $status = false;
@@ -1125,7 +1127,35 @@ class AgentController extends Controller
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);    
      }  
+}  
+
+
+
+
+
+  public function becomeAgent(){
+    //get all request to be an  agent from mobile app 
+    $user_agents = BecomeAgent::all();
+
+    if (!$user_agents ){
+      $status = false;
+      $message ="No request to ba agent currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $user_agents;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }  
 }   
+
 
 
 

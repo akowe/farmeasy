@@ -75,11 +75,9 @@ class AdminController extends Controller
         'service_type' => 'required',
         'user_id' => 'required',
         'name' => 'required',
-        'sp_id' => 'required',
         'phone' => 'required|min:11||numeric',
-        'measurement' => 'required|numeric',
-        'amount' => 'required|numeric',
         'location' => 'required',
+        'farm_type'=>'required',
    ]);      
     if($validator->fails()){
      $status = false;
@@ -89,16 +87,14 @@ class AdminController extends Controller
      $code = 401;                
      return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }else{
-        $amount = $request->measurement * $request->amount;
+      
         $orderRequest = new OrderRequest();
         $orderRequest->user_id = $request->user_id;
         $orderRequest->name = $request->name;
         $orderRequest->phone = $request->phone;
-        $orderRequest->amount = $amount;
         $orderRequest->location = $request->location;
-        $orderRequest->farm_size = $request->measurement;
         $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
-        $orderRequest->sp_id =$request->sp_id; //this should be selest from dropdown
+        $orderRequest->farm_type =$request->farm_type;
         $orderRequest->status = "pending";
         $orderRequest->save();
         $status = true;

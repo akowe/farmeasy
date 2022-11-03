@@ -1581,7 +1581,9 @@ class ServiceController extends Controller
 
 public function getServiceProviders(){
     //get service providers
-    $users = User::where('user_type', '5')->get();
+    $users = User::Join('profile','profile.user_id', '=', 'users.id')
+                  ->where('users.user_type', '5')
+                  ->get(['users.*', 'profile.*']);
 
     if (!$users){
       $status = false;
