@@ -127,7 +127,11 @@ class PaymentController extends Controller
   //fetch all payments
   public function allPayments(User $user){
 
-      $all_payments = Payment::all();
+      // $all_payments = Payment::all();
+   $all_payments =  Payment::Join('request', 'request.id', '=', 'payment.request_id')
+                ->Join('users', 'users.id', '=', 'request.agent_id')
+                ->Join('profile', 'profile.user_id', '=', 'users.id')
+                ->get(['payment.*',  'users.name', 'users.phone', 'profile.*']);
       $status = true;
       $message ="";
       $error = "";
