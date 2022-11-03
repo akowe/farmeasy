@@ -68,7 +68,7 @@ class AdminController extends Controller
 
     //admin request for service 
     public function requestService(Request $request){
-      
+
       // validation
       $validator =Validator ::make($request->all(), [
 
@@ -91,7 +91,7 @@ class AdminController extends Controller
     }else{
         $amount = $request->measurement * $request->amount;
         $orderRequest = new OrderRequest();
-        $orderRequest->user_id = Auth::user()->id;
+        $orderRequest->user_id = $request->user_id;
         $orderRequest->name = $request->name;
         $orderRequest->phone = $request->phone;
         $orderRequest->amount = $amount;

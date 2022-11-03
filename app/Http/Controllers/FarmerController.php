@@ -235,7 +235,7 @@ class FarmerController extends Controller
   // fetch all farm types
   public function allFarmTypes(){
  
-    $all_farm_types  = FarmType::where("status","=", NULL)->get();
+    $all_farm_types  = FarmType::all();
     $status = true;
     $message ="";
     $error = "";
@@ -1363,7 +1363,7 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
+            $mail->Username = "fmeapp@riceafrika.com";
             $mail->Password = "oxqoiqibtejlalmz";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
@@ -1930,5 +1930,31 @@ public function HireHarrow(Request $request){
     }
 
   }
+
+
+  public function getFarmers(){
+    //get all farmers 
+    $user_farmers = User::where('user_type', '4')->get();
+
+    if (!$user_farmers ){
+      $status = false;
+      $message ="No Farmer currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $user_farmers;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }  
+}   
+
+
 
 }

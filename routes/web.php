@@ -91,6 +91,33 @@ $router->group(['prefix' => 'api'], function () use ($router) {
      $router->get('vendor', ['uses' => 'ServiceController@countVendorsBYServiceTypes']);
 
 
+     //Admin
+
+    $router->get('all_request', ['uses' => 'SuperAdminController@allRequest']);
+
+    $router->get('agents_by_location', ['uses' => 'AgentController@getAgentsByLocation']); 
+
+    $router->get('service_providers', ['uses' => 'ServiceController@getServiceProviders']);
+
+    $router->get('all_agents', ['uses' => 'AgentController@getAgents']);
+
+    $router->get('all_farmers', ['uses' => 'FarmerController@getFarmers']);
+    
+    $router->post('admin_request', ['uses' => 'AdminController@requestService']);
+    
+    $router->get('all_payments', ['uses' => 'PaymentController@allPayments']); 
+
+    $router->post('add_service_type', ['uses' => 'SuperAdminController@addServiceType']); 
+
+    $router->post('add_farm_type', ['uses' => 'SuperAdminController@addFarmType']);
+
+    $router->get('edit_farm_type', ['uses' => 'SuperAdminController@editFarmType']);
+
+    $router->put('update_farm_type', ['uses' => 'SuperAdminController@updateFarmType']);
+
+    $router->get('edit_service_type', ['uses' => 'SuperAdminController@editServiceType']);
+
+    $router->put('update_service_type', ['uses' => 'SuperAdminController@updateServiceType']);
 
 });
 
@@ -202,8 +229,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('agent_request', ['uses' => 'AgentController@requestService']);
 
-    $router->get('agents', ['uses' => 'AgentController@getAgentsByLocation']); 
-
     $router->post('sell', ['uses' => 'AgentController@forSell']); 
 
     $router->get('all_for_sell', ['uses' => 'AgentController@allForSell']);
@@ -215,7 +240,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->put('payment', ['uses' => 'PaymentController@payment']); 
 
-    $router->get('all_payments', ['uses' => 'PaymentController@allPayments']); 
+
 
 
 
@@ -249,8 +274,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
      $router->get('treasher_service_provider', ['uses' => 'ServiceController@getServiceProvidersByTreasher']);
 
-     $router->get('service_providers', ['uses' => 'ServiceController@getServiceProviders']);
-
 
     $router->get('service_providers_by_service_type', ['uses' => 'ServiceController@getServiceProvidersByServiceType']);
 
@@ -282,7 +305,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     // ADMIN
     $router->get('users', ['uses' => 'UserController@index']);
 
-    $router->post('admin_request', ['uses' => 'AdminController@requestService']);
 
     $router->post('agent', ['uses' => 'UserController@createAgent']); 
 
@@ -297,19 +319,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->put('update_price', ['uses' => 'PriceController@updatePrice']);
 
-    $router->post('add_service_type', ['uses' => 'SuperAdminController@addServiceType']); 
-
-    $router->post('add_farm_type', ['uses' => 'SuperAdminController@addFarmType']);
-
-    $router->get('edit_service_type', ['uses' => 'SuperAdminController@editServiceType']);
-
-    $router->get('edit_farm_type', ['uses' => 'SuperAdminController@editFarmType']);
-
     $router->get('services', ['uses' => 'SuperAdminController@allServiceType']);
-
-    $router->put('update_service_type', ['uses' => 'SuperAdminController@updateServiceType']);
-
-    $router->put('update_farm_type', ['uses' => 'SuperAdminController@updateFarmType']);
 
     $router->delete('delete_farm_type', ['uses' => 'SuperAdminController@deleteFarmType']);
 
@@ -326,8 +336,6 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
 
     $router->post('agent', ['uses' => 'UserController@createAgent']); 
-
-    $router->get('all_request', ['uses' => 'SuperAdminController@allRequest']);
 
     $router->delete('delete_order_request', ['uses' => 'SuperAdminController@deleteOrderRequest']);
 

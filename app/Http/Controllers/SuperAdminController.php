@@ -271,7 +271,6 @@ class SuperAdminController extends Controller
  //add farm type
  public function addFarmType(Request $request, User $user){
 
-  if(Gate::allows('create', $user)){
     // validation
     $validator =Validator::make($request->all(), [
       'farm' => 'required'
@@ -296,18 +295,10 @@ class SuperAdminController extends Controller
         return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
     } 
-  }else{
-    $status = false;
-    $message ="Not Authorized to add new farm type";
-    $error = "";
-    $data = "";
-    $code = 401;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);
-  }      
 }  
   // edit service type
-  public function editServiceType(Request $request, User $user){
-    if(Gate::allows('edit', $user)){
+  public function editServiceType(Request $request){
+
       // validation
       $validator =Validator::make($request->all(), [
       'service_type_id' => 'required'
@@ -339,34 +330,16 @@ class SuperAdminController extends Controller
           $code = 401;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);  
       }
-    }else{
-      $status = false;
-      $message ="Not Authorized to edit the service type";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-    }    
      
   }  
    
  // edit farm type
- public function editFarmType(Request $request, User $user){
-  if(Gate::allows('edit', $user)){
-    // validation
-    $validator =Validator::make($request->all(), [
-    'farm_type_id' => 'required'
-    ]);        
-    if($validator->fails()){
-    $status = false;
-    $message ="";
-    $error = $validator->errors()->first();
-    $data = "";
-    $code = 400;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);   
-    } 
+ public function editFarmType(Request $request){
+ 
     $farm_type_id = $request->farm_type_id;
-    $farmTypeResult  = FarmType::where('id', $farm_type_id )->first();  
+
+    $farmTypeResult  = FarmType::where('id', $farm_type_id)->first(); 
+ 
     if($farmTypeResult){
       $status = true;
       $message ="";
@@ -384,21 +357,12 @@ class SuperAdminController extends Controller
         $code = 401;                
         return ResponseBuilder::result($status, $message, $error, $data, $code);  
     }
-  }else{
-    $status = false;
-    $message ="Not Authorized to edit the farm type";
-    $error = "";
-    $data = "";
-    $code = 401;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);
-  }    
    
 }  
 
   //update service type
-  public function updateServiceType(Request $request, User $user){
+  public function updateServiceType(Request $request){
 
-    if(Gate::allows('update', $user)){
       // validation
       $validator =Validator::make($request->all(), [
       'service' => 'required',
@@ -438,21 +402,12 @@ class SuperAdminController extends Controller
           $code = 401;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);  
       }
-    }else{
-      $status = false;
-      $message ="Not Authorized to update service type";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-    }    
      
   } 
   
    //update farm type
-   public function updateFarmType(Request $request, User $user){
+   public function updateFarmType(Request $request){
 
-    if(Gate::allows('update', $user)){
       // validation
       $validator =Validator::make($request->all(), [
       'farm' => 'required',
@@ -492,14 +447,6 @@ class SuperAdminController extends Controller
           $code = 401;                
           return ResponseBuilder::result($status, $message, $error, $data, $code);  
       }
-    }else{
-      $status = false;
-      $message ="Not Authorized to update farm type";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-    }    
      
   }  
   

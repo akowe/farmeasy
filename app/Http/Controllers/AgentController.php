@@ -18,6 +18,7 @@ use App\UserProfile;
 use Carbon\Profile;
 use App\ServiceType;
 use App\Payment;
+use App\BecomeAgent;
 use App\Price;
 use App\AgentNotification;
 use App\FarmerNotification;
@@ -377,6 +378,38 @@ class AgentController extends Controller
 
   }  
 
+  // all agents by location
+  public function getAgentsByLocation(Request $request){
+     $location = $request->location;
+    $profiles = UserProfile::where(['location' => $location])->get();
+
+
+
+
+    if($profiles){
+      $agents = array();
+      foreach($profiles as $profile){
+        $user = User::where(['id' => $profile->user_id])->first();
+        $agents[] = ["agent_id" => $user->id,"name" => $user->name];
+      }
+      $status = true;
+      $message ="";
+      $error = "";
+      $data = $agents;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }else{
+      $status = false;
+      $message ="";
+      $error = "";
+      $data = "No agents is found";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code); 
+  
+    }
+
+  }  
 
 
   // all farmer tractor Request in his location
@@ -1071,6 +1104,28 @@ class AgentController extends Controller
    } 
 
 
+   public function getAgents(){
+    //get all agents 
+    $user_agents = BecomeAgent::all();
+
+    if (!$user_agents ){
+      $status = false;
+      $message ="No Agent currently avaliable";
+      $error = "";
+      $data = "";
+      $code = 401;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+      
+     else{
+        $status = true;
+      $message ="";
+      $error = "";
+      $data = $user_agents;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);    
+     }  
+}   
 
 
 public function allAgentPayment (Request $request){

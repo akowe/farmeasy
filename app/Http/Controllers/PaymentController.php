@@ -126,7 +126,7 @@ class PaymentController extends Controller
 
   //fetch all payments
   public function allPayments(User $user){
-    if(Gate::allows('view', $user)){
+
       $all_payments = Payment::all();
       $status = true;
       $message ="";
@@ -134,14 +134,6 @@ class PaymentController extends Controller
       $data = $all_payments;
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code); 
-   }else{
-    $status = false;
-    $message ="Not Authorized to view all payment transactions";
-    $error = "";
-    $data = "";
-    $code = 401;                
-    return ResponseBuilder::result($status, $message, $error, $data, $code);
-   }    
 
   }
 
