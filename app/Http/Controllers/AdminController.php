@@ -45,26 +45,8 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-      //create superadmin  
-      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      // $user->ip = 'none';
-      // $user->name ="superadmin";
-      // $user->phone ="08188373898";
-      // $user->country      = 'Nigeria';
-      // $user->country_code ='+234';
-      // $user->user_type   =  '1'; // can select from role table
-      // $user->password    = Hash::make('password');
-      // $user->status      = 'verified';
-      // $user->save();
-
-      // $status = false;
-      // $message ="User already exist";
-      // $error = "";
-      // $data = "";
-      // $code = 401;                
-      // return ResponseBuilder::result($status, $message, $error, $data, $code);
+    
     }
-
 
     //admin request for service 
     public function requestService(Request $request){
