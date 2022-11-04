@@ -124,7 +124,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 
        // ADMIN
-    $router->get('users', ['uses' => 'UserController@index']);
+    $router->get('all_users', ['uses' => 'UserController@index']);
 
     //create agent
     $router->post('agent', ['uses' => 'UserController@createAgent']); 

@@ -537,10 +537,8 @@ class UserController extends Controller
 
 // this should be for admin only
   public function index(){
-
-    if(in_array(Auth::user()->user_type,array('1','2'))  ){
- 
-      $users  = User::all();
+    $user_type = '1';
+      $users  = User::where('user_type', '!=', $user_type)->get();
       $status = true;
       $message ="";
       $error = "";
@@ -548,16 +546,9 @@ class UserController extends Controller
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);
     }
-    else{
-      $status = false;
-        $message ="You don't have permission to view this page";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);   
-    }
+    
  
-  }
+  
 
   public function user(Request $request){
   $id = Auth::user()->id;
