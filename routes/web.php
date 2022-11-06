@@ -126,6 +126,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
        // ADMIN
     $router->get('all_users', ['uses' => 'UserController@index']);
 
+    $router->get('edit_user', ['uses' => 'SuperAdminController@editUser']);
+
+    $router->put('update_user', ['uses' => 'SuperAdminController@updateUser']);
+
     //create agent
     $router->post('agent', ['uses' => 'UserController@createAgent']); 
 

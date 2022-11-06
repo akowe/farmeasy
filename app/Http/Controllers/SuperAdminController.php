@@ -565,4 +565,84 @@ class SuperAdminController extends Controller
  
 
 
+
+ // edit users
+ public function editUser(Request $request){
+ 
+    $id = $request->id;
+
+    $userResult  = User::where('id', $id)->first(); 
+ 
+    if($userResult){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data =$userResult;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+    }else{
+        $status = false;
+        $message ="User not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+   
+}  
+
+
+
+   //update farm type
+   public function updateUser(Request $request){
+
+      // validation
+      $validator =Validator::make($request->all(), [
+      'name' => 'string',
+      'status' => 'string',
+      'id' => 'required'
+
+      ]);        
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+      $name = $request->name;
+      $status =   $request->status;
+      $id = $request->id;
+      $userResult  = User::where('id', $id)->first();  
+      if($userResult ){
+
+         $userResult  = User::where('id', $id)
+          ->update([
+          'name' =>$name,
+          'status' =>$status  
+          ]);
+          $status = true;
+          $message ='You have successfully updated '.$name.'';
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+      }else{
+          $status = false;
+          $message ="User not found";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+     
+  }  
+
+
+
 }
