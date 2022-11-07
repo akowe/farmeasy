@@ -134,7 +134,7 @@ class FarmerController extends Controller
                   $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
       
                   $sendername = 'FarmEASY';
-                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
+                  $messagetext = 'Kindly use '.$reg_code.' to verify your account on FarmEASY App';
       
                   
                   $gsm = array();

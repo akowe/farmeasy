@@ -111,7 +111,7 @@ class UserController extends Controller
                   $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
       
                   $sendername = 'FarmEASY';
-                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
+                  $messagetext = 'Kindly use '.$reg_code.' to verify your account on FarmEASY App';
       
                   
                   $gsm = array();
@@ -626,7 +626,7 @@ class UserController extends Controller
                   // $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
       
                   $sendername = 'FarmEASY';
-                  $messagetext = 'Kindly use this '.$password_reset_code.' code to reset your password on FarmEASY App';
+                  $messagetext = 'Kindly use  '.$password_reset_code.'  to reset your password on FarmEASY App';
       
                   
                   $gsm = array();
