@@ -161,7 +161,7 @@ class SuperAdminController extends Controller
   // fetch all request  with user details
   public function allRequest(){
 
-    $all_orders = OrderRequest::all();
+    $all_orders = OrderRequest::orderByDesc('created_at')->get();
     
     // $all_orders = OrderRequest::Join('users','users.id', '=', 'request.agent_id')
     //               ->where('users.user_type', '3')

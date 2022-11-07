@@ -1135,7 +1135,7 @@ class AgentController extends Controller
 
   public function becomeAgent(){
     //get all request to be an  agent from mobile app 
-    $user_agents = BecomeAgent::all();
+    $user_agents = BecomeAgent::orderByDesc('created_at')->get();
 
     if (!$user_agents ){
       $status = false;

@@ -538,7 +538,7 @@ class UserController extends Controller
 // this should be for admin only
   public function index(){
     $user_type = '1';
-      $users  = User::where('user_type', '!=', $user_type)->get();
+      $users  = User::where('user_type', '!=', $user_type)->orderByDesc('created_at')->get();
       $status = true;
       $message ="";
       $error = "";
