@@ -721,7 +721,7 @@ class UserController extends Controller
     $validator =Validator ::make($request->all(), [
       'phone' => 'required|min:11|numeric',
       'new_password' => 'required',
-      'reset_code' => 'reuired'
+      'reset_code' => 'required'
     ]);      
    if($validator->fails()){
     $status = false;
