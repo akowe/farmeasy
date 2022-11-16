@@ -96,6 +96,7 @@ class UserController extends Controller
        // upon successful registration create profile for user so user can edit their profile later
          $profile            = new UserProfile();
          $profile->user_id   = $user->id;
+  
          $profile->save();
         
         
@@ -110,7 +111,7 @@ class UserController extends Controller
                   $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
       
                   $sendername = 'FarmEASY';
-                  $messagetext = 'Kindly use this '.$reg_code.' code to verify your account on FarmEASY App';
+                  $messagetext = 'Kindly use '.$reg_code.' to verify your account on FarmEASY App';
       
                   
                   $gsm = array();
@@ -536,10 +537,8 @@ class UserController extends Controller
 
 // this should be for admin only
   public function index(){
-
-    if(in_array(Auth::user()->user_type,array('1','2'))  ){
- 
-      $users  = User::all();
+    $user_type = '1';
+      $users  = User::where('user_type', '!=', $user_type)->orderByDesc('created_at')->get();
       $status = true;
       $message ="";
       $error = "";
@@ -547,16 +546,9 @@ class UserController extends Controller
       $code = 200;                
       return ResponseBuilder::result($status, $message, $error, $data, $code);
     }
-    else{
-      $status = false;
-        $message ="You don't have permission to view this page";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);   
-    }
+    
  
-  }
+  
 
   public function user(Request $request){
   $id = Auth::user()->id;
@@ -634,7 +626,7 @@ class UserController extends Controller
                   // $apikey = '9f55c26a56608eaf6f3587b630513695921fa4ba';
       
                   $sendername = 'FarmEASY';
-                  $messagetext = 'Kindly use this '.$password_reset_code.' code to reset your password on FarmEASY App';
+                  $messagetext = 'Kindly use  '.$password_reset_code.'  to reset your password on FarmEASY App';
       
                   
                   $gsm = array();

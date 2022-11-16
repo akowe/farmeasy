@@ -45,26 +45,8 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-      //create superadmin  
-      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      // $user->ip = 'none';
-      // $user->name ="superadmin";
-      // $user->phone ="08188373898";
-      // $user->country      = 'Nigeria';
-      // $user->country_code ='+234';
-      // $user->user_type   =  '1'; // can select from role table
-      // $user->password    = Hash::make('password');
-      // $user->status      = 'verified';
-      // $user->save();
-
-      // $status = false;
-      // $message ="User already exist";
-      // $error = "";
-      // $data = "";
-      // $code = 401;                
-      // return ResponseBuilder::result($status, $message, $error, $data, $code);
+    
     }
-
 
     //admin request for service 
     public function requestService(Request $request){
@@ -75,11 +57,9 @@ class AdminController extends Controller
         'service_type' => 'required',
         'user_id' => 'required',
         'name' => 'required',
-        'sp_id' => 'required',
         'phone' => 'required|min:11||numeric',
-        'measurement' => 'required|numeric',
-        'amount' => 'required|numeric',
         'location' => 'required',
+        'farm_type'=>'required',
    ]);      
     if($validator->fails()){
      $status = false;
@@ -89,16 +69,14 @@ class AdminController extends Controller
      $code = 401;                
      return ResponseBuilder::result($status, $message, $error, $data, $code);   
     }else{
-        $amount = $request->measurement * $request->amount;
+      
         $orderRequest = new OrderRequest();
         $orderRequest->user_id = $request->user_id;
         $orderRequest->name = $request->name;
         $orderRequest->phone = $request->phone;
-        $orderRequest->amount = $amount;
         $orderRequest->location = $request->location;
-        $orderRequest->farm_size = $request->measurement;
         $orderRequest->service_type =$request->service_type;// this should be select fromdropdown
-        $orderRequest->sp_id =$request->sp_id; //this should be selest from dropdown
+        $orderRequest->farm_type =$request->farm_type;
         $orderRequest->status = "pending";
         $orderRequest->save();
         $status = true;

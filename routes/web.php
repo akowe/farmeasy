@@ -84,7 +84,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
 
-    //request to become an agent
+    //request form to become an agent
     $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
 
       //count service providers as vendor by service type
@@ -100,6 +100,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('service_providers', ['uses' => 'ServiceController@getServiceProviders']);
 
     $router->get('all_agents', ['uses' => 'AgentController@getAgents']);
+    
+    //view all form request to be an agent from mobile app
+    $router->get('all_become_agent', ['uses' => 'AgentController@becomeAgent']);
 
     $router->get('all_farmers', ['uses' => 'FarmerController@getFarmers']);
     
@@ -119,8 +122,53 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->put('update_service_type', ['uses' => 'SuperAdminController@updateServiceType']);
 
+
+       // ADMIN
+    $router->get('all_users', ['uses' => 'UserController@index']);
+
+    $router->get('edit_user', ['uses' => 'SuperAdminController@editUser']);
+
+    $router->put('update_user', ['uses' => 'SuperAdminController@updateUser']);
+
+    //create agent
+    $router->post('agent', ['uses' => 'UserController@createAgent']); 
+
+    $router->put('edit_farmer_request', ['uses' => 'AdminController@editFarmerAgent']);
+
+    $router->put('assign_request_to_agent', ['uses' => 'AdminController@assignRequestToAgent']); 
+ 
+
+    $router->get('prices', ['uses' => 'PriceController@allPrice']);
+
+    $router->get('price', ['uses' => 'PriceController@editPrice']);
+
+    $router->put('update_price', ['uses' => 'PriceController@updatePrice']);
+
+    $router->get('services', ['uses' => 'SuperAdminController@allServiceType']);
+
+    $router->delete('delete_farm_type', ['uses' => 'SuperAdminController@deleteFarmType']);
+
+    $router->delete('delete_service_type', ['uses' => 'SuperAdminController@deleteServiceType']);
+
+    $router->get('get_price_by_service_type', ['uses' => 'PriceController@getPriceByServiceType']);
+
+   
+    
+
+    //SUPER ADMIN
+    $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
+
+    $router->post('agent', ['uses' => 'UserController@createAgent']); 
+
+    $router->delete('delete_order_request', ['uses' => 'SuperAdminController@deleteOrderRequest']);
+
+    $router->delete('delete', ['uses' => 'UserController@deleteUser']);
+
+
 });
 
+
+//Authentication start here
 
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     
@@ -302,45 +350,7 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
     $router->put('end_service', ['uses' => 'ServiceController@endService']); 
 
 
-    // ADMIN
-    $router->get('users', ['uses' => 'UserController@index']);
-
-
-    $router->post('agent', ['uses' => 'UserController@createAgent']); 
-
-    $router->put('edit_farmer_request', ['uses' => 'AdminController@editFarmerAgent']);
-
-    $router->put('assign_request_to_agent', ['uses' => 'AdminController@assignRequestToAgent']); 
  
-
-    $router->get('prices', ['uses' => 'PriceController@allPrice']);
-
-    $router->get('price', ['uses' => 'PriceController@editPrice']);
-
-    $router->put('update_price', ['uses' => 'PriceController@updatePrice']);
-
-    $router->get('services', ['uses' => 'SuperAdminController@allServiceType']);
-
-    $router->delete('delete_farm_type', ['uses' => 'SuperAdminController@deleteFarmType']);
-
-    $router->delete('delete_service_type', ['uses' => 'SuperAdminController@deleteServiceType']);
-
-    $router->get('get_price_by_service_type', ['uses' => 'PriceController@getPriceByServiceType']);
-
-   
-    
-
-    
-
-    //SUPER ADMIN
-    $router->post('admin', ['uses' => 'SuperAdminController@createAdmin']);
-
-    $router->post('agent', ['uses' => 'UserController@createAgent']); 
-
-    $router->delete('delete_order_request', ['uses' => 'SuperAdminController@deleteOrderRequest']);
-
-    $router->delete('delete', ['uses' => 'UserController@deleteUser']);
-
  
   
 });

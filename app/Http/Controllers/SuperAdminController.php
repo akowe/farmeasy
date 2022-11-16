@@ -48,17 +48,6 @@ class SuperAdminController extends Controller
 
     public function __construct()
     {
-      //create superadmin  
-      // $user = User::firstOrNew(['name' => 'superadmin', 'phone' => '08188373898']);
-      // $user->ip = 'none';
-      // $user->name ="superadmin";
-      // $user->phone ="08188373898";
-      // $user->country      = 'Nigeria';
-      // $user->country_code ='+234';
-      // $user->user_type   =  '1'; // can select from role table
-      // $user->password    = Hash::make('password');
-      // $user->status      = 'verified';
-      // $user->save();
     }    
     // create admin 
     public function createAdmin(Request $request){
@@ -169,10 +158,14 @@ class SuperAdminController extends Controller
 } 
 
 
-  // fetch all request 
+  // fetch all request  with user details
   public function allRequest(){
 
-    $all_orders = OrderRequest::all();
+    $all_orders = OrderRequest::orderByDesc('created_at')->get();
+    
+    // $all_orders = OrderRequest::Join('users','users.id', '=', 'request.agent_id')
+    //               ->where('users.user_type', '3')
+    //               ->get(['users.*', 'profile.*']);
     
     $status = true;
     $message ="";
@@ -232,7 +225,7 @@ class SuperAdminController extends Controller
   //add service type
   public function addServiceType(Request $request, User $user){
 
-    if(Gate::allows('create', $user)){
+    // if(Gate::allows('create', $user)){
       // validation
       $validator =Validator::make($request->all(), [
         'service' => 'required'
@@ -257,15 +250,16 @@ class SuperAdminController extends Controller
           return ResponseBuilder::result($status, $message, $error, $data, $code); 
 
       } 
-    }else{
-      $status = false;
-      $message ="Not Authorized to add new service type";
-      $error = "";
-      $data = "";
-      $code = 401;                
-      return ResponseBuilder::result($status, $message, $error, $data, $code);
-    }      
-  }
+    }
+    // else{
+    //   $status = false;
+    //   $message ="Not Authorized to add new service type";
+    //   $error = "";
+    //   $data = "";
+    //   $code = 401;                
+    //   return ResponseBuilder::result($status, $message, $error, $data, $code);
+    // }      
+  //}
 
 
  //add farm type
@@ -273,7 +267,8 @@ class SuperAdminController extends Controller
 
     // validation
     $validator =Validator::make($request->all(), [
-      'farm' => 'required'
+      'farm' => 'required',
+      'status'=> 'string'
     ]);      
     if($validator->fails()){
     $status = false;
@@ -285,6 +280,7 @@ class SuperAdminController extends Controller
     }else{
         $farmType = new FarmType();
         $farmType->farm = $request->farm;
+        $farmType->status = $request->status;
         $farmType->save();
 
         $status = true;
@@ -411,6 +407,7 @@ class SuperAdminController extends Controller
       // validation
       $validator =Validator::make($request->all(), [
       'farm' => 'required',
+      'status' => 'string',
       'farm_type_id' => 'required'
 
       ]);        
@@ -423,13 +420,15 @@ class SuperAdminController extends Controller
       return ResponseBuilder::result($status, $message, $error, $data, $code);   
       } 
       $farm_type = $request->farm;
+      $status =   $request->status;
       $farm_type_id = $request->farm_type_id;
       $farmTypeResult  = FarmType::where('id', $farm_type_id)->first();  
       if($farmTypeResult){
 
         $farmTypeResult = FarmType::where('id', $farm_type_id)
           ->update([
-          'farm' =>$farm_type 
+          'farm' =>$farm_type,
+          'status' =>$status  
           ]);
           $status = true;
           $message ="You have successfully updated the farm type";
@@ -564,6 +563,86 @@ class SuperAdminController extends Controller
     }
   }
  
+
+
+
+ // edit users
+ public function editUser(Request $request){
+ 
+    $id = $request->id;
+
+    $userResult  = User::where('id', $id)->first(); 
+ 
+    if($userResult){
+      $status = true;
+      $message ="";
+      $error = "";
+      $data =$userResult;
+      $code = 200;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+    }else{
+        $status = false;
+        $message ="User not found";
+        $error = "";
+        $data = "";
+        $code = 401;                
+        return ResponseBuilder::result($status, $message, $error, $data, $code);  
+    }
+   
+}  
+
+
+
+   //update farm type
+   public function updateUser(Request $request){
+
+      // validation
+      $validator =Validator::make($request->all(), [
+      'name' => 'string',
+      'status' => 'string',
+      'id' => 'required'
+
+      ]);        
+      if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 400;                
+      return ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+      $name = $request->name;
+      $status =   $request->status;
+      $id = $request->id;
+      $userResult  = User::where('id', $id)->first();  
+      if($userResult ){
+
+         $userResult  = User::where('id', $id)
+          ->update([
+          'name' =>$name,
+          'status' =>$status  
+          ]);
+          $status = true;
+          $message ='You have successfully updated '.$name.'';
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+
+
+      }else{
+          $status = false;
+          $message ="User not found";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);  
+      }
+     
+  }  
+
 
 
 }
