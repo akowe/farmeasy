@@ -83,7 +83,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
-
+     //change password after logged into the application
+    $router->post('change_password', ['uses' => 'UserController@userChangePassword']);
+    
     //request form to become an agent
     $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
 

@@ -29,20 +29,8 @@ use App\Treasher;
 class PriceController extends Controller
 {
 
-    public function editPrice(Request $request, User $user){
-      if(Gate::allows('edit', $user)){
-        // validation
-        $validator =Validator::make($request->all(), [
-        'price_id' => 'required'
-        ]);        
-        if($validator->fails()){
-        $status = false;
-        $message ="";
-        $error = $validator->errors()->first();
-        $data = "";
-        $code = 400;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);   
-        } 
+    public function editPrice(Request $request){
+
         $price_id = $request->price_id;
         $priceResult  = Price::where('id', $price_id)->first();  
         if($priceResult){
@@ -56,24 +44,16 @@ class PriceController extends Controller
 
         }else{
             $status = false;
-            $message ="Price request not found";
+            $message ="Price not found";
             $error = "";
             $data = "";
             $code = 401;                
             return ResponseBuilder::result($status, $message, $error, $data, $code);  
         }
-      }else{
-        $status = false;
-        $message ="Not Authorized to edit price";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);
-      }    
        
     }  
-    public function updatePrice(Request $request, User $user){
-      if(Gate::allows('update', $user)){
+    public function updatePrice(Request $request){
+
         // validation
         $validator =Validator::make($request->all(), [
         'price_id' => 'required',
@@ -112,15 +92,6 @@ class PriceController extends Controller
             $code = 401;                
             return ResponseBuilder::result($status, $message, $error, $data, $code);  
         }
-      }else{
-        $status = false;
-        $message ="Not Authorized to update price";
-        $error = "";
-        $data = "";
-        $code = 401;                
-        return ResponseBuilder::result($status, $message, $error, $data, $code);
-      }    
-      
        
     }   
     public function getPriceByServiceType(Request $request){
@@ -157,6 +128,8 @@ class PriceController extends Controller
         }
        
     }
+
+
   //fetch all price
   public function allPrice(){
 

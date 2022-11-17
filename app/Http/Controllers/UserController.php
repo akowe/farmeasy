@@ -715,14 +715,14 @@ class UserController extends Controller
       'new_password' => 'required',
       'reset_code' => 'required'
     ]);      
-   if($validator->fails()){
-    $status = false;
-    $message ="";
-    $error = $validator->errors()->first();
-    $data = "";
-    $code = 401;                
-    ResponseBuilder::result($status, $message, $error, $data, $code);   
-   } 
+    if($validator->fails()){
+      $status = false;
+      $message ="";
+      $error = $validator->errors()->first();
+      $data = "";
+      $code = 401;                
+      ResponseBuilder::result($status, $message, $error, $data, $code);   
+    } 
         //check if exist
       $user =  User::where('reg_code', $request->reset_code)->exists();
       
@@ -733,7 +733,7 @@ class UserController extends Controller
           'password' => Hash::make($request['new_password'])
         ]);
         $status = true;
-        $message ="Message successfully sent";
+        $message ="Password successfully reset";
         $error = "";
         $data = "";
         $code = 200;                
@@ -751,6 +751,51 @@ class UserController extends Controller
 
 
    }
+
+     //change to new passowrd when logged in
+     public  function userChangePassword(Request $request){
+
+      //validattion
+      $validator =Validator ::make($request->all(), [
+        'old_password' => 'required|min:11|numeric',
+        'new_password' => 'required'
+      ]);      
+      if($validator->fails()){
+        $status = false;
+        $message ="";
+        $error = $validator->errors()->first();
+        $data = "";
+        $code = 401;                
+        ResponseBuilder::result($status, $message, $error, $data, $code);   
+      } 
+          //check if exist
+        $user =  User::where('password',  Hash::make($request->old_password))->exists();
+        
+        if($user){
+  
+          $user  = User::where('password',  Hash::make($request->old_password))
+          ->update([
+            'password' => Hash::make($request['new_password'])
+          ]);
+          $status = true;
+          $message ="Password successfully changed";
+          $error = "";
+          $data = "";
+          $code = 200;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+         
+        }else{
+          $status = false;
+          $message ="Old password is wrong";
+          $error = "";
+          $data = "";
+          $code = 401;                
+          return ResponseBuilder::result($status, $message, $error, $data, $code);   
+         
+        }
+  
+  
+     } 
 
   // authenticate user for login
   public function authenticateUser(Request $request){
