@@ -165,6 +165,7 @@ class UserController extends Controller
                     $response = curl_exec($curl);
                     $err = curl_error($curl);
                     $res = json_decode($response, true);
+
                   }
                   if($err){
                     $status = false;
@@ -727,10 +728,15 @@ class UserController extends Controller
       $user =  User::where('reg_code', $request->reset_code)->exists();
       
       if($user){
-
+        // generate new otp
+        $password_reset_code  =random_int(100000, 999999); //random_code(6);
+        $otp            = new Otp();
+        $otp->code      = $password_reset_code;
+        $otp->save();
         $user  = User::where('phone', $request->phone)
         ->update([
-          'password' => Hash::make($request['new_password'])
+          'password' => Hash::make($request['new_password']),
+          'reg_code' => $password_reset_code
         ]);
         $status = true;
         $message ="Password successfully reset";
@@ -769,11 +775,11 @@ class UserController extends Controller
         ResponseBuilder::result($status, $message, $error, $data, $code);   
       } 
           //check if exist
-        $user =  User::where('password',  Hash::make($request->old_password))->exists();
+        $user =  Hash::check($request->old_password,Auth::user()->password);
         
         if($user){
   
-          $user  = User::where('password',  Hash::make($request->old_password))
+          $user  = User::where('password',  Auth::user()->password)
           ->update([
             'password' => Hash::make($request['new_password'])
           ]);

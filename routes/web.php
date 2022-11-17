@@ -139,7 +139,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->put('assign_request_to_agent', ['uses' => 'AdminController@assignRequestToAgent']); 
  
-
     $router->get('prices', ['uses' => 'PriceController@allPrice']);
 
     $router->get('price', ['uses' => 'PriceController@editPrice']);
