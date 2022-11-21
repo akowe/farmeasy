@@ -83,8 +83,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('forgot_password', ['uses' => 'UserController@userForgotPassword']);
 
     $router->post('reset_password', ['uses' => 'UserController@userResetPassword']);
-     //change password after logged into the application
-    $router->post('change_password', ['uses' => 'UserController@userChangePassword']);
+
     
     //request form to become an agent
     $router->post('become_agent', ['uses' => 'UserController@BecomeAnAgent']);
@@ -186,8 +185,10 @@ $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($ro
 
     $router->post('rating', ['uses' => 'UserController@rating']); 
 
-    $router->get('get_rating', ['uses' => 'UserController@getRating']); 
-
+    $router->get('get_rating', ['uses' => 'UserController@getRating']);
+     
+     //change password after logged into the application
+     $router->post('change_password', ['uses' => 'UserController@userChangePassword']);
 
     //FARMER ACCOUNT
     $router->post('farmer_request', ['uses' => 'FarmerController@requestService']);
