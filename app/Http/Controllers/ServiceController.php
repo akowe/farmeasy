@@ -1051,7 +1051,7 @@ class ServiceController extends Controller
   //fetch all service types
   public function allServiceTypes(){
  
-    $all_service_types  = ServiceType::all();
+    $all_service_types  = ServiceType::where("status", NULL)->where("service","!=","Harvester")->get();
 
     $status = true;
     $message ="";
