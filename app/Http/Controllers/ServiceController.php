@@ -125,8 +125,8 @@ class ServiceController extends Controller
                  // https://api.ebulksms.com:4433/sendsms.json
                   //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
-                  $username = 'admin@riceafrika.com';
-                  $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
+                  $username = '';
+                  $apikey = '';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use '.$reg_code.'  to verify your account on FarmEASY App';
