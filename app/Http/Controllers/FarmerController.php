@@ -130,8 +130,8 @@ class FarmerController extends Controller
                  // https://api.ebulksms.com:4433/sendsms.json
                   //http://api.ebulksms.com:8080/sendsms.json
                   $json_url = "https://api.ebulksms.com:4433/sendsms.json";
-                  $username = 'admin@riceafrika.com';
-                  $apikey = 'eda594a3b4f30a20857dd9a80fcde0ff69840cb7';
+                  $username = '';
+                  $apikey = '';
       
                   $sendername = 'FarmEASY';
                   $messagetext = 'Kindly use '.$reg_code.' to verify your account on FarmEASY App';
@@ -400,8 +400,8 @@ public function HireTractor(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = " ";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -522,8 +522,8 @@ public function HirePlough(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -642,8 +642,8 @@ public function HirePlanter(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = " ";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -761,8 +761,8 @@ public function HireSeed(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -880,8 +880,8 @@ public function HirePesticide(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = " ";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1001,8 +1001,8 @@ public function HireFertilizer(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1120,8 +1120,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = " ";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1241,8 +1241,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1363,8 +1363,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1485,8 +1485,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1606,8 +1606,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1727,8 +1727,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
@@ -1847,8 +1847,8 @@ public function HireHarrow(Request $request){
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = 'ssl'; //'ssl';
             $mail->Host = "smtp.gmail.com";                                                   
-            $mail->Username = "fmeapp@riceafrika.com ";
-            $mail->Password = "oxqoiqibtejlalmz";                              
+            $mail->Username = "";
+            $mail->Password = "";                              
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;           
             $mail->Port       = 465; //465;                                   
             //Recipients
