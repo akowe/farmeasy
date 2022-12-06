@@ -56,7 +56,7 @@ class PaymentController extends Controller
         curl_setopt($crl, CURLINFO_HEADER_OUT, true);
     
         curl_setopt($crl, CURLOPT_HTTPHEADER, array(
-          "authorization: Bearer sk_test_8fabc18c29f908e5b7540b54d38a4b097250c39b", //replace this with your own test key
+          "authorization: Bearer ", //replace this with your own test key
           "content-type: application/json",
           "cache-control: no-cache")
       );
